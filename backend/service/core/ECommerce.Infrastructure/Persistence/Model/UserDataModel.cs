@@ -19,9 +19,15 @@ namespace ECommerce.Infrastructure.Persistence.Model
         public UserRole Role {  get; set; }
         public AccountStatus AccountStatus { get; set; }
         public string profilePhoto { get; set; }
+        
+       // public UserOtpDataModel? OTpRegister { get; set; }
+        //public UserOtpDataModel? OTPForgetPassword { get; set; }
+
         public DateTime CreateAt { get; set; }
         public DateTime UpdateAt { get; set; }
         public bool isDelete { get; set; } = false;
         public DateTime DeleteAt { get; set; }
+
+
     }
 }

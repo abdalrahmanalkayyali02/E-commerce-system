@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IAC.Domain.Repository.Read
+namespace IAC.Domain.Repository.Write
 {
-    public interface IUserOTpReadRepository : IReadReposotries<UserOTPEntity>
+    public interface IUserOTpWriteRepository : IWriteReposotries<UserOTPEntity>
     {
     }
 }

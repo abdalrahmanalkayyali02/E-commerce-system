@@ -1,9 +1,5 @@
 ﻿using ECommerce.Application.Abstraction;
 using IAC.Domain.Enum;
-using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text;
 
 namespace ECommerce.Infrastructure.Service
 {

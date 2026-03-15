@@ -3,6 +3,7 @@
   <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.1.0" />
     <PackageReference Include="MailKit" Version="4.15.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.5" />
     <PackageReference Include="MimeKit" Version="4.15.1" />
   </ItemGroup>
@@ -13,7 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Persistence\ModelConfigurations\" />
     <Folder Include="Persistence\Migrations\" />
   </ItemGroup>
 

@@ -49,7 +49,6 @@ namespace ECommerce.Application.Feature.IAC.Commands.CreateUser.Handler
 
             try
             {
-
                 var id = Guid.CreateVersion7();
                 var hashedPassword = _passwordService.PasswordHash(command.password);
                 var otp = OTP.Generate();

@@ -8,12 +8,22 @@ namespace ECommerce.Infrastructure.Persistence.Repository.Write
 {
     public class CustomerWriteRepository : ICustomerWriteRepository
     {
-        public Task AddAsync(CustomerAggregate customer, CancellationToken cancellation = default)
+        public Task AddAsync(CustomerAggregate item, CancellationToken cancellation = default)
         {
             throw new NotImplementedException();
         }
 
-        public Task UpdateAsync(CustomerAggregate customer, CancellationToken cancellation = default)
+        public Task DeleteAsync(Guid id, CancellationToken cancellation = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SoftDelete(Guid id, CancellationToken cancellation = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Update(CustomerAggregate item, CancellationToken cancellation = default)
         {
             throw new NotImplementedException();
         }

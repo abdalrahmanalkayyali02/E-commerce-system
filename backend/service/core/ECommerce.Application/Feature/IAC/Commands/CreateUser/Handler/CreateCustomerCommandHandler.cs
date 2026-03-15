@@ -1,4 +1,5 @@
-﻿using ECommerce.Application.DTO.IAC.User.Response;
+﻿using Common.Abstraction.Reposotries;
+using ECommerce.Application.DTO.IAC.User.Response;
 using ECommerce.Application.Feature.IAC.Commands.CreateUser.Command;
 using FluentValidation;
 using IAC.Application.Abstraction;
@@ -8,10 +9,6 @@ using IAC.Domain.Repository.Read;
 using IAC.Domain.Repository.Write;
 using IAC.Domain.Value_Object;
 using MediatR;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace ECommerce.Application.Feature.IAC.Commands.CreateUser.Handler;
 
@@ -20,27 +17,31 @@ public class CreateCustomerCommandHandler : IRequestHandler<CreateCustomerComman
     private readonly IUserReadRepository _userReadRepo;
     private readonly IUserWriteRepository _userWriteRepo;
     private readonly ICustomerWriteRepository _customerWriteRepo;
+    private readonly IUserOTpWriteRepository _userOTpWriteRepo;
     private readonly IEmailGatway _emailGatway;
     private readonly IPasswordService _passwordService;
     private readonly IValidator<CreateCustomerCommand> _validater;
-   // private readonly IUnitOfWork _unitOfWork; // Essential for dual-aggregate transactions
+    private readonly IUnitOfWork _unitOfWork; 
 
     public CreateCustomerCommandHandler(
         IUserReadRepository userReadRepo,
         IUserWriteRepository userWriteRepo,
         ICustomerWriteRepository customerWriteRepo,
+        IUserOTpWriteRepository _userOTpWriteRepo,
         IEmailGatway emailGatway,
         IPasswordService passwordService,
-        IValidator<CreateCustomerCommand> validater)
-     //   IUnitOfWork unitOfWork)
+        IValidator<CreateCustomerCommand> validater,
+        IUnitOfWork unitOfWork)
+     
     {
         _userReadRepo = userReadRepo;
         _userWriteRepo = userWriteRepo;
         _customerWriteRepo = customerWriteRepo;
+        _customerWriteRepo = customerWriteRepo;
         _emailGatway = emailGatway;
         _passwordService = passwordService;
         _validater = validater;
-       // _unitOfWork = unitOfWork;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<CreateUserResponse> Handle(CreateCustomerCommand command, CancellationToken cancellationToken)
@@ -82,9 +83,9 @@ public class CreateCustomerCommandHandler : IRequestHandler<CreateCustomerComman
             // 6. Persistence
             await _userWriteRepo.AddAsync(newUser, cancellationToken);
             await _customerWriteRepo.AddAsync(newCustomer, cancellationToken);
+            await _userOTpWriteRepo.AddAsync(newUser.RegisterOTP!, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            // Commit both changes in a single database transaction
-          //  await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             await _emailGatway.SendOtpEmailAsync(
                 command.email,

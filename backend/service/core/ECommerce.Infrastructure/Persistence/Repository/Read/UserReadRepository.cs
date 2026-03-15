@@ -8,12 +8,17 @@ namespace ECommerce.Infrastructure.Persistence.Repository.Read
 {
     public class UserReadRepository : IUserReadRepository
     {
-        public Task<UserAggregate?> GetUserByEmail(string email, CancellationToken cancellationToken = default)
+        public Task<IEnumerable<UserAggregate>> GetAll(CancellationToken cancellation)
         {
             throw new NotImplementedException();
         }
 
-        public Task<UserAggregate?> GetUserById(Guid id, CancellationToken cancellationToken = default)
+        public Task<UserAggregate> GetById(Guid id, CancellationToken cancellation)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<UserAggregate?> GetUserByEmail(string email, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }

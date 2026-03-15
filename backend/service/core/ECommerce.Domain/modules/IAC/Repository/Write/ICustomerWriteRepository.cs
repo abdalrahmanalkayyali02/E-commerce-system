@@ -1,14 +1,12 @@
-﻿using IAC.Domain.AggregateRoot;
+﻿using Common.Abstraction.Reposotries;
+using IAC.Domain.AggregateRoot;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace IAC.Domain.Repository.Write
 {
-    public interface ICustomerWriteRepository
+    public interface ICustomerWriteRepository : IWriteReposotries<CustomerAggregate>
     {
-        Task AddAsync(CustomerAggregate customer,CancellationToken cancellation = default);
-        Task UpdateAsync(CustomerAggregate customer, CancellationToken cancellation = default);
-        
     }
 }
