@@ -13,8 +13,8 @@ namespace Catalog.Domain.Aggregate
         public string BasePrice { get; private set; } 
         public bool IsActive { get; private set; }
 
-        private readonly List<ProductArtibutreEntity> _attributes = new();
-        public IReadOnlyCollection<ProductArtibutreEntity> Attributes => _attributes;
+        private readonly List<ProductAttributeEntity> _attributes = new();
+        public IReadOnlyCollection<ProductAttributeEntity> Attributes => _attributes;
 
         public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; private set; }
@@ -26,6 +26,28 @@ namespace Catalog.Domain.Aggregate
         public IReadOnlyCollection<ProductPhotoEntity> Photos => _photos;
 
         private ProductAggregate() { }
+
+        public ProductAggregate
+            (
+                Guid id, Guid categoryId, Guid sellerId, string name, string description,
+                string basePrice, bool isActive, List<ProductAttributeEntity> attributes,
+                DateTime createdAt, DateTime? updatedAt, List<ProductPhotoEntity> photos
+            )
+        {
+            Id = id;
+            CategoryId = categoryId;
+            SellerId = sellerId;
+            Name = name;
+            Description = description;
+            BasePrice = basePrice;
+            IsActive = isActive;
+            _attributes = attributes;
+            CreatedAt = createdAt;
+            UpdatedAt = updatedAt;
+            _photos = photos;
+        }
+
+
 
         // Static Factory Method
         public static ProductAggregate Create(

@@ -7,8 +7,8 @@ namespace IAC.Domain.Repository.Write
 {
     public interface IUserWriteRepository
     {
-        public Task AddAsync(UserAggregate user);
-        public Task UpdateAsync(UserAggregate user);
-        public Task DeleteAsync(Guid id);
+        public Task AddAsync(UserAggregate user,CancellationToken concellation = default);
+        public Task UpdateAsync(UserAggregate user, CancellationToken concellation = default);
+        public Task DeleteAsync(Guid i, CancellationToken concellation = default);
     }
 }

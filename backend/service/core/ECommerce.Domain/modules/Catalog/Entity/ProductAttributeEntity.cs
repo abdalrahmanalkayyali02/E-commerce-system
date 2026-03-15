@@ -31,8 +31,6 @@ namespace Catalog.Domain.Entity
             IsFilterable = isFilterable;
             IsVariant = isVariant;
             this.DisplayOrder = DisplayOrder;
-
-
         }
 
         public static ProductAttributeEntity Create(Guid id, string name, string value, bool isFilterable, bool isVariant, int DisplayOrder, string Unit)

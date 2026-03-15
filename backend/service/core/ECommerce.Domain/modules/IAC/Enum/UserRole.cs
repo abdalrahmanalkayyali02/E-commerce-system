@@ -9,5 +9,6 @@ namespace IAC.Domain.Enum
         Admin = 1,
         Seller = 2,
         Customer = 3,
+        Guests = 4,
     }
 }

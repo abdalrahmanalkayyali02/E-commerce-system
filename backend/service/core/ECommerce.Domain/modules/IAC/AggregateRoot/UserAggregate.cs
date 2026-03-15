@@ -1,39 +1,42 @@
 ﻿using IAC.Domain.Entity;
 using IAC.Domain.Enum;
 using IAC.Domain.Value_Object;
-
+using System.Runtime.CompilerServices;
+[assembly: InternalsVisibleTo("ECommerce.Infrastructure")]
 namespace IAC.Domain.AggregateRoot
 {
     public class UserAggregate
     {
-        public Guid Id { get; private set; }
-        public Name FirstName { get; private set; }
-        public Name LastName { get; private set; }
-        public Name UserName { get; private set; }
-        public DateOfBirth DateOfBirth { get; private set; }
+        public Guid Id { get; internal set; }
+        public Name FirstName { get; internal set; }
+        public Name LastName { get; internal set; }
+        public Name UserName { get; internal set; }
+        public DateOfBirth DateOfBirth { get; internal set; }
 
-        public Email Email { get; private set; }
-        public bool IsEmailConfirmed { get; private set; } = false;
-        public PhoneNumber PhoneNumber { get; private set; }
-        public Password Password { get; private set; }
+        public Email Email { get; internal set; }
+        public bool IsEmailConfirmed { get; internal set; } = false;
+        public PhoneNumber PhoneNumber { get; internal set; }
+        public Password Password { get; internal set; }
 
-        public UserRole Role { get; private set; }
-        public AccountStatus AccountStatus { get; private set; }
-        public string? ProfilePhoto { get; private set; }
-        public DateTime CreatedAt { get; private set; }
-        public DateTime UpdatedAt { get; private set; }
+        public UserRole Role { get; internal set; }
+        public AccountStatus AccountStatus { get; internal set; }
+        public string? ProfilePhoto { get; internal set; }
+        public DateTime CreatedAt { get; internal set; }
+        public DateTime UpdatedAt { get; internal set; }
+        public DateTime DeleteAt { get; internal set; }
+        public bool isDelete { get; internal set; } = false;
 
-        public UserOTP? RegisterOTP { get; private set; }
-        public UserOTP? ResetPasswordOTP { get; private set; }
+        public UserOTPEntity? RegisterOTP { get; internal set; }
+        public UserOTPEntity? ResetPasswordOTP { get; internal set; }
 
         private UserAggregate() { }
 
-        private UserAggregate(
+        internal UserAggregate(
             Guid id, Name firstName, Name lastName, Name userName,
             DateOfBirth dateOfBirth, Email email, bool isEmailConfirmed,
             PhoneNumber phoneNumber, Password password, UserRole role,
             AccountStatus accountStatus, string? profilePhoto,
-            DateTime createdAt, DateTime updatedAt)
+            DateTime createdAt, DateTime updatedAt,DateTime DeleteAt, bool isDelete)
         {
             Id = id;
             FirstName = firstName;
@@ -49,8 +52,11 @@ namespace IAC.Domain.AggregateRoot
             ProfilePhoto = profilePhoto;
             CreatedAt = createdAt;
             UpdatedAt = updatedAt;
+            this.DeleteAt = DeleteAt;
+            this.isDelete = isDelete;
         }
 
+        // factory 
         public static UserAggregate Create(
             Guid id, Name firstName, Name lastName, Name userName,
             DateOfBirth dateOfBirth, Email email, PhoneNumber phoneNumber,
@@ -60,7 +66,7 @@ namespace IAC.Domain.AggregateRoot
             return new UserAggregate(
                 id, firstName, lastName, userName, dateOfBirth, email,
                 false, phoneNumber, password, role,
-                AccountStatus.Inactive, null, now, now);
+                AccountStatus.Inactive, null, now, now,DateTime.MinValue,false);
         }
 
 
@@ -93,12 +99,12 @@ namespace IAC.Domain.AggregateRoot
 
         public void SetRegisterOTP(string code)
         {
-            RegisterOTP = UserOTP.Create(OTP.From(code));
+            RegisterOTP = UserOTPEntity.Create(Guid.NewGuid(), this.Id, OTP.From(code));
         }
 
-        public void SetResetPasswordOTP(string code)
+        public void SetResetPasswordOTP(OTP code)
         {
-            ResetPasswordOTP = UserOTP.Create(OTP.From(code));
+            ResetPasswordOTP = UserOTPEntity.Create(Guid.NewGuid(), this.Id, code);
         }
 
         public void ConfirmEmail(string code)

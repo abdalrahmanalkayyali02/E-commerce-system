@@ -11,7 +11,7 @@ namespace Catalog.Domain.Entity
         public string catogryDescription { get; private set; }
 
         // the parent is product catogry 
-        public Guid  parentCategoryID { get; private set; }
+        public Guid?  parentCategoryID { get; private set; }
         
         // need to addeed 
         public bool isDelete { get; private set; } = false;
@@ -21,7 +21,7 @@ namespace Catalog.Domain.Entity
 
 
         private ProductCatogryEntity() { }
-        private ProductCatogryEntity(Guid id ,string name, string description, Guid parentCategory)
+        private ProductCatogryEntity(Guid id ,string name, string description, Guid? parentCategory)
         {
             CatogryID = id;
             catogryName = name;
@@ -29,8 +29,11 @@ namespace Catalog.Domain.Entity
             this.parentCategoryID = parentCategory;
         }
 
-        public static ProductCatogryEntity Create(Guid id, string name, string description, Guid parentCategory)
+        public static ProductCatogryEntity Create(Guid id, string name, string description, Guid? parentCategory)
         {
+            if (parentCategory == id)
+                throw new ArgumentException("A category cannot be its own parent.");
+
             var catogry = new ProductCatogryEntity(id,name,description,parentCategory);
 
             return catogry;

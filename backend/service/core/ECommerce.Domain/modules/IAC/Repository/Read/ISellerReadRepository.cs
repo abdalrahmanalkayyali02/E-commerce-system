@@ -7,11 +7,11 @@ namespace IAC.Domain.Repository.Read
 {
     public interface ISellerReadRepository
     {
-        public List<Task<SellerAggregate>> GetAllSeller();
-        public List<Task<SellerAggregate>> GetAllSellerNotVerfiedSellerDocument();
-        public List<Task<SellerAggregate>> GetAllSellerNotVerfiedShopDocument();
+        public List<Task<SellerAggregate>> GetAllSeller(CancellationToken cancellationToken = default);
+        public List<Task<SellerAggregate>> GetAllSellerNotVerfiedSellerDocument(CancellationToken cancellationToken = default);
+        public List<Task<SellerAggregate>> GetAllSellerNotVerfiedShopDocument(CancellationToken cancellationToken = default);
 
-        public List<Task<SellerAggregate>> GetAllSellerNotVerfiedByAdmin();
-        public List<Task<SellerAggregate>> GetAllSellerThatVerifedByAdmin();
+        public List<Task<SellerAggregate>> GetAllSellerNotVerfiedByAdmin(CancellationToken cancellationToken = default);
+        public List<Task<SellerAggregate>> GetAllSellerThatVerifedByAdmin(CancellationToken cancellationToken = default);
     }
 }

@@ -7,12 +7,12 @@ namespace IAC.Domain.Repository.Read
 {
     public  interface IUserReadRepository
     {
-        public Task<UserAggregate?> GetUserByEmail(string email);
-        public Task<UserAggregate?> GetUserByUsername(string username);
+        public Task<UserAggregate?> GetUserByEmail(string email, CancellationToken cancellationToken = default);
+        public Task<UserAggregate?> GetUserByUsername(string username, CancellationToken cancellationToken = default);
 
-        public Task<UserAggregate?> GetUserById(Guid id);
+        public Task<UserAggregate?> GetUserById(Guid id, CancellationToken cancellationToken = default);
 
-        public Task <UserAggregate?> GetUserByPhoneNumber(string phoneNumber);
+        public Task <UserAggregate?> GetUserByPhoneNumber(string phoneNumber, CancellationToken cancellationToken = default);
 
 
     }

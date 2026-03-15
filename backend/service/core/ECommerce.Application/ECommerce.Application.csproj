@@ -1,15 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <Compile Remove="UseCase\**" />
+    <EmbeddedResource Remove="UseCase\**" />
+    <None Remove="UseCase\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentValidation" Version="12.1.1" />
+    <PackageReference Include="MediatR" Version="14.1.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ECommerce.Domain\ECommerce.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="validator\IAC\EmailVerification\" />
   </ItemGroup>
 
   <PropertyGroup>

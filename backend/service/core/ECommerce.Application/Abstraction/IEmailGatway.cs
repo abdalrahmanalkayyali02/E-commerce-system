@@ -7,6 +7,8 @@ namespace IAC.Application.Abstraction
 {
     public interface IEmailGatway
     {
-        Tasks  SendOtpEmailAsync(string userEmail, string otp, EmailOtpType type);
+        Task SendOtpEmailAsync(string userEmail, string otp, EmailOtpType type);
     }
 }
+
+

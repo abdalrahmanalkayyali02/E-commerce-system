@@ -1,25 +1,26 @@
 ﻿using IAC.Domain.Entity;
 using IAC.Domain.Value_Object;
-using System;
+using System.Runtime.CompilerServices;
+[assembly: InternalsVisibleTo("ECommerce.Infrastructure")]
 
 namespace IAC.Domain.AggregateRoot
 {
     public class CustomerAggregate
     {
-        public Guid CustomrID { get; private set; }
-        public Address Address { get; private set; }
+        public Guid CustomrID { get; internal set; }
+        public Address Address { get; internal set; }
 
-        public DateTime CreateAt { get; private set; }
-        public DateTime UpdateAt { get; private set; }
+        public DateTime CreateAt { get; internal set; }
+        public DateTime UpdateAt { get; internal set; }
 
         private CustomerAggregate() { }
 
-        private CustomerAggregate(Guid customrID, Address address)
+        public CustomerAggregate(Guid customrID, Address address, DateTime CreateAt, DateTime updateAt)
         {
             CustomrID = customrID;
             Address = address;
-            CreateAt = DateTime.UtcNow;
-            UpdateAt = DateTime.UtcNow;
+            this.CreateAt = CreateAt;
+            this.UpdateAt = updateAt;
         }
 
         public static CustomerAggregate Create(Guid userId, string rawAddress)
@@ -29,7 +30,7 @@ namespace IAC.Domain.AggregateRoot
 
             var addressVo = Address.Create(rawAddress);
 
-            return new CustomerAggregate(userId, addressVo);
+            return new CustomerAggregate(userId, addressVo,DateTime.Now,DateTime.Now);
         }
 
 

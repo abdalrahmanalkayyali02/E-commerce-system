@@ -27,8 +27,8 @@ public record DateOfBirth
         if (age < 18)
             throw new ArgumentException("User must be at least 18 years old.");
 
-        if (age > 70)
-            throw new ArgumentException("User must be at most 70 years old.");
+        if (age > 150)
+            throw new ArgumentException("User must be at most 150 years old");
 
         Value = parsedDate;
     }

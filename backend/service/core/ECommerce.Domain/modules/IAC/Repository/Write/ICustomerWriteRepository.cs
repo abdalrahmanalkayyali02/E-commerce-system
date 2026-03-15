@@ -7,8 +7,8 @@ namespace IAC.Domain.Repository.Write
 {
     public interface ICustomerWriteRepository
     {
-        Task AddAsync(CustomerAggregate customer);
-        Task UpdateAsync(CustomerAggregate customer);
+        Task AddAsync(CustomerAggregate customer,CancellationToken cancellation = default);
+        Task UpdateAsync(CustomerAggregate customer, CancellationToken cancellation = default);
         
     }
 }
