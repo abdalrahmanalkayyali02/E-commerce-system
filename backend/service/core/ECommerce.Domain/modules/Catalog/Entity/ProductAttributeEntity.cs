@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Catalog.Domain.Entity
+namespace ECommerce.Domain.modules.Catalog.Entity
 {
     public class ProductAttributeEntity
     {

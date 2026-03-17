@@ -1,12 +1,13 @@
-﻿using ECommerce.Application.DTO.IAC.User.Request;
+﻿using Common.DTOs.IAC.Request;
+using ECommerce.Application.Feature.IAC.User.Create.Command;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controller.IAC
 {
     [ApiController]
-    [ApiVersion("1.0")]
-    [Route("/Register")]
+  //  [ApiVersion("1.0")]
+    [Route("Register")]
     public class RegisterationController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -15,27 +16,27 @@ namespace Api.Controller.IAC
             this._mediator = _mediator;
         }
 
-        [HttpPost("/customer")]
-        public async Task<IActionResult> CustomerRegister([FromBody] CreateCustomerRequest request)
+        [HttpPost("customer")]
+        public async Task<IActionResult> CustomerRegister([FromBody] CreateCustomerCommand request)
         {
 
-            var result = _mediator.Send(request);
+            var result = await _mediator.Send(request);
 
-            if (result == null)
-                return  BadRequest("Registration failed.");
-
-            return Ok(result);
-        }
-
-        [HttpPost("/seller")]
-        public async Task<IActionResult> SellerRegister([FromBody] CreateSellerRequest request)
-        {
-            var result = _mediator.Send(request);
             if (result == null)
                 return BadRequest("Registration failed.");
+
             return Ok(result);
         }
-        
-        
+
+        //[HttpPost("/seller")]
+        //public async Task<IActionResult> SellerRegister([FromBody] CreateSellerRequest request)
+        //{
+        //    var result = _mediator.Send(request);
+        //    if (result == null)
+        //        return BadRequest("Registration failed.");
+        //    return Ok(result);
+        //}
+
+
     }
 }

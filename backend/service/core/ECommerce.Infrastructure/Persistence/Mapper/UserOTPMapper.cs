@@ -1,6 +1,6 @@
 ﻿
+using ECommerce.Domain.modules.IAC.Entity;
 using ECommerce.Infrastructure.Persistence.Model;
-using IAC.Domain.Entity;
 
 namespace ECommerce.Infrastructure.Persistence.Mapper
 {

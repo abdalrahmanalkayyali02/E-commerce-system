@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System.Reflection;
 
-namespace Infrastructure.Persistence
+namespace ECommerce.Infrastructure.Persistence
 {
     public class AppDbContext : DbContext
     {
@@ -12,7 +12,7 @@ namespace Infrastructure.Persistence
         public DbSet<UserDataModel> Users { get; set; }
         public DbSet<CustomerDataModel> Customers { get; set; }
         public DbSet<UserOtpDataModel> Otps { get; set; }
-        public DbSet<SellerDataModel> Sellers { get; set; }
+       // public DbSet<SellerDataModel> Sellers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

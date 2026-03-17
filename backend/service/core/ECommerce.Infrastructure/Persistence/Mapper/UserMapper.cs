@@ -1,6 +1,6 @@
-﻿using ECommerce.Infrastructure.Persistence.Model;
-using IAC.Domain.AggregateRoot;
-using IAC.Domain.Value_Object;
+﻿using ECommerce.Domain.modules.IAC.Entity;
+using ECommerce.Domain.modules.IAC.ValueObject;
+using ECommerce.Infrastructure.Persistence.Model;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,7 +11,7 @@ namespace ECommerce.Infrastructure.Persistence.Mapper
     {
         // Domain => Persistence
 
-        public static UserDataModel FromDomainToPersistence(UserAggregate user)
+        public static UserDataModel FromDomainToPersistence(UserEntity user)
         {
             var model = new UserDataModel();
 
@@ -40,9 +40,9 @@ namespace ECommerce.Infrastructure.Persistence.Mapper
 
         // Persistence => Domain
 
-        public static UserAggregate FromPersistenceToDomain(UserDataModel model)
+        public static UserEntity FromPersistenceToDomain(UserDataModel model)
         {
-            var user = new UserAggregate
+            var user = new UserEntity
                 (
                     id: model.id,
                     firstName: Name.FromStrict(model.FirstName),

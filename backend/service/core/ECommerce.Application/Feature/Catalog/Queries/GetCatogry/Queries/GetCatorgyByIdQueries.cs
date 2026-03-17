@@ -1,4 +1,4 @@
-﻿using ECommerce.Application.DTO.Catalog.Catogry.Response;
+﻿using Common.DTOs.Catalog.Catogry.Response;
 using MediatR;
 using System;
 using System.Collections.Generic;

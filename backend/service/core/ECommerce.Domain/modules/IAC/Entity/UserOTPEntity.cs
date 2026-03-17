@@ -1,6 +1,6 @@
-﻿using IAC.Domain.Value_Object;
+﻿using ECommerce.Domain.modules.IAC.ValueObject;
 
-namespace IAC.Domain.Entity
+namespace ECommerce.Domain.modules.IAC.Entity
 {
     public class UserOTPEntity
     {

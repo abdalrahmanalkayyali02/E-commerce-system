@@ -1,4 +1,4 @@
-﻿using IAC.Domain.Value_Object;
+﻿using ECommerce.Domain.modules.IAC.ValueObject;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,7 +11,7 @@ namespace ECommerce.Infrastructure.Persistence.Model
 
         public string shopName { get;  set; }
         public string shopPhoto { get;  set; }
-        public Address address { get;  set; }
+        public string address { get;  set; }
         public bool isVerifiedByAdmin { get;  set; } = false;
 
         public string verfiedSellerDocument { get;  set; }

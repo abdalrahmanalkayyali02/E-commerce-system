@@ -1,4 +1,4 @@
-﻿using IAC.Domain.Enum;
+﻿using Common.Enum;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,8 +20,6 @@ namespace ECommerce.Infrastructure.Persistence.Model
         public AccountStatus AccountStatus { get; set; }
         public string profilePhoto { get; set; }
         
-       // public UserOtpDataModel? OTpRegister { get; set; }
-        //public UserOtpDataModel? OTPForgetPassword { get; set; }
 
         public DateTime CreateAt { get; set; }
         public DateTime UpdateAt { get; set; }
