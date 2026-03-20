@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using ECommerce.Domain.modules.IAC.ValueObject;
 using ECommerce.Application.Feature.IAC.User.Create.Command;
+using System;
 
 namespace ECommerce.Application.Feature.IAC.User.Create.Validater
 {
@@ -38,10 +39,11 @@ namespace ECommerce.Application.Feature.IAC.User.Create.Validater
                 .Must(BeAValidPassword)
                 .WithMessage("Password requires 8+ chars, uppercase, and digits.");
 
+            // التعديل: نمرر الـ date مباشرة لأن الـ Command صار فيه DateOnly
             RuleFor(x => x.dateOfBirth)
-                .NotEmpty() 
-                .Must(date => BeAValidDateOfBirth(date.ToString()))
-                .WithMessage("Customer must be at least 18 years old.");
+                .NotEmpty()
+                .Must(BeAValidDateOfBirth)
+                .WithMessage("Customer must be at least 18 years old and under 150.");
 
             RuleFor(x => x.profilePhoto)
                 .Must(url => string.IsNullOrEmpty(url) || Uri.IsWellFormedUriString(url, UriKind.Absolute))
@@ -55,6 +57,8 @@ namespace ECommerce.Application.Feature.IAC.User.Create.Validater
         private bool BeAValidFirstOrLastName(string name) => Try(() => Name.FromStrict(name));
         private bool BeAValidUserName(string name) => Try(() => Name.From(name));
         private bool BeAValidAddress(string address) => Try(() => Address.Create(address));
+
+        // التعديل هنا: نستخدم ميثود From الجديدة التي تستقبل DateOnly
         private bool BeAValidDateOfBirth(string date) => Try(() => DateOfBirth.From(date));
 
         private bool Try(Action action)

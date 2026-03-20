@@ -24,5 +24,11 @@ public sealed record OTP
             .Select(s => s[random.Next(s.Length)]).ToArray());
 
         return new OTP(code);
+    } 
+
+
+    public static OTP Reconstructing(string value)
+    {
+        return new OTP(value);
     }
 }

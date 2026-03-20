@@ -2,10 +2,9 @@
 using ECommerce.Infrastructure.Persistence.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ECommerce.Domain.modules.IAC.ValueObject;
 
-namespace ECommerce.Infrastructure.Persistence.Configurations
-    
+namespace ECommerce.Infrastructure.Persistence.ModelConfigurations
+
 {
     public class UserOtpConfiguration : IEntityTypeConfiguration<UserOtpDataModel>
     {
@@ -16,10 +15,9 @@ namespace ECommerce.Infrastructure.Persistence.Configurations
             builder.HasKey(x => x.ID);
 
             builder.Property(x => x.Code)
-                .HasConversion(
-                v => v.Value,            // How to save: OTP -> string
-                v => OTP.From(v))    // How to load: string -> OTP)
-                .HasMaxLength(6);
+                   .HasColumnName("Code")
+                   .HasMaxLength(6)
+                   .IsRequired(false);
 
             builder.Property(x => x.GeneratedAt)
                 .IsRequired();

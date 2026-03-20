@@ -1,44 +1,61 @@
-﻿using Common.Reposotries;
-using ECommerce.Application.Abstraction.Data;
+﻿using ECommerce.Application.Abstraction.Data;
+using ECommerce.Domain.modules.IAC.Repositories;
 using Microsoft.EntityFrameworkCore;
-using System.Collections;
 
 namespace ECommerce.Infrastructure.Persistence.Repository
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly DbContext _context;
-        private Hashtable _repositories; 
-        public UnitOfWork(AppDbContext context)
+        private readonly AppDbContext _context;
+
+        public IUserRepository Users { get; }
+        public ICustomerRepository Customer { get; }
+        public ISellerRepository Seller { get; }
+        public IUserOTpRepository UserOTp { get; }
+
+        public UnitOfWork(
+            AppDbContext context,
+            IUserRepository users,
+            ICustomerRepository customer,
+            ISellerRepository seller,
+            IUserOTpRepository userOTp)
         {
             _context = context;
+            Users = users;
+            Customer = customer;
+            Seller = seller;
+            UserOTp = userOTp;
         }
 
-        public IGenericRepository<T> Repo<T>() where T : class
+        public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            if (_repositories == null) _repositories = new Hashtable();
+            //try
+            //{
+            //   return  await _context.SaveChangesAsync(cancellationToken);
 
-            var type = typeof(T).Name;
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new Exception();
+            //}
 
-            if (!_repositories.ContainsKey(type))
+            try
             {
-                var repositoryInstance = new GenericRepsotries<DbContext, T>(_context);
-
-                _repositories.Add(type, repositoryInstance);
+                return await _context.SaveChangesAsync(cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                // استخدم throw فقط ليرسل الخطأ كاملاً للـ Debugger
+                // أو اطبع الـ InnerException
+                var innerError = ex.InnerException?.Message ?? ex.Message;
+                throw new Exception($"Database Error: {innerError}");
             }
 
-            return (IGenericRepository<T>)_repositories[type]!;
         }
-
 
         public void Dispose()
         {
             _context.Dispose();
-        }
-
-        public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
         }
     }
 }

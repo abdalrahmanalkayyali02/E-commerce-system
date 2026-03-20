@@ -8,9 +8,6 @@ namespace Common.Result
     {
         List<Error?> Errors { get; }
         bool IsSuccess { get; }
-        //bool isFailes { get; } // extra 
-      //  DateTime Timestamp { get; }  // extra 
-
     }
 
     public interface IResult<out TValue> : IResult

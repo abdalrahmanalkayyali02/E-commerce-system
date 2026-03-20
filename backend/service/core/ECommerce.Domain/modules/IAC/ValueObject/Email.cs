@@ -1,33 +1,41 @@
-﻿using System.Text.RegularExpressions;
+﻿using Common.Impl.Result;
+using ECommerce.Domain.Modules.IAC.DomainError;
+using System.Text.RegularExpressions;
 
-namespace ECommerce.Domain.modules.IAC.ValueObject;
-
-public sealed record Email
+namespace ECommerce.Domain.Modules.IAC.ValueObject
 {
-    public string Value { get; }
-
-    private static readonly Regex EmailRegex = new(
-        @"^[^@\s]+@[^@\s]+\.[^@\s]+$",
-        RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
-    private Email(string value)
+    public sealed record Email
     {
-        if (string.IsNullOrWhiteSpace(value))
+        public string Value { get; init; }
+
+        private static readonly Regex EmailRegex = new(
+            @"^[^@\s]+@[^@\s]+\.[^@\s]+$",
+            RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        private Email(string value)
         {
-            throw new ArgumentException("Email cannot be empty.");
+            Value = value;
         }
 
-        var trimmedEmail = value.Trim();
-
-        if (!EmailRegex.IsMatch(trimmedEmail))
+        public static Result<Email> From(string value)
         {
-            throw new ArgumentException("Invalid email format.");
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return Result<Email>.Failure(EmailErrors.Required);
+            }
+
+            var trimmedEmail = value.Trim();
+
+            if (!EmailRegex.IsMatch(trimmedEmail))
+            {
+                return Result<Email>.Failure(EmailErrors.InvalidFormat);
+            }
+
+            return Result <Email>.Success(new Email(trimmedEmail.ToLowerInvariant()));
         }
 
-        Value = trimmedEmail.ToLowerInvariant();
+        public static Email Reconstruct(string value) => new(value);
+
+        public override string ToString() => Value;
     }
-
-    public static Email From(string value) => new(value: value);
-
-    public override string ToString() => Value;
 }

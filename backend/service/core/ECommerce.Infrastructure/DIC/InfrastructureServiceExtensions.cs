@@ -1,4 +1,5 @@
 ﻿using Common.Reposotries;
+using ECommerce.Application.Abstraction.Data;
 using ECommerce.Application.Abstraction.IExternalService;
 using ECommerce.Infrastructure.ExternalService;
 using ECommerce.Infrastructure.Persistence.Repository;
@@ -34,7 +35,7 @@ namespace ECommerce.Infrastructure.DIC
         }
        public static IServiceCollection AddSharedServices(this IServiceCollection services, IConfiguration configuration)
         {
-            //services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             return services;
         }

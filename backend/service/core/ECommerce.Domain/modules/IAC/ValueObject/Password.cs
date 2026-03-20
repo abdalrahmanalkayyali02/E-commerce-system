@@ -1,28 +1,46 @@
-﻿namespace ECommerce.Domain.modules.IAC.ValueObject;
+﻿using System;
+using System.Linq;
+using Common.Impl.Result;
+using ECommerce.Domain.Modules.IAC.DomainError;
 
-public sealed record Password
+namespace ECommerce.Domain.Modules.IAC.ValueObject
 {
-    public string Value { get; }
-
-    private Password(string value)
+    public sealed record Password
     {
-        Validate(value);
-        Value = value;
+        public string Value { get; init; }
+
+        private Password(string value)
+        {
+            Value = value;
+        }
+
+        public static Result<Password> From(string password)
+        {
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                return PasswordErrors.Required;
+            }
+
+            if (password.Length < 8)
+            {
+                return PasswordErrors.TooShort;
+            }
+
+            bool hasUpper = password.Any(char.IsUpper);
+            bool hasLower = password.Any(char.IsLower);
+            bool hasDigit = password.Any(char.IsDigit);
+
+            if (!hasUpper || !hasLower || !hasDigit)
+            {
+                return PasswordErrors.MissingComplexity;
+            }
+
+
+            return Result<Password>.Success(new Password(password));
+        }
+
+        public static Password Reconstruct(string value) => new(value);
+
+        public override string ToString() => "********";
     }
-
-    public static Password From(string value) => new(value);
-
-    private static void Validate(string password)
-    {
-        if (string.IsNullOrWhiteSpace(password))
-            throw new ArgumentException("the password can not be empty !!");
-
-        if (password.Length < 8)
-            throw new ArgumentException("the password must be at least 8 char ");
-
-        if (!password.Any(char.IsUpper) || !password.Any(char.IsDigit))
-            throw new ArgumentException("the password must have one uppercase and one lowercase ");
-    }
-
-    public override string ToString() => "********";
 }

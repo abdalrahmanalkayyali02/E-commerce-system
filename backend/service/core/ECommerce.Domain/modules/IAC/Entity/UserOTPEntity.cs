@@ -1,4 +1,7 @@
-﻿using ECommerce.Domain.modules.IAC.ValueObject;
+﻿using Common.Impl.Result;
+using ECommerce.Domain.modules.IAC.ValueObject;
+using Common.Result;
+using ECommerce.Domain.Modules.IAC.DomainError;
 
 namespace ECommerce.Domain.modules.IAC.Entity
 {
@@ -47,10 +50,13 @@ namespace ECommerce.Domain.modules.IAC.Entity
             DateTime.UtcNow <= ExpiresAt &&
             FailedAttempts < 5;
 
-        public void MarkAsVerified()
+        public Result<bool> MarkAsVerified()
         {
-            if (!IsValid()) throw new InvalidOperationException("Cannot verify an expired or used OTP.");
+            if (!IsValid())
+                return Result<bool>.Failure(Error.Validation("400", "Cannot verify an expired or used OTP."));
+          
             IsVerified = true;
+            return Result<bool>.Success(true);
         }
 
         public void MarkAsUsed() => IsUsed = true;

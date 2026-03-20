@@ -16,6 +16,8 @@ namespace ECommerce.Infrastructure.Persistence.Model
 
         public string verfiedSellerDocument { get;  set; }
         public string verfiedShopDocument { get;  set; }
+        public bool isVerfiedSellerDocumentBeenViewed { get; set; }
+        public bool isVerfiedShopDocumentBeenViewed { get; set; }
         public DateTime CreateAt { get;  set; }
         public DateTime UpdateAt { get;  set; }
     }

@@ -27,9 +27,9 @@ namespace ECommerce.Domain.modules.IAC.Entity
 
 
         private SellerEntity() { }
-        private  SellerEntity
+        public  SellerEntity
             (Guid id, string shopName, string shopPhoto, Address address, bool isVerfiedByAdmin,
-            string verfiedShopDocument, string VerfiedSelllerDocumentt, bool isShopDocumentView, bool isSellerDocumentView)
+            string verfiedShopDocument, string VerfiedSelllerDocument, bool isShopDocumentView, bool isSellerDocumentView)
         {
             sellerID = id;
             this.shopName = shopName;
@@ -38,6 +38,7 @@ namespace ECommerce.Domain.modules.IAC.Entity
             isVerifiedByAdmin = isVerfiedByAdmin;
             this.verfiedShopDocument = verfiedShopDocument;
             verfiedSellerDocument = verfiedSellerDocument;
+            this.verfiedShopDocument = VerfiedSelllerDocument;
             isVerfiedShopDocumentBeenViewed = isShopDocumentView;
             isVerfiedSellerDocumentBeenViewed = isSellerDocumentView;
         }

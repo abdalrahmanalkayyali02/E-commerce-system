@@ -10,7 +10,6 @@ namespace ECommerce.Infrastructure.Persistence.Mapper
     public static class UserMapper
     {
         // Domain => Persistence
-
         public static UserDataModel FromDomainToPersistence(UserEntity user)
         {
             var model = new UserDataModel();
@@ -24,45 +23,45 @@ namespace ECommerce.Infrastructure.Persistence.Mapper
             model.phoneNumber = user.PhoneNumber.Value;
             model.password = user.Password.Value;
             model.DateOfBirth = user.DateOfBirth.Value;
+            //model.DateOfBirth = DateTime.SpecifyKind(user.DateOfBirth.Value, DateTimeKind.Utc);
             model.profilePhoto = user.ProfilePhoto;
-            model.CreateAt = user.CreatedAt;
-            model.UpdateAt = user.UpdatedAt;
-            model.DeleteAt = user.DeleteAt;
+            model.Role = user.Role;
+            model.AccountStatus = user.AccountStatus;
+            model.CreateAt = DateTime.SpecifyKind(user.CreatedAt, DateTimeKind.Utc);
+            model.UpdateAt = DateTime.SpecifyKind(user.UpdatedAt, DateTimeKind.Utc);
+            model.DeleteAt = user.DeleteAt.HasValue
+                ? DateTime.SpecifyKind(user.DeleteAt.Value, DateTimeKind.Utc)
+                : null;
             model.isDelete = user.isDelete;
-            
 
             return model;
         }
 
-
-
-
-
         // Persistence => Domain
-
         public static UserEntity FromPersistenceToDomain(UserDataModel model)
         {
-            var user = new UserEntity
-                (
-                    id: model.id,
-                    firstName: Name.FromStrict(model.FirstName),
-                    lastName: Name.FromStrict(model.LastName),
-                    userName: Name.From(model.UserName),
-                    dateOfBirth:  DateOfBirth.From(model.DateOfBirth.ToString()), // maybe will happen error 
-                    email: Email.From(model.Email),
-                    isEmailConfirmed: model.IsEmailConfirmed,
-                    phoneNumber: PhoneNumber.From(model.phoneNumber),
-                    password: Password.From(model.password),
-                    role:  model.Role,
-                    accountStatus: model.AccountStatus,
-                    profilePhoto: model.profilePhoto,
-                    createdAt: model.CreateAt,
-                    updatedAt: model.UpdateAt,
-                    DeleteAt: model.DeleteAt,
-                    isDelete: model.isDelete
-                );
+            return new UserEntity(
+                id: model.id,
+                firstName: Name.FromStrict(model.FirstName),
+                lastName: Name.FromStrict(model.LastName),
+                userName: Name.From(model.UserName),
+                dateOfBirth: DateOfBirth.Reconstructing(model.DateOfBirth),
+               // dateOfBirth: DateOfBirth.From(DateTime.SpecifyKind(model.DateOfBirth, DateTimeKind.Utc)),
+                email: Email.From(model.Email),
+                isEmailConfirmed: model.IsEmailConfirmed,
+                phoneNumber: PhoneNumber.From(model.phoneNumber),
+                password: Password.From(model.password),
+                role: model.Role,
+                accountStatus: model.AccountStatus,
+                profilePhoto: model.profilePhoto,
 
-            return user;
+                createdAt: DateTime.SpecifyKind(model.CreateAt, DateTimeKind.Utc),
+                updatedAt: DateTime.SpecifyKind(model.UpdateAt, DateTimeKind.Utc),
+                deleteAt: model.DeleteAt.HasValue
+                    ? DateTime.SpecifyKind(model.DeleteAt.Value, DateTimeKind.Utc)
+                    : null,
+                isDelete: model.isDelete
+            );
         }
     }
 }

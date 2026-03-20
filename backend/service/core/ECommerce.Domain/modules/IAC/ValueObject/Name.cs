@@ -1,45 +1,70 @@
-﻿namespace ECommerce.Domain.modules.IAC.ValueObject;
+﻿using Common.Impl.Result;
+using ECommerce.Domain.Modules.IAC.DomainError;
+using System.Linq;
+using System.Text.RegularExpressions;
 
-public sealed record Name
+namespace ECommerce.Domain.Modules.IAC.ValueObject
 {
-    public string Value { get; }
-
-    private Name(string value, bool allowSpecialChars)
+    public sealed record Name
     {
-        if (string.IsNullOrWhiteSpace(value))
-            throw new ArgumentException("Name cannot be empty.");
+        public string Value { get; init; }
 
-        var trimmedName = value.Trim();
-
-        if (trimmedName.Length < 4 || trimmedName.Length > 15)
-            throw new ArgumentException("Name must be between 4 and 15 characters long.");
-
-        if (trimmedName.Contains("  "))
-            throw new ArgumentException("Multiple consecutive spaces are not allowed.");
-
-        if (!allowSpecialChars)
+        private Name(string value)
         {
-            if (trimmedName.Contains("@") || trimmedName.Contains("_"))
-                throw new ArgumentException("Special characters (@ and _) are not allowed in this field.");
-        }
-        else
-        {
-            if (trimmedName.Count(c => c == '_') > 1)
-                throw new ArgumentException("The underscore (_) can only be used once.");
-
-            if (trimmedName.Count(c => c == '@') > 1)
-                throw new ArgumentException("The @ symbol can only be used once.");
+            Value = value;
         }
 
-        if (!System.Text.RegularExpressions.Regex.IsMatch(trimmedName, @"^[a-zA-Z0-9 _@]+$"))
-            throw new ArgumentException("Name contains invalid characters.");
+        public static Result<Name> From(string value) => Create(value, allowSpecialChars: true);
 
-        Value = trimmedName;
+        public static Result<Name> FromStrict(string value) => Create(value, allowSpecialChars: false);
+
+        private static Result<Name> Create(string value, bool allowSpecialChars)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return NameErrors.Required;
+            }
+
+            var trimmedName = value.Trim();
+
+            // Length Validation
+            if (trimmedName.Length < 4 || trimmedName.Length > 15)
+            {
+                return NameErrors.InvalidLength;
+            }
+
+            // Formatting Validation
+            if (trimmedName.Contains("  "))
+            {
+                return NameErrors.ConsecutiveSpaces;
+            }
+
+            // Special Character Logic
+            if (!allowSpecialChars)
+            {
+                if (trimmedName.Contains("@") || trimmedName.Contains("_"))
+                {
+                    return NameErrors.SpecialCharsNotAllowed;
+                }
+            }
+            else
+            {
+                if (trimmedName.Count(c => c == '_') > 1 || trimmedName.Count(c => c == '@') > 1)
+                {
+                    return NameErrors.MultipleSpecialChars;
+                }
+            }
+
+            if (!Regex.IsMatch(trimmedName, @"^[a-zA-Z0-9 _@]+$"))
+            {
+                return NameErrors.InvalidCharacters;
+            }
+
+            return new Name(trimmedName);
+        }
+
+        public static Name Reconstruct(string value) => new(value);
+
+        public override string ToString() => Value;
     }
-
-    public static Name From(string value) => new(value, allowSpecialChars: true);
-
-    public static Name FromStrict(string value) => new(value, allowSpecialChars: false);
-
-    public override string ToString() => Value;
 }

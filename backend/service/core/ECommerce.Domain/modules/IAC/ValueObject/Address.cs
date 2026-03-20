@@ -1,39 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Common.Impl.Result;
+using ECommerce.Domain.modules.IAC.DomainError;
+using ECommerce.Domain.Modules.IAC.DomainError;
 
 namespace ECommerce.Domain.modules.IAC.ValueObject
 {
-    public  sealed record Address
+    public sealed record Address
     {
-        public string Value { get;  init; }
+        public string Value { get; init; }
 
-        private Address() { }
-
-        private Address (string value )
+        private Address(string value)
         {
             Value = value;
         }
 
-        public static Address Create (string value)
+        public static Result<Address> Create(string value)
         {
-
-            if (string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrWhiteSpace(value))
             {
-                throw new ArgumentNullException("the address can not be null");
+                return Result<Address>.Failure(AddressErrors.Required);
             }
 
             if (value.Length < 5 || value.Length > 150)
             {
-                throw new ArgumentOutOfRangeException("the address must be at least 5 char and at most 150 char");
+                return Result<Address>.Failure(AddressErrors.InvalidLength);
             }
 
-
-            return new Address (value); 
+            return Result<Address>.Success(new Address(value));
         }
 
+        public static Address Reconstruct(string value) => new Address(value);
+
         public override string ToString() => Value;
-
-
     }
 }

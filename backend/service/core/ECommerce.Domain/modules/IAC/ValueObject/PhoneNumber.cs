@@ -1,32 +1,43 @@
-﻿namespace ECommerce.Domain.modules.IAC.ValueObject;
+﻿using Common.Impl.Result;
+using ECommerce.Domain.Modules.IAC.DomainError;
+using System.Text.RegularExpressions;
 
-public sealed  record PhoneNumber
+namespace ECommerce.Domain.Modules.IAC.ValueObject
 {
-    public string Value { get; }
-
-    private PhoneNumber(string value)
+    public sealed record PhoneNumber
     {
-        if (string.IsNullOrWhiteSpace(value))
+        public string Value { get; init; }
+
+        private PhoneNumber(string value)
         {
-            throw new ArgumentException("Phone number cannot be empty.");
+            Value = value;
         }
 
-        var cleanedValue = value.Trim().Replace(" ", "").Replace("-", "");
-
-        if (cleanedValue.Length < 7 || cleanedValue.Length > 15)
+        public static Result<PhoneNumber> From(string value)
         {
-            throw new ArgumentException("Phone number must be between 7 and 15 characters.");
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return PhoneNumberErrors.Required;
+            }
+
+            var cleanedValue = value.Trim().Replace(" ", "").Replace("-", "");
+
+            if (cleanedValue.Length < 7 || cleanedValue.Length > 15)
+            {
+                return PhoneNumberErrors.InvalidLength;
+            }
+
+            if (!Regex.IsMatch(cleanedValue, @"^\+?[0-9]+$"))
+            {
+                return PhoneNumberErrors.InvalidFormat;
+            }
+
+            return new PhoneNumber(cleanedValue);
         }
 
-        if (!System.Text.RegularExpressions.Regex.IsMatch(cleanedValue, @"^\+?[0-9]+$"))
-        {
-            throw new ArgumentException("Phone number format is invalid.");
-        }
+ 
+        public static PhoneNumber Reconstruct(string value) => new(value);
 
-        Value = cleanedValue;
+        public override string ToString() => Value;
     }
-
-    public static PhoneNumber From(string value) => new(value);
-
-    public override string ToString() => Value;
 }

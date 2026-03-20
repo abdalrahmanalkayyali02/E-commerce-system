@@ -1,58 +1,13 @@
-﻿using ECommerce.Application.Feature.IAC.User.Create.Command;
+﻿using FluentValidation;
 using ECommerce.Domain.modules.IAC.ValueObject;
-using FluentValidation;
+using ECommerce.Application.Feature.IAC.User.Create.Command;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ECommerce.Application.Feature.IAC.User.Create.Validater
 {
     public class CreateSellerValidater : AbstractValidator<CreateSellerCommand>
     {
-
-        #region Helper Method (Domain Bridge)
-        private bool BeAValidEmail(string email)
-        {
-            try { Email.From(email); return true; }
-            catch { return false; }
-        }
-
-        private bool BeAValidPassword(string password)
-        {
-            try { Password.From(password); return true; }
-            catch { return false; }
-        }
-
-
-        private bool BeAValidFirstOrLastName(string name)
-        {
-            try
-            { Name.FromStrict(name); return true; }
-            catch { return false; }
-        }
-
-        private bool BeAValidUserName(string name)
-        {
-            try
-            { Name.From(name); return true; }
-            catch { return false; }
-        }
-
-        private bool BeAValidAddress(string address)
-        {
-            try { Address.Create(address); return true; }
-            catch { return false; }
-        }
-
-        private bool BeAValidDateOfBirth(string date)
-        {
-            try { DateOfBirth.From(date); return true; }
-            catch { return false; }
-        }
-
-        #endregion
-
-        public CreateSellerValidater() 
+        public CreateSellerValidater()
         {
             RuleFor(x => x.firstName)
               .NotEmpty()
@@ -81,32 +36,56 @@ namespace ECommerce.Application.Feature.IAC.User.Create.Validater
             RuleFor(x => x.password)
                 .NotEmpty()
                 .Must(BeAValidPassword)
-                .WithMessage("Password must be at least 8 chars with uppercase,lowercase and digits.");
+                .WithMessage("Password must be at least 8 chars with uppercase, lowercase and digits.");
 
             RuleFor(x => x.dateOfBirth)
                 .NotNull()
                 .Must(BeAValidDateOfBirth)
-                .WithMessage("Customer must be at least 18 years old.");
+                .WithMessage("Seller must be at least 18 years old.");
 
             RuleFor(x => x.shopName)
-                .NotNull()
-                .WithMessage("shop name is require !!")
+                .NotEmpty() // تم استبدال NotNull بـ NotEmpty لضمان عدم وجود نص فارغ
+                .WithMessage("Shop name is required !!")
                 .MaximumLength(50)
-                .WithMessage("the max length for the shop name is 50 charchter");
+                .WithMessage("The max length for the shop name is 50 characters.");
 
             RuleFor(x => x.profilePhoto)
                .Must(url => string.IsNullOrEmpty(url) || Uri.IsWellFormedUriString(url, UriKind.Absolute))
                .WithMessage("Profile photo must be a valid URL.");
 
             RuleFor(x => x.verfiedSellerDocument)
-                              .NotEmpty().WithMessage("Seller verification document is required.")
-                              .Must(url => Uri.IsWellFormedUriString(url, UriKind.Absolute))
-                              .WithMessage("Seller document must be a valid URL.");
+                .NotEmpty().WithMessage("Seller verification document is required.")
+                .Must(url => Uri.IsWellFormedUriString(url, UriKind.Absolute))
+                .WithMessage("Seller document must be a valid URL.");
 
             RuleFor(x => x.verfiedShopDocument)
-                  .NotEmpty().WithMessage("Shop verification document is required.")
-                  .Must(url => Uri.IsWellFormedUriString(url, UriKind.Absolute))
-                  .WithMessage("Shop document must be a valid URL.");
+                .NotEmpty().WithMessage("Shop verification document is required.")
+                .Must(url => Uri.IsWellFormedUriString(url, UriKind.Absolute))
+                .WithMessage("Shop document must be a valid URL.");
         }
+
+        #region Helper Method (Domain Bridge)
+
+        // استخدمنا الـ Try ميثود لتقليل تكرار الـ Catch في كل مكان
+        private bool Try(Action action)
+        {
+            try { action(); return true; }
+            catch { return false; }
+        }
+
+        private bool BeAValidEmail(string email) => Try(() => Email.From(email));
+
+        private bool BeAValidPassword(string password) => Try(() => Password.From(password));
+
+        private bool BeAValidFirstOrLastName(string name) => Try(() => Name.FromStrict(name));
+
+        private bool BeAValidUserName(string name) => Try(() => Name.From(name));
+
+        private bool BeAValidAddress(string address) => Try(() => Address.Create(address));
+
+        // تصحيح الـ Variable Name من data إلى date
+        private bool BeAValidDateOfBirth(string date) => Try(() => DateOfBirth.From(date));
+
+        #endregion
     }
 }

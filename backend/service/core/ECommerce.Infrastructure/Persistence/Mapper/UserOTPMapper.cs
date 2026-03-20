@@ -1,5 +1,6 @@
 ﻿
 using ECommerce.Domain.modules.IAC.Entity;
+using ECommerce.Domain.modules.IAC.ValueObject;
 using ECommerce.Infrastructure.Persistence.Model;
 
 namespace ECommerce.Infrastructure.Persistence.Mapper
@@ -14,7 +15,7 @@ namespace ECommerce.Infrastructure.Persistence.Mapper
             {
                 ID = domain.ID,
                 userID = domain.userID,
-                Code = domain.Code,
+                Code = domain.Code.Value,
                 GeneratedAt = domain.GeneratedAt,
                 ExpiresAt = domain.ExpiresAt,
                 IsUsed = domain.IsUsed,
@@ -30,10 +31,10 @@ namespace ECommerce.Infrastructure.Persistence.Mapper
 
         public static UserOTPEntity FromPersistenceToDomain(UserOtpDataModel model)
         {
-            var domain = new UserOTPEntity (
+            var domain = new UserOTPEntity(
                 iD: model.ID,
                 userID: model.userID,
-                code: model.Code,
+                code: OTP.Reconstructing(model.Code),
                 generatedAt: model.GeneratedAt,
                 expiresAt: model.ExpiresAt,
                 isUsed: model.IsUsed,

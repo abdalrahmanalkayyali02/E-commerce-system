@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace Api.Controller.IAC
 {
     [ApiController]
-  //  [ApiVersion("1.0")]
-    [Route("Register")]
+    [ApiVersion("1.0")]
+    [Route("register")]
     public class RegisterationController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -19,6 +19,8 @@ namespace Api.Controller.IAC
         [HttpPost("customer")]
         public async Task<IActionResult> CustomerRegister([FromBody] CreateCustomerCommand request)
         {
+            
+      
 
             var result = await _mediator.Send(request);
 

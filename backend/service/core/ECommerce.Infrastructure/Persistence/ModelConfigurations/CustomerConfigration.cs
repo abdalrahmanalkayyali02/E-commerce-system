@@ -2,14 +2,14 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ECommerce.Infrastructure.Persistence.Configurations
+namespace ECommerce.Infrastructure.Persistence.ModelConfigurations
 {
     public class CustomerConfiguration : IEntityTypeConfiguration<CustomerDataModel>
     {
         public void Configure(EntityTypeBuilder<CustomerDataModel> builder)
         {
             // 1. Table Mapping
-            builder.ToTable("Customers");
+            builder.ToTable("Customers", "iac");
 
             // 2. Primary Key
             builder.HasKey(c => c.CustomrID);

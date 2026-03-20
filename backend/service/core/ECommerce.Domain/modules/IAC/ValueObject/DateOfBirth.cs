@@ -1,39 +1,44 @@
-﻿using System.Globalization;
+﻿using Common.Impl.Result;
+using ECommerce.Domain.Modules.IAC.DomainError;
+using System.Globalization;
 
-namespace ECommerce.Domain.modules.IAC.ValueObject;
-
-public sealed  record DateOfBirth
+public sealed record DateOfBirth
 {
-    public DateTime Value { get; }
+    public DateOnly Value { get; init; }
 
-    private DateOfBirth(string value)
+    private DateOfBirth(DateOnly value) => Value = value;
+
+    /// <summary>
+    /// used when creating new request of the dob form user
+    /// </summary>
+    public static Result<DateOfBirth> From(string dateStr)
     {
-        if (string.IsNullOrWhiteSpace(value))
-            throw new ArgumentException("Date of birth cannot be empty.");
-
-        if (!DateTime.TryParseExact(value, "dd-MM-yyyy",
-            CultureInfo.InvariantCulture,
-            DateTimeStyles.None,
-            out DateTime parsedDate))
+        if (!DateTime.TryParseExact(dateStr, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var dt))
         {
-            throw new ArgumentException("Invalid date format. Please use DD-MM-YYYY (e.g., 25-12-1990).");
+            return Result<DateOfBirth>.Failure(DateOfBirthErrors.InvalidFormat);
         }
 
-        var today = DateTime.UtcNow.Date;
-        var age = today.Year - parsedDate.Year;
+        var utcDateTime = DateTime.SpecifyKind(dt, DateTimeKind.Utc);
+        var date = DateOnly.FromDateTime(utcDateTime);
 
-        if (parsedDate.Date > today.AddYears(-age)) age--;
+        int age = DateTime.Today.Year - date.Year;
 
-        if (age < 18)
-            throw new ArgumentException("User must be at least 18 years old.");
+        if (age < 18 || age > 150)
+        {
+            return Result<DateOfBirth>.Failure(DateOfBirthErrors.InvalidAge);
 
-        if (age > 150)
-            throw new ArgumentException("User must be at most 150 years old");
+        }
 
-        Value = parsedDate;
+        return Result<DateOfBirth>.Success(new DateOfBirth(date));
     }
 
-    public static DateOfBirth From(string value) => new(value);
 
-    public override string ToString() => Value.ToString("dd-MM-yyyy");
+    public static DateOfBirth Reconstructing(DateOnly date)
+    {
+        return new DateOfBirth(date);
+    }
+
+    public static implicit operator DateOnly(DateOfBirth dob) => dob.Value;
+
+    public override string ToString() => Value.ToString("yyyy-MM-dd");
 }
