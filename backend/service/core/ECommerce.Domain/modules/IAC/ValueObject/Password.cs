@@ -3,7 +3,8 @@ using System.Linq;
 using Common.Impl.Result;
 using ECommerce.Domain.Modules.IAC.DomainError;
 
-namespace ECommerce.Domain.Modules.IAC.ValueObject
+namespace ECommerce.Domain.modules.IAC.ValueObject
+
 {
     public sealed record Password
     {

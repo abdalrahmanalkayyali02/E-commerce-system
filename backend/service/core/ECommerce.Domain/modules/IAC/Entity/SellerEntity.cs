@@ -1,34 +1,34 @@
-﻿using ECommerce.Domain.modules.IAC.ValueObject;
+﻿using Common.Enum;
+using Common.Impl.Result;
+using Common.Result;
+using ECommerce.Domain.modules.IAC.ValueObject;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
-[assembly: InternalsVisibleTo("ECommerce.Infrastructure")]
 
+[assembly: InternalsVisibleTo("ECommerce.Infrastructure")]
 
 namespace ECommerce.Domain.modules.IAC.Entity
 {
-    public  class SellerEntity
+    public class SellerEntity
     {
-        public Guid sellerID { get;private set;  }
-
+        public Guid sellerID { get; private set; }
         public string shopName { get; private set; }
         public string shopPhoto { get; private set; }
         public Address address { get; private set; }
         public bool isVerifiedByAdmin { get; private set; } = false;
-
         public string verfiedSellerDocument { get; private set; }
         public bool isVerfiedSellerDocumentBeenViewed { get; private set; } = false;
-
         public string verfiedShopDocument { get; private set; }
         public bool isVerfiedShopDocumentBeenViewed { get; private set; } = false;
         public DateTime CreateAt { get; private set; }
         public DateTime UpdateAt { get; private set; }
 
-
         private SellerEntity() { }
-        public  SellerEntity
-            (Guid id, string shopName, string shopPhoto, Address address, bool isVerfiedByAdmin,
+
+        public SellerEntity(
+            Guid id, string shopName, string shopPhoto, Address address, bool isVerfiedByAdmin,
             string verfiedShopDocument, string VerfiedSelllerDocument, bool isShopDocumentView, bool isSellerDocumentView)
         {
             sellerID = id;
@@ -37,110 +37,159 @@ namespace ECommerce.Domain.modules.IAC.Entity
             this.address = address;
             isVerifiedByAdmin = isVerfiedByAdmin;
             this.verfiedShopDocument = verfiedShopDocument;
-            verfiedSellerDocument = verfiedSellerDocument;
-            this.verfiedShopDocument = VerfiedSelllerDocument;
+            verfiedSellerDocument = VerfiedSelllerDocument;
             isVerfiedShopDocumentBeenViewed = isShopDocumentView;
             isVerfiedSellerDocumentBeenViewed = isSellerDocumentView;
         }
 
-        public static SellerEntity Create 
-            (Guid id, string shopName, string shopPhoto, Address address, bool isVerfiedByAdmin,
+        public static Result<SellerEntity> Create(
+            Guid id, string shopName, string shopPhoto, Address address, bool isVerfiedByAdmin,
             string verfiedShopDocument, string VerfiedSelllerDocument, bool isShopDocumentView, bool isSellerDocumentView)
         {
-            var seller = new SellerEntity
-                (id, shopName, shopPhoto, address, isVerfiedByAdmin, verfiedShopDocument, VerfiedSelllerDocument,isShopDocumentView,isSellerDocumentView);
+            if (string.IsNullOrWhiteSpace(shopName))
+                return Error.Validation("Seller.InvalidShopName", "Shop name cannot be empty.");
 
-            return seller;
+            if (shopName.Length < 5 || shopName.Length > 20)
+                return Error.Validation("Seller.InvalidShopName", "Shop name must be between 5-20 characters.");
+
+            if (string.IsNullOrWhiteSpace(shopPhoto))
+                return Error.Validation("Seller.InvalidShopPhoto", "Shop photo cannot be empty.");
+
+            if (string.IsNullOrWhiteSpace(verfiedShopDocument))
+                return Error.Validation("Seller.InvalidShopDocument", "Shop document cannot be empty.");
+
+            if (string.IsNullOrWhiteSpace(VerfiedSelllerDocument))
+                return Error.Validation("Seller.InvalidSellerDocument", "Seller document cannot be empty.");
+
+            var seller = new SellerEntity(
+                id, shopName, shopPhoto, address, isVerfiedByAdmin,
+                verfiedShopDocument, VerfiedSelllerDocument, isShopDocumentView, isSellerDocumentView);
+
+            seller.CreateAt = DateTime.UtcNow;
+            seller.UpdateAt = DateTime.UtcNow;
+
+            return Result<SellerEntity>.Success(seller);
         }
 
-
-
-        public void updateShopName(string shopName)
+        public Result<Success> updateShopName(string shopName)
         {
-            if (shopName == this.shopName) return;  
+            if (string.IsNullOrWhiteSpace(shopName))
+                return Error.Validation("Seller.InvalidShopName", "Shop name cannot be empty.");
 
-            if (shopName.Length < 5 && shopName.Length > 10)
-            {
-                throw new Exception("the shop name must be between 5-10 charchter");
-            }
+            if (shopName.Length < 5 || shopName.Length > 20)
+                return Error.Validation("Seller.InvalidShopName", "Shop name must be between 5-20 characters.");
+
+            if (shopName == this.shopName)
+                return Result<Success>.Success(new Success());
 
             this.shopName = shopName;
-            this.UpdateAt = DateTime.UtcNow;
+            UpdateAt = DateTime.UtcNow;
+            return Result<Success>.Success(new Success());
         }
 
-        public void updateShopPhoto(string  shopPhoto)
+        public Result<Success> updateShopPhoto(string shopPhoto)
         {
-            if (this.shopPhoto ==  shopPhoto) return;
+            if (string.IsNullOrWhiteSpace(shopPhoto))
+                return Error.Validation("Seller.InvalidShopPhoto", "Shop photo cannot be empty.");
+
+ 
             this.shopPhoto = shopPhoto;
-            this.UpdateAt = DateTime.UtcNow;
-
+            UpdateAt = DateTime.UtcNow;
+            return Result<Success>.Success(new Success());
         }
 
-        public void updateShopAddress(Address address)
+        public Result<Success> updateShopAddress(Address address)
         {
-            if (this.address.Value == address.Value) 
-                return;
+            if (address is null)
+                return Error.Validation("Seller.InvalidAddress", "Address cannot be null.");
+
+        
 
             this.address = address;
-            this.UpdateAt = DateTime.UtcNow;
-
+            UpdateAt = DateTime.UtcNow;
+            return Result<Success>.Success(new Success());
         }
 
-        public void markAsVerfied()
+        public Result<Success> markAsVerfied()
         {
+            if (isVerifiedByAdmin)
+                return Error.Conflict("Seller.AlreadyVerified", "Seller is already verified.");
+
             isVerifiedByAdmin = true;
-            this.UpdateAt = DateTime.UtcNow;
-
+            UpdateAt = DateTime.UtcNow;
+            return Result<Success>.Success(new Success());
         }
 
-        public void markAsUnvervied()
+        public Result<Success> markAsUnvervied()
         {
+            if (!isVerifiedByAdmin)
+                return Error.Conflict("Seller.AlreadyUnverified", "Seller is already unverified.");
+
             isVerifiedByAdmin = false;
-            this.UpdateAt = DateTime.UtcNow;
+            UpdateAt = DateTime.UtcNow;
+            return Result<Success>.Success(new Success());
         }
 
-        public void markAsViewForSellerDocument()
+        public Result<Success> markAsViewForSellerDocument()
         {
+            if (isVerfiedSellerDocumentBeenViewed)
+                return Error.Conflict("Seller.AlreadyViewed", "Seller document already marked as viewed.");
+
             isVerfiedSellerDocumentBeenViewed = true;
+            return Result<Success>.Success(new Success());
         }
 
-        public void markAsNotViewForSellerDocument()
+        public Result<Success> markAsNotViewForSellerDocument()
         {
-            isVerfiedSellerDocumentBeenViewed= false;
+            if (!isVerfiedSellerDocumentBeenViewed)
+                return Error.Conflict("Seller.AlreadyNotViewed", "Seller document already marked as not viewed.");
+
+            isVerfiedSellerDocumentBeenViewed = false;
+            return Result<Success>.Success(new Success());
         }
 
-        public void markAsViewForShopDocument()
+        public Result<Success> markAsViewForShopDocument()
         {
+            if (isVerfiedShopDocumentBeenViewed)
+                return Error.Conflict("Seller.AlreadyViewed", "Shop document already marked as viewed.");
+
             isVerfiedShopDocumentBeenViewed = true;
+            return Result<Success>.Success(new Success());
         }
 
-        public void markAsNotViewForShopDocument()
+        public Result<Success> markAsNotViewForShopDocument()
         {
+            if (isVerfiedShopDocumentBeenViewed == false)
+                return Error.Conflict("Seller.AlreadyNotViewed", "Shop document already marked as not viewed.");
+
             isVerfiedShopDocumentBeenViewed = false;
+            return Result<Success>.Success(new Success());
         }
 
+        public Result<Success> updateVerfiedSellerDocument(string verfiedSellerDocument)
+        {
+            if (isVerifiedByAdmin)
+                return Error.Conflict("Seller.AlreadyVerified", "Cannot update verified seller document when the seller is already verified.");
 
+            if (string.IsNullOrWhiteSpace(verfiedSellerDocument))
+                return Error.Validation("Seller.InvalidSellerDocument", "Seller document cannot be empty.");
 
-
-        public void updateVerfiedSellerDocument(string verfiedSellerDocument)
-        { 
-            if (isVerifiedByAdmin == true) 
-            {
-                throw new InvalidOperationException("Cannot update verified seller document when the seller is already verified.");
-            }
             this.verfiedSellerDocument = verfiedSellerDocument;
             UpdateAt = DateTime.UtcNow;
+            return Result<Success>.Success(new Success());
         }
 
-        public void updateVerfiedShopDocument(string verfiedShopDocument)
+        public Result<Success> updateVerfiedShopDocument(string verfiedShopDocument)
         {
-            if (isVerifiedByAdmin == true)
-            {
-                throw new InvalidOperationException("Cannot update verified shop document when the seller is already verified.");
-            }
+            if (isVerifiedByAdmin)
+                return Error.Conflict("Seller.AlreadyVerified", "Cannot update verified shop document when the seller is already verified.");
+
+            if (string.IsNullOrWhiteSpace(verfiedShopDocument))
+                return Error.Validation("Seller.InvalidShopDocument", "Shop document cannot be empty.");
+
             this.verfiedShopDocument = verfiedShopDocument;
             UpdateAt = DateTime.UtcNow;
+            return Result<Success>.Success(new Success());
         }
-
     }
 }

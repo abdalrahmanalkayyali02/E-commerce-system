@@ -28,8 +28,8 @@ namespace ECommerce.Infrastructure.DIC
             // validater
             services.AddScoped<IValidator<CreateCustomerCommand>, CreateCustomerValidator>();
 
-           // services.AddScoped<IValidator<CreateSellerCommand>, CreateSellerValidater>();
-           // services.AddScoped<IValidator<LoginUserCommand>, LoginValidater>();
+            services.AddScoped<IValidator<CreateSellerCommand>, CreateSellerValidater>();
+            // services.AddScoped<IValidator<LoginUserCommand>, LoginValidater>();
 
 
             // verfied otp

@@ -1,5 +1,6 @@
 ﻿using ECommerce.Domain.modules.IAC.Entity;
 using ECommerce.Domain.modules.IAC.ValueObject;
+using ECommerce.Domain.Modules.IAC.Entity;
 using ECommerce.Infrastructure.Persistence.Model;
 using System;
 using System.Collections.Generic;
@@ -29,10 +30,10 @@ namespace ECommerce.Infrastructure.Persistence.Mapper
             model.AccountStatus = user.AccountStatus;
             model.CreateAt = DateTime.SpecifyKind(user.CreatedAt, DateTimeKind.Utc);
             model.UpdateAt = DateTime.SpecifyKind(user.UpdatedAt, DateTimeKind.Utc);
-            model.DeleteAt = user.DeleteAt.HasValue
-                ? DateTime.SpecifyKind(user.DeleteAt.Value, DateTimeKind.Utc)
+            model.DeleteAt = user.DeletedAt.HasValue
+                ? DateTime.SpecifyKind(user.DeletedAt.Value, DateTimeKind.Utc)
                 : null;
-            model.isDelete = user.isDelete;
+            model.isDelete = user.IsDeleted;
 
             return model;
         }
@@ -42,25 +43,24 @@ namespace ECommerce.Infrastructure.Persistence.Mapper
         {
             return new UserEntity(
                 id: model.id,
-                firstName: Name.FromStrict(model.FirstName),
-                lastName: Name.FromStrict(model.LastName),
-                userName: Name.From(model.UserName),
+                firstName: Name.Reconstruct(model.FirstName),
+                lastName: Name.Reconstruct(model.LastName),
+                userName: Name.Reconstruct(model.UserName),
                 dateOfBirth: DateOfBirth.Reconstructing(model.DateOfBirth),
-               // dateOfBirth: DateOfBirth.From(DateTime.SpecifyKind(model.DateOfBirth, DateTimeKind.Utc)),
-                email: Email.From(model.Email),
+                email: Email.Reconstruct(model.Email),
                 isEmailConfirmed: model.IsEmailConfirmed,
-                phoneNumber: PhoneNumber.From(model.phoneNumber),
-                password: Password.From(model.password),
+                phoneNumber: PhoneNumber.Reconstruct(model.phoneNumber),
+                password: Password.Reconstruct(model.password),
                 role: model.Role,
                 accountStatus: model.AccountStatus,
                 profilePhoto: model.profilePhoto,
 
                 createdAt: DateTime.SpecifyKind(model.CreateAt, DateTimeKind.Utc),
                 updatedAt: DateTime.SpecifyKind(model.UpdateAt, DateTimeKind.Utc),
-                deleteAt: model.DeleteAt.HasValue
+                deletedAt: model.DeleteAt.HasValue
                     ? DateTime.SpecifyKind(model.DeleteAt.Value, DateTimeKind.Utc)
                     : null,
-                isDelete: model.isDelete
+                isDeleted: model.isDelete
             );
         }
     }

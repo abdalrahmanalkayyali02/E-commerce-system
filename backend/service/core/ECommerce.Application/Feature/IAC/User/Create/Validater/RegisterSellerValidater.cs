@@ -10,48 +10,53 @@ namespace ECommerce.Application.Feature.IAC.User.Create.Validater
         public CreateSellerValidater()
         {
             RuleFor(x => x.firstName)
-              .NotEmpty()
-              .Must(BeAValidFirstOrLastName)
-              .MaximumLength(50);
+               .NotEmpty()
+               .Must(name => !Name.FromStrict(name).IsError)
+               .WithMessage("First name must be 4-15 chars and contain no special characters.");
 
             RuleFor(x => x.lastName)
                 .NotEmpty()
-                .Must(BeAValidFirstOrLastName)
-                .MaximumLength(50);
+                .Must(name => !Name.FromStrict(name).IsError)
+                .WithMessage("Last name must be 4-15 chars and contain no special characters.");
 
             RuleFor(x => x.userName)
                 .NotEmpty()
-                .Must(BeAValidUserName)
-                .MinimumLength(4);
+                .Must(name => !Name.From(name).IsError)
+                .WithMessage("Username allows only one '_' or '@' and must be 4-15 chars.");
 
             RuleFor(x => x.address)
                 .NotEmpty()
-                .Must(BeAValidAddress);
+                .Must(address => !Address.Create(address).IsError)
+                .WithMessage("Invalid address format.");
 
             RuleFor(x => x.email)
                 .NotEmpty()
-                .Must(BeAValidEmail)
+                .Must(email => !Email.From(email).IsError)
                 .WithMessage("Invalid email format.");
 
             RuleFor(x => x.password)
                 .NotEmpty()
-                .Must(BeAValidPassword)
-                .WithMessage("Password must be at least 8 chars with uppercase, lowercase and digits.");
+                .Must(password => !Password.From(password).IsError)
+                .WithMessage("Password requires 8+ chars, uppercase, and digits.");
 
             RuleFor(x => x.dateOfBirth)
-                .NotNull()
-                .Must(BeAValidDateOfBirth)
-                .WithMessage("Seller must be at least 18 years old.");
-
-            RuleFor(x => x.shopName)
-                .NotEmpty() // تم استبدال NotNull بـ NotEmpty لضمان عدم وجود نص فارغ
-                .WithMessage("Shop name is required !!")
-                .MaximumLength(50)
-                .WithMessage("The max length for the shop name is 50 characters.");
+                .NotEmpty()
+                .Must(date => !DateOfBirth.From(date).IsError)
+                .WithMessage("Seller must be at least 18 years old and under 150.");
 
             RuleFor(x => x.profilePhoto)
-               .Must(url => string.IsNullOrEmpty(url) || Uri.IsWellFormedUriString(url, UriKind.Absolute))
-               .WithMessage("Profile photo must be a valid URL.");
+                .Must(url => string.IsNullOrEmpty(url) || Uri.IsWellFormedUriString(url, UriKind.Absolute))
+                .WithMessage("Profile photo must be a valid URL.");
+
+            RuleFor(x => x.shopName)
+                .NotEmpty()
+                .WithMessage("Shop name is required.")
+                .MaximumLength(20)
+                .WithMessage("The max length for the shop name is 20 characters.");
+
+            RuleFor(x => x.shopPhoto)
+                .Must(url => string.IsNullOrEmpty(url) || Uri.IsWellFormedUriString(url, UriKind.Absolute))
+                .WithMessage("Shop photo must be a valid URL.");
 
             RuleFor(x => x.verfiedSellerDocument)
                 .NotEmpty().WithMessage("Seller verification document is required.")
@@ -63,29 +68,5 @@ namespace ECommerce.Application.Feature.IAC.User.Create.Validater
                 .Must(url => Uri.IsWellFormedUriString(url, UriKind.Absolute))
                 .WithMessage("Shop document must be a valid URL.");
         }
-
-        #region Helper Method (Domain Bridge)
-
-        // استخدمنا الـ Try ميثود لتقليل تكرار الـ Catch في كل مكان
-        private bool Try(Action action)
-        {
-            try { action(); return true; }
-            catch { return false; }
-        }
-
-        private bool BeAValidEmail(string email) => Try(() => Email.From(email));
-
-        private bool BeAValidPassword(string password) => Try(() => Password.From(password));
-
-        private bool BeAValidFirstOrLastName(string name) => Try(() => Name.FromStrict(name));
-
-        private bool BeAValidUserName(string name) => Try(() => Name.From(name));
-
-        private bool BeAValidAddress(string address) => Try(() => Address.Create(address));
-
-        // تصحيح الـ Variable Name من data إلى date
-        private bool BeAValidDateOfBirth(string date) => Try(() => DateOfBirth.From(date));
-
-        #endregion
     }
 }

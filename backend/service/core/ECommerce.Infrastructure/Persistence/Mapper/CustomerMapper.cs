@@ -26,7 +26,7 @@ namespace ECommerce.Infrastructure.Persistence.Mapper
             var customer = new CustomerEntity
                 (
                     customrID: model.CustomrID,
-                    address: Address.Create(model.Address),
+                    address: Address.Reconstruct(model.Address),
                     CreateAt :model.CreateAt,
                     updateAt: model.UpdateAt
                 );

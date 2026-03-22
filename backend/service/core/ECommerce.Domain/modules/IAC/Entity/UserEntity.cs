@@ -2,8 +2,8 @@
 using Common.Impl.Result;
 using Common.Result;
 using ECommerce.Domain.modules.IAC.Entity;
+using ECommerce.Domain.modules.IAC.ValueObject;
 using ECommerce.Domain.Modules.IAC.DomainError;
-using ECommerce.Domain.Modules.IAC.ValueObject;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("ECommerce.Infrastructure")]
@@ -115,14 +115,17 @@ namespace ECommerce.Domain.Modules.IAC.Entity
 
         // --- OTP and Security Methods ---
 
+ 
         public void SetRegisterOTP(string code)
         {
-            RegisterOTP = UserOTPEntity.Create(Guid.NewGuid(), this.Id, code);
+            var otp = OTP.From(code); 
+            RegisterOTP = UserOTPEntity.Create(Guid.NewGuid(), this.Id, otp);
         }
 
         public void SetResetPasswordOTP(string code)
         {
-            ResetPasswordOTP = UserOTPEntity.Create(Guid.NewGuid(), this.Id, code);
+            var otp = OTP.From(code);
+            ResetPasswordOTP = UserOTPEntity.Create(Guid.NewGuid(), this.Id, otp);
         }
 
         public Result<Success> ConfirmEmail(string code)

@@ -1,5 +1,6 @@
 ﻿using Common.Specfication;
 using ECommerce.Domain.modules.IAC.Entity;
+using ECommerce.Domain.Modules.IAC.Entity;
 using System.Linq.Expressions;
 
 namespace ECommerce.Domain.modules.IAC.Repositories

@@ -1,4 +1,5 @@
 ﻿using Common.DTOs.IAC.Response;
+using Common.Impl.Result;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace ECommerce.Application.Feature.IAC.User.Create.Command
         string password, string? profilePhoto, string address,
         string shopName, string? shopPhoto,
         string verfiedSellerDocument, string verfiedShopDocument
-    ) : IRequest<CreateUserResponse>;
+    ) : IRequest<Result<CreateUserResponse>>;
 }
 
 

@@ -1,101 +1,138 @@
-﻿//using Common.Enum;
-//using Common.Reposotries;
-//using ECommerce.Application.Abstraction.IExternalService;
-//using ECommerce.Application.DTO.IAC.User.Response;
-//using ECommerce.Application.Feature.IAC.Commands.CreateUser.Command;
-//using ECommerce.Domain.modules.IAC.Entity;
-//using ECommerce.Domain.modules.IAC.Repositories.Read;
-//using ECommerce.Domain.modules.IAC.Repositories.Write;
-//using ECommerce.Domain.modules.IAC.ValueObject;
-//using FluentValidation;
-//using MediatR;
+﻿using Common.DTOs.IAC.Response;
+using Common.Enum;
+using Common.Impl.Result;
+using Common.Reposotries;
+using Common.Result;
+using ECommerce.Application.Abstraction.Data;
+using ECommerce.Application.Abstraction.IExternalService;
+using ECommerce.Application.Feature.IAC.ApplicationError;
+using ECommerce.Application.Feature.IAC.User.Create.Command;
+using ECommerce.Domain.modules.IAC.Entity;
+using ECommerce.Domain.modules.IAC.Specfication;
+using ECommerce.Domain.modules.IAC.ValueObject;
+using ECommerce.Domain.Modules.IAC.Entity; 
+using FluentValidation;
+using MediatR;
 
+namespace ECommerce.Application.Feature.IAC.Commands.CreateUser.Handler
+{
+    public class CreateSellerCommandHandler : IRequestHandler<CreateSellerCommand, Result<CreateUserResponse>>
+    {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IEmailService _emailGatway;
+        private readonly IPasswordService _passwordService;
+       // private readonly INotificationGateway _notificationGatway;
+        private readonly IValidator<CreateSellerCommand> _validator;
 
-//namespace ECommerce.Application.Feature.IAC.Commands.CreateUser.Handler
-//{
-//    public class CreateSellerCommandHandler : IRequestHandler<CreateSellerCommand,CreateUserResponse>
-//    {
-//        private readonly IUserReadRepository _userReadRepository;
-//        private readonly IUserWriteRepository _userWriteRepository;
-//        private readonly ISellerWriteRepository _sellerWriteRepository;
-//        private readonly IUnitOfWork _unitOfWork;
-//        private readonly IEmailService _emailGatway;
-//        private readonly IPasswordService _passwordService;
-//        private readonly INotificationGateway _notificationGatway;
-//        private readonly IValidator<CreateSellerCommand> _validator;
-        
+        public CreateSellerCommandHandler(
+            IUnitOfWork unitOfWork,
+            IEmailService emailGatway,
+            IPasswordService passwordService,
+          //  INotificationGateway notificationGatway,
+            IValidator<CreateSellerCommand> validator)
+        {
+            _unitOfWork = unitOfWork;
+            _emailGatway = emailGatway;
+            _passwordService = passwordService;
+           // _notificationGatway = notificationGatway;
+            _validator = validator;
+        }
 
+        public async Task<Result<CreateUserResponse>> Handle(CreateSellerCommand command, CancellationToken cancellationToken)
+        {
+            // 1. Fluent Validation
+            var validationResult = await _validator.ValidateAsync(command, cancellationToken);
+            if (!validationResult.IsValid)
+            {
+                return Result<CreateUserResponse>.Failure(
+                    Error.Validation("User.Validation", validationResult.Errors.First().ErrorMessage));
+            }
 
-//        public CreateSellerCommandHandler(
-//            IUserReadRepository userReadRepo, IUserWriteRepository userWriteRepo,ISellerWriteRepository sellerWriteRepo,
-//            IUnitOfWork unitOfWork,IEmailService emailGatway, IPasswordService passwordService,
-//            INotificationGateway notificationGatway, IValidator<CreateSellerCommand> _validator)
-//        {
-//            _userReadRepository = userReadRepo;
-//            _userWriteRepository = userWriteRepo;
-//            _sellerWriteRepository = sellerWriteRepo;
-//            _unitOfWork = unitOfWork;
-//            _emailGatway = emailGatway;
-//            _passwordService = passwordService;
-//            _notificationGatway = notificationGatway;
-//            this._validator = _validator;
-//        }
+            // 2. Create Value Objects
+            var firstNameVo = Name.FromStrict(command.firstName);
+            var lastNameVo = Name.FromStrict(command.lastName);
+            var userNameVo = Name.From(command.userName);
+            var dateOfBirthVo = DateOfBirth.From(command.dateOfBirth);
+            var emailVo = Email.From(command.email);
+            var phoneNumberVo = PhoneNumber.From(command.phoneNumber);
+            var passwordVo = Password.From(command.password);
+            var addressResult = Address.Create(command.address); // تأكد من معالجة Address كـ Result
 
-//        public async Task <CreateUserResponse> Handle (CreateSellerCommand command, CancellationToken cancellationToken)
-//        {
-//            var validateResult = await _validator.ValidateAsync(command);
-            
-//            if (!validateResult.IsValid)
-//            {
-//                return new CreateUserResponse(validateResult.Errors.First().ErrorMessage); 
-//            }
+            var results = new dynamic[]
+            {
+                emailVo, phoneNumberVo, dateOfBirthVo, firstNameVo, lastNameVo, userNameVo, passwordVo, addressResult
+            };
 
-//            try
-//            {
-//                var id = Guid.CreateVersion7();
-//                var hashedPassword = _passwordService.PasswordHash(command.password);
-//                var otp = OTP.Generate();
+            var firstFailure = results.FirstOrDefault(r => r.IsError);
+            if (firstFailure is not null)
+            {
+                return Result<CreateUserResponse>.Failure(firstFailure.Errors);
+            }
 
+            try
+            {
+                // 3. Specification Checks
+                if (await _unitOfWork.Users.GetEntityWithSpec(new UserByEmailSpecification(emailVo.Value.Value), cancellationToken) != null)
+                    return Result<CreateUserResponse>.Failure(EmailAppError.Unique);
 
-//                var newUser = UserEntity.Create(
-//                    id,
-//                    Name.FromStrict(command.firstName),
-//                    Name.FromStrict(command.lastName),
-//                    Name.From(command.userName),
-//                    DateOfBirth.From(command.dateOfBirth),
-//                    Email.From(command.email),
-//                    PhoneNumber.From(command.phoneNumber),
-//                    Password.From(hashedPassword),
-//                    UserRole.Customer
-//                );
+                if (await _unitOfWork.Users.GetEntityWithSpec(new UserByPhoneNumberSpecfication(phoneNumberVo.Value.Value), cancellationToken) != null)
+                    return Result<CreateUserResponse>.Failure(PhoneAppError.Unique);
 
-//                newUser.SetRegisterOTP(otp.Value);
+                if (await _unitOfWork.Users.GetEntityWithSpec(new UserByUserNameSpecfication(userNameVo.Value.Value), cancellationToken) != null)
+                    return Result<CreateUserResponse>.Failure(UserNameAppError.Unique);
 
-//                var newSeller = SellerEntity.Create(
-//                    id,
-//                    command.shopName,
-//                    command.shopPhoto,
-//                    Address.Create(command.address),
-//                    false,
-//                    command.verfiedShopDocument,
-//                    command.verfiedSellerDocument)
-//                    ;
+                // 4. Identity & OTP Generation
+                var id = Guid.CreateVersion7();
+                var otp = OTP.Generate(); // قمت بإضافة توليد الـ OTP الناقص في كودك
+                var hashedPassword = _passwordService.PasswordHash(passwordVo.Value.Value);
+                var hashedPassVo = Password.From(hashedPassword);
 
-//                await _userWriteRepository.AddAsync(newUser, cancellationToken);
-//                await _sellerWriteRepository.AddAsync(newSeller,cancellationToken);
-//                await _unitOfWork.SaveChangesAsync(cancellationToken);
+                // 5. Entity Creation
+                var newUser = UserEntity.Create(
+                    id,
+                    firstNameVo.Value,
+                    lastNameVo.Value,
+                    userNameVo.Value,
+                    dateOfBirthVo.Value,
+                    emailVo.Value,
+                    phoneNumberVo.Value,
+                    hashedPassVo.Value,
+                    UserRole.Seller
+                );
 
-//                await _emailGatway.SendOtpEmailAsync(command.email, otp.Value, EmailOtpType.Registration);
-//                await _notificationGatway.SendToRoleAsync(UserRole.Admin, "Seller Verfication", "Verfied Sellerand shop Document");
+                newUser.SetRegisterOTP(otp.Value);
 
-//                return new CreateUserResponse("Customer registered successfully. Please verify your email with the OTP sent.");
+                var newSeller = SellerEntity.Create(
+                    id,
+                    command.shopName,
+                    command.shopPhoto,
+                    addressResult.Value, // استخدام الـ VO المصحح
+                    false, // isVerified
+                    command.verfiedShopDocument,
+                    command.verfiedSellerDocument,
+                    false,
+                    false
+                );
 
-//            } catch (Exception ex)
-//            {
-//                return new CreateUserResponse($"Invalid Data: {ex.Message}");
-//            }
+                // 6. Persistence
+                await _unitOfWork.Users.AddAsync(newUser, cancellationToken);
+                await _unitOfWork.Seller.AddAsync(newSeller.Value, cancellationToken);
 
-//        }
-            
-//    }
-//}
+                if (newUser.RegisterOTP != null)
+                    await _unitOfWork.UserOTp.AddAsync(newUser.RegisterOTP, cancellationToken);
+
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+                // 7. Communication
+                await _emailGatway.SendOtpEmailAsync(emailVo.Value.Value, otp.Value, EmailOtpType.Registration);
+               // await _notificationGatway.SendToRoleAsync(UserRole.Admin, "Seller Verification", "New Seller registered and needs document review.");
+
+                return Result<CreateUserResponse>.Success(new CreateUserResponse("Seller registered successfully. Please verify your email with the OTP sent."));
+            }
+            catch (Exception ex)
+            {
+                return Result<CreateUserResponse>.Failure(Error.Failure("Server.Exception", ex.Message));
+            }
+        }
+    }
+}

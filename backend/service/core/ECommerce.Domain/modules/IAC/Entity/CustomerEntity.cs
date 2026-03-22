@@ -29,7 +29,7 @@ namespace ECommerce.Domain.modules.IAC.Entity
 
             var addressVo = Address.Create(rawAddress);
 
-            return new CustomerEntity(userId, addressVo,DateTime.Now,DateTime.Now);
+            return new CustomerEntity(userId, addressVo.Value,DateTime.Now,DateTime.Now);
         }
 
 
@@ -37,10 +37,10 @@ namespace ECommerce.Domain.modules.IAC.Entity
         {
             var newAddresValue = Address.Create(newRawAddress);
 
-            if (Address.Value == newAddresValue.Value)
+            if (Address.Value == newAddresValue.Value.Value)
                 return;
 
-            Address = newAddresValue;
+            Address = newAddresValue.Value;
             this.UpdateAt = DateTime.UtcNow;
         }
 

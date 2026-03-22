@@ -2,7 +2,7 @@
 using ECommerce.Domain.Modules.IAC.DomainError;
 using System.Text.RegularExpressions;
 
-namespace ECommerce.Domain.Modules.IAC.ValueObject
+namespace ECommerce.Domain.modules.IAC.ValueObject
 {
     public sealed record Email
     {

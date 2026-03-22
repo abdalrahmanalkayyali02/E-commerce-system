@@ -1,6 +1,7 @@
 ﻿using Common.Specfication;
 using ECommerce.Domain.modules.IAC.Entity;
 using ECommerce.Domain.modules.IAC.Repositories;
+using ECommerce.Domain.Modules.IAC.Entity;
 using ECommerce.Infrastructure.Persistence.Mapper;
 using ECommerce.Infrastructure.Persistence.Model;
 using Microsoft.EntityFrameworkCore;

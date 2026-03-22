@@ -3,7 +3,7 @@ using ECommerce.Domain.Modules.IAC.DomainError;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace ECommerce.Domain.Modules.IAC.ValueObject
+namespace ECommerce.Domain.modules.IAC.ValueObject
 {
     public sealed record Name
     {
@@ -28,7 +28,7 @@ namespace ECommerce.Domain.Modules.IAC.ValueObject
             var trimmedName = value.Trim();
 
             // Length Validation
-            if (trimmedName.Length < 4 || trimmedName.Length > 15)
+            if (trimmedName.Length < 3 || trimmedName.Length > 15)
             {
                 return NameErrors.InvalidLength;
             }

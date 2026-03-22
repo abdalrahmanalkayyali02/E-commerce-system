@@ -37,7 +37,7 @@ namespace ECommerce.Infrastructure.Persistence.Mapper
                     id : model.sellerID,
                     shopName: model.shopName,
                     shopPhoto: model.shopPhoto,
-                    address: Address.Reconstructing(model.address),
+                    address: Address.Reconstruct(model.address),
                     isVerfiedByAdmin: model.isVerifiedByAdmin,
                     verfiedShopDocument: model.verfiedShopDocument,
                     VerfiedSelllerDocument: model.verfiedSellerDocument,

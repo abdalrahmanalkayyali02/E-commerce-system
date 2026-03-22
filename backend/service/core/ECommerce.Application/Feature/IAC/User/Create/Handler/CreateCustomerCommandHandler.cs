@@ -1,121 +1,129 @@
 ﻿using Common.DTOs.IAC.Response;
 using Common.Enum;
+using Common.Impl.Result;
 using Common.Reposotries;
+using Common.Result;
 using ECommerce.Application.Abstraction.Data;
 using ECommerce.Application.Abstraction.IExternalService;
+using ECommerce.Application.Feature.IAC.ApplicationError;
 using ECommerce.Application.Feature.IAC.User.Create.Command;
 using ECommerce.Domain.modules.IAC.Entity;
 using ECommerce.Domain.modules.IAC.Specfication;
 using ECommerce.Domain.modules.IAC.ValueObject;
+using ECommerce.Domain.Modules.IAC.Entity;
 using FluentValidation;
 using MediatR;
 
 namespace ECommerce.Application.Feature.IAC.User.Create.Handler;
 
-public class CreateCustomerCommandHandler : IRequestHandler<CreateCustomerCommand, CreateUserResponse>
+public class CreateCustomerCommandHandler : IRequestHandler<CreateCustomerCommand, Result<CreateUserResponse>>
 {
-    private readonly IEmailService _emailGatway;
+    private readonly IEmailService _emailGateway;
     private readonly IPasswordService _passwordService;
-    private readonly IValidator<CreateCustomerCommand> _validater;
+    private readonly IValidator<CreateCustomerCommand> _validator;
     private readonly IUnitOfWork _unitOfWork;
 
     public CreateCustomerCommandHandler(
-        IEmailService emailGatway,
+        IEmailService emailGateway,
         IPasswordService passwordService,
-        IValidator<CreateCustomerCommand> validater,
+        IValidator<CreateCustomerCommand> validator,
         IUnitOfWork unitOfWork)
     {
-        _emailGatway = emailGatway;
+        _emailGateway = emailGateway;
         _passwordService = passwordService;
-        _validater = validater;
+        _validator = validator;
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<CreateUserResponse> Handle(CreateCustomerCommand command, CancellationToken cancellationToken)
+    public async Task<Result<CreateUserResponse>> Handle(CreateCustomerCommand command, CancellationToken cancellationToken)
     {
-        // 1. التحقق الأولي من المدخلات (FluentValidation)
-        var validationResult = await _validater.ValidateAsync(command, cancellationToken);
+        // 1. Fluent Validation (Command Level)
+        var validationResult = await _validator.ValidateAsync(command, cancellationToken);
         if (!validationResult.IsValid)
         {
-            return new CreateUserResponse(validationResult.Errors.First().ErrorMessage);
+            return Result<CreateUserResponse>.Failure(
+                Error.Validation("User.Validation", validationResult.Errors.First().ErrorMessage));
+        }
+
+        // 2. Create Value Objects
+        var emailResult = Email.From(command.email);
+        var phoneResult = PhoneNumber.From(command.phoneNumber);
+        var dobResult = DateOfBirth.From(command.dateOfBirth);
+        var fNameResult = Name.FromStrict(command.firstName);
+        var lNameResult = Name.FromStrict(command.lastName);
+        var uNameResult = Name.From(command.userName);
+        var passResult = Password.From(command.password);
+
+        var results = new dynamic[]
+        {
+            emailResult, phoneResult, dobResult, fNameResult, lNameResult, uNameResult, passResult
+        };
+
+        var firstFailure = results.FirstOrDefault(r => r.IsError);
+
+        if (firstFailure is not null)
+        {
+            return Result<CreateUserResponse>.Failure(firstFailure.Errors);
         }
 
         try
         {
-            var emailVo = Email.From(command.email);
-            var phoneVo = PhoneNumber.From(command.phoneNumber);
-            var dobVo = DateOfBirth.From(command.dateOfBirth);
-            var firstNameVo = Name.FromStrict(command.firstName);
-            var lastNameVo = Name.FromStrict(command.lastName);
-            var userNameVo = Name.From(command.userName);
+            var specEmail = new UserByEmailSpecification(emailResult.Value.Value);
+            var existingEmail = await _unitOfWork.Users.GetEntityWithSpec(specEmail, cancellationToken);
+            if (existingEmail is not null)
+                return Result<CreateUserResponse>.Failure(EmailAppError.Unique);
 
+            var specPhone = new UserByPhoneNumberSpecfication(phoneResult.Value.Value);
+            var existingPhone = await _unitOfWork.Users.GetEntityWithSpec(specPhone, cancellationToken);
+            if (existingPhone is not null)
+                return Result<CreateUserResponse>.Failure(PhoneAppError.Unique);
 
-            // email specfication 
-            var specEmail = new UserByEmailSpecification(emailVo.Value);
-            var existingUserByEmail = await _unitOfWork.Users.GetEntityWithSpec(specEmail, cancellationToken);
-            if (existingUserByEmail != null)
-            {
-                throw new Exception("Registration failed: Email already in use.");
-            }
-
-
-            // phone number specfication 
-            var specPhone = new UserByPhoneNumberSpecfication(phoneVo.Value);
-            var existingUserByPhone = await _unitOfWork.Users.GetEntityWithSpec(specPhone, cancellationToken);
-            if (existingUserByPhone != null)
-            {
-                throw new Exception("Registration failed: Phone number already in use.");
-            }
-
-
-            // user name specfication 
-            var specUserName = new UserByUserNameSpecfication(userNameVo.Value);
-            var existingUserByUserame = await _unitOfWork.Users.GetEntityWithSpec(specUserName, cancellationToken);
-
-            if (existingUserByUserame != null)
-            {
-                throw new Exception("Registeration failed : User name already use");
-            }
+            var specUser = new UserByUserNameSpecfication(uNameResult.Value.Value);
+            var existingUser = await _unitOfWork.Users.GetEntityWithSpec(specUser, cancellationToken);
+            if (existingUser is not null)
+                return Result<CreateUserResponse>.Failure(UserNameAppError.Unique);
 
             var userId = Guid.CreateVersion7();
             var otpCode = OTP.Generate();
-            var hashedPassword = _passwordService.PasswordHash(command.password);
+
+            var hashedString = _passwordService.PasswordHash(passResult.Value.Value);
+            var hashedPasswordVo = Password.From(hashedString);
 
             var newUser = UserEntity.Create(
                 userId,
-                firstNameVo,
-                lastNameVo,
-                userNameVo,
-                dobVo,
-                emailVo,
-                phoneVo,
-                Password.From(hashedPassword),
+                fNameResult.Value,
+                lNameResult.Value,
+                uNameResult.Value,
+                dobResult.Value,
+                emailResult.Value,
+                phoneResult.Value,
+                hashedPasswordVo.Value,
                 UserRole.Customer
             );
 
             newUser.SetRegisterOTP(otpCode.Value);
-
             var newCustomer = CustomerEntity.Create(userId, command.address);
 
             await _unitOfWork.Users.AddAsync(newUser, cancellationToken);
             await _unitOfWork.Customer.AddAsync(newCustomer, cancellationToken);
-            await _unitOfWork.UserOTp.AddAsync(newUser.RegisterOTP!, cancellationToken);
+
+            if (newUser.RegisterOTP is not null)
+            {
+                await _unitOfWork.UserOTp.AddAsync(newUser.RegisterOTP, cancellationToken);
+            }
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            await _emailGatway.SendOtpEmailAsync(emailVo.Value, otpCode.Value, EmailOtpType.Registration);
+            // 7. Communication
+            await _emailGateway.SendOtpEmailAsync(emailResult.Value.Value, otpCode.Value, EmailOtpType.Registration);
 
-            return new CreateUserResponse("Customer registered successfully. Please verify your email with the OTP sent.");
-        }
-        catch (ArgumentException ex)
-        {
-            // مسك أخطاء الـ Value Objects في حال فشل الـ Parsing
-            return new CreateUserResponse($"Invalid Data: {ex.Message}");
+            return Result<CreateUserResponse>.Success(
+                new CreateUserResponse("Registration successful. Please check your email for the OTP."));
         }
         catch (Exception ex)
         {
-            // مسك أي أخطاء غير متوقعة أو مشاكل الـ Database المباشرة
-            throw new Exception($"An error occurred during registration: {ex.Message}");
+            return Result<CreateUserResponse>.Failure(
+                Error.Failure("Server.Exception", ex.Message));
         }
     }
 }
