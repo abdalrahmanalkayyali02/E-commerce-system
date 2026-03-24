@@ -1,4 +1,4 @@
-﻿using Common.DTOs.IAC.Response;
+﻿using Common.DTOs.IAC.User;
 using MediatR;
 using System;
 using System.Collections.Generic;

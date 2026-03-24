@@ -16,6 +16,21 @@
     <ProjectReference Include="..\ECommerce.Domain\ECommerce.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Feature\Catalog\ApplicationError\" />
+    <Folder Include="Feature\Catalog\Product\Delete\" />
+    <Folder Include="Feature\Catalog\Product\Update\" />
+    <Folder Include="Feature\IAC\OtpVerification\Verified\Validater\" />
+    <Folder Include="Feature\IAC\User\GetProfile\Handler\" />
+    <Folder Include="Feature\IAC\User\GetProfile\Queries\" />
+    <Folder Include="Feature\IAC\User\UpdateForgetPassword\Command\" />
+    <Folder Include="Feature\IAC\User\UpdateForgetPassword\Handler\" />
+    <Folder Include="Feature\IAC\User\UpdateForgetPassword\Validater\" />
+    <Folder Include="Feature\IAC\User\UpdateProfile\Command\" />
+    <Folder Include="Feature\IAC\User\UpdateProfile\Handler\" />
+    <Folder Include="Feature\IAC\User\UpdateProfile\Validater\" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>

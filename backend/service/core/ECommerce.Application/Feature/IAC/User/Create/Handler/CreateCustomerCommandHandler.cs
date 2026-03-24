@@ -1,4 +1,4 @@
-﻿using Common.DTOs.IAC.Response;
+﻿using Common.DTOs.IAC.User;
 using Common.Enum;
 using Common.Impl.Result;
 using Common.Reposotries;
@@ -84,7 +84,7 @@ public class CreateCustomerCommandHandler : IRequestHandler<CreateCustomerComman
                 return Result<CreateUserResponse>.Failure(UserNameAppError.Unique);
 
             var userId = Guid.CreateVersion7();
-            var otpCode = OTP.Generate();
+            var generatedOtp = ECommerce.Domain.modules.IAC.ValueObject.OTP.Generate();
 
             var hashedString = _passwordService.PasswordHash(passResult.Value.Value);
             var hashedPasswordVo = Password.From(hashedString);
@@ -101,7 +101,7 @@ public class CreateCustomerCommandHandler : IRequestHandler<CreateCustomerComman
                 UserRole.Customer
             );
 
-            newUser.SetRegisterOTP(otpCode.Value);
+            newUser.SetRegisterOTP(generatedOtp.Value);
             var newCustomer = CustomerEntity.Create(userId, command.address);
 
             await _unitOfWork.Users.AddAsync(newUser, cancellationToken);
@@ -115,7 +115,7 @@ public class CreateCustomerCommandHandler : IRequestHandler<CreateCustomerComman
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             // 7. Communication
-            await _emailGateway.SendOtpEmailAsync(emailResult.Value.Value, otpCode.Value, EmailOtpType.Registration);
+            await _emailGateway.SendOtpEmailAsync(emailResult.Value.Value, generatedOtp.Value, EmailOtpType.Registration);
 
             return Result<CreateUserResponse>.Success(
                 new CreateUserResponse("Registration successful. Please check your email for the OTP."));

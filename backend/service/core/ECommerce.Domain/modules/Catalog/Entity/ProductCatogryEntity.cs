@@ -1,58 +1,91 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Common.Impl.Result;
+using Common.Result;
+using ECommerce.Domain.modules.Catalog.DomainError;
+using ECommerce.Domain.modules.Catalog.Value_Object;
+using System;
 
 namespace ECommerce.Domain.modules.Catalog.Entity
 {
-    public class ProductCatogryEntity
+    public class ProductCategoryEntity
     {
-        public Guid CatogryID { get; private set; }
-        public string catogryName { get; private set; }
-        public string catogryDescription { get; private set; }
+        public Guid CategoryID { get; private set; }
+        public CategoryName CategoryName { get; private set; }
+        public CategoryDescription CategoryDescription { get; private set; }
+        public Guid? ParentCategoryID { get; private set; }
 
-        // the parent is product catogry 
-        public Guid?  parentCategoryID { get; private set; }
-        
-        // need to addeed 
-        public bool isDelete { get; private set; } = false;
-        public DateTime CreateAT { get; private set; } = DateTime.Now;
+        // Audit Fields
+        public bool IsDelete { get; private set; } = false;
+        public DateTime CreateAT { get; private set; } = DateTime.UtcNow;
         public DateTime UpdateAT { get; private set; }
-        public DateTime DeleteAt { get; private set; }
+        public DateTime? DeleteAt { get; private set; } 
 
+        private ProductCategoryEntity() { }
 
-        private ProductCatogryEntity() { }
-        private ProductCatogryEntity(Guid id ,string name, string description, Guid? parentCategory)
+        public ProductCategoryEntity(Guid id, CategoryName name, CategoryDescription description, Guid? parentCategory)
         {
-            CatogryID = id;
-            catogryName = name;
-            catogryDescription = description;
-            this.parentCategoryID = parentCategory;
+            CategoryID = id;
+            CategoryName = name;
+            CategoryDescription = description;
+            ParentCategoryID = parentCategory;
+            UpdateAT = DateTime.UtcNow;
+            IsDelete = false;
         }
 
-        public static ProductCatogryEntity Create(Guid id, string name, string description, Guid? parentCategory)
+        public static Result<ProductCategoryEntity> Create(Guid id, CategoryName name, CategoryDescription description, Guid? parentCategory)
         {
-            if (parentCategory == id)
-                throw new ArgumentException("A category cannot be its own parent.");
+            if (parentCategory.HasValue && parentCategory.Value == id)
+            {
+                return Result<ProductCategoryEntity>.Failure(Error.Validation
+                    ("Category.SelfParent", "A category cannot be its own parent."));
+            }
 
-            var catogry = new ProductCatogryEntity(id,name,description,parentCategory);
-
-            return catogry;
+            return Result<ProductCategoryEntity>.Success(
+                new ProductCategoryEntity(id, name, description, parentCategory));
         }
 
-        public void updateCatogryName(string name)
+
+        public Result<bool> UpdateName(string newName)
         {
-            catogryName = name;
+            var nameResult = CategoryName.Create(newName);
+            if (nameResult.IsError) return nameResult.Errors;
+
+            CategoryName = nameResult.Value;
+            UpdateAT = DateTime.UtcNow;
+            return Result<bool>.Success(true);
         }
 
-        public void updateCatogryDescription(string description)
+        public Result<bool> UpdateDescription(string newDescription)
         {
-            catogryDescription = description;
+            var descResult = CategoryDescription.Create(newDescription);
+            if (descResult.IsError) return descResult.Errors;
+
+            CategoryDescription = descResult.Value;
+            UpdateAT = DateTime.UtcNow;
+            return Result<bool>.Success(true);
         }
 
-        public void updateCatogryParent(Guid parentCategory)
+        public Result<bool> UpdateParent(Guid? newParentId)
         {
-            this.parentCategoryID = parentCategory;
+            if (newParentId.HasValue && newParentId.Value == CategoryID)
+                return Result<bool>.Failure(Error.Validation("Category.SelfParent", "A category cannot be its own parent."));
+
+            ParentCategoryID = newParentId;
+            UpdateAT = DateTime.UtcNow;
+            return Result<bool>.Success(true);
         }
 
+        public void MarkAsDeleted()
+        {
+            IsDelete = true;
+            DeleteAt = DateTime.UtcNow;
+            UpdateAT = DateTime.UtcNow;
+        }
+
+        public void Restore()
+        {
+            IsDelete = false;
+            DeleteAt = null;
+            UpdateAT = DateTime.UtcNow;
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Common.DTOs.IAC.Response;
+﻿using Common.DTOs.IAC.User;
 using Common.Enum;
 using Common.Impl.Result;
 using Common.Reposotries;
@@ -10,11 +10,11 @@ using ECommerce.Application.Feature.IAC.User.Create.Command;
 using ECommerce.Domain.modules.IAC.Entity;
 using ECommerce.Domain.modules.IAC.Specfication;
 using ECommerce.Domain.modules.IAC.ValueObject;
-using ECommerce.Domain.Modules.IAC.Entity; 
+using ECommerce.Domain.Modules.IAC.Entity;
 using FluentValidation;
 using MediatR;
 
-namespace ECommerce.Application.Feature.IAC.Commands.CreateUser.Handler
+namespace ECommerce.Application.Feature.IAC.User.Create.Handler
 {
     public class CreateSellerCommandHandler : IRequestHandler<CreateSellerCommand, Result<CreateUserResponse>>
     {
@@ -83,7 +83,8 @@ namespace ECommerce.Application.Feature.IAC.Commands.CreateUser.Handler
 
                 // 4. Identity & OTP Generation
                 var id = Guid.CreateVersion7();
-                var otp = OTP.Generate(); // قمت بإضافة توليد الـ OTP الناقص في كودك
+                var generatedOtp = ECommerce.Domain.modules.IAC.ValueObject.OTP.Generate();
+
                 var hashedPassword = _passwordService.PasswordHash(passwordVo.Value.Value);
                 var hashedPassVo = Password.From(hashedPassword);
 
@@ -100,7 +101,7 @@ namespace ECommerce.Application.Feature.IAC.Commands.CreateUser.Handler
                     UserRole.Seller
                 );
 
-                newUser.SetRegisterOTP(otp.Value);
+                newUser.SetRegisterOTP(generatedOtp.Value);
 
                 var newSeller = SellerEntity.Create(
                     id,
@@ -124,7 +125,7 @@ namespace ECommerce.Application.Feature.IAC.Commands.CreateUser.Handler
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
 
                 // 7. Communication
-                await _emailGatway.SendOtpEmailAsync(emailVo.Value.Value, otp.Value, EmailOtpType.Registration);
+                await _emailGatway.SendOtpEmailAsync(emailVo.Value.Value, generatedOtp.Value, EmailOtpType.Registration);
                // await _notificationGatway.SendToRoleAsync(UserRole.Admin, "Seller Verification", "New Seller registered and needs document review.");
 
                 return Result<CreateUserResponse>.Success(new CreateUserResponse("Seller registered successfully. Please verify your email with the OTP sent."));

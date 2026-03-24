@@ -1,4 +1,4 @@
-﻿using Common.DTOs.IAC.Response;
+﻿using Common.DTOs.IAC.User;
 using Common.Impl.Result;
 using MediatR;
 using System;

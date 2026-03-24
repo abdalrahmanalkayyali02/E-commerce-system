@@ -27,19 +27,16 @@ namespace ECommerce.Domain.modules.IAC.ValueObject
 
             var trimmedName = value.Trim();
 
-            // Length Validation
             if (trimmedName.Length < 3 || trimmedName.Length > 15)
             {
                 return NameErrors.InvalidLength;
             }
 
-            // Formatting Validation
             if (trimmedName.Contains("  "))
             {
                 return NameErrors.ConsecutiveSpaces;
             }
 
-            // Special Character Logic
             if (!allowSpecialChars)
             {
                 if (trimmedName.Contains("@") || trimmedName.Contains("_"))

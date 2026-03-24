@@ -3,9 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
-using Common.DTOs.Catalog.Catogry.Response;
-using Common.DTOs.IAC.Response;
 using Common.Impl.Result;
+using Common.DTOs.IAC.User;
 
 namespace ECommerce.Application.Feature.IAC.User.Create.Command
 {

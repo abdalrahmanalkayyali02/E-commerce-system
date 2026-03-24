@@ -1,6 +1,5 @@
 ﻿namespace ECommerce.Domain.modules.IAC.ValueObject
 {
-
     public sealed record OTP
     {
         public string Value { get; }

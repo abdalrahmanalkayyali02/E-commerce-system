@@ -14,7 +14,7 @@ namespace Common.Entity
         public List<string> ipAddress { get; set; } = new List<string>();
         
         public Guid UserIdThatMakeChange { get; set; }
-        public Guid clientUserID { get; set; }
+        public Guid OtherUserID{ get; set; }
 
         public bool isSameClientMakeChange { get; set; } 
         public string Location { get; set; }
@@ -36,7 +36,7 @@ namespace Common.Entity
             this.isDeleting = isDeleting;
             this.ipAddress = ipAddress;
             UserIdThatMakeChange = userIdThatMakeChange;
-            this.clientUserID = clientUserID;
+            this.OtherUserID = clientUserID;
             this.isSameClientMakeChange = isSameClientMakeChange;
             this.Location = Location;
         }
@@ -57,7 +57,7 @@ namespace Common.Entity
 
         public bool IsSameClientMakeChange ()
         {
-            return (UserIdThatMakeChange == clientUserID);
+            return (UserIdThatMakeChange == OtherUserID);
         }
 
         public void addIpAddress(string ipAddress)

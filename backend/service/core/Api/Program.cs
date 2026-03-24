@@ -17,24 +17,20 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         npgsqlOptions => npgsqlOptions.MigrationsAssembly("ECommerce.Infrastructure")
     ));
 
-builder.Services.AddInfrastructureServicesForIAC(builder.Configuration);
-builder.Services.AddInternalServices(builder.Configuration);
-builder.Services.AddExternalServices(builder.Configuration);
-builder.Services.AddSharedServices(builder.Configuration);
-
-// --- 4. MEDIATR ---
-builder.Services.AddMediatR(cfg =>
-    cfg.RegisterServicesFromAssembly(typeof(CreateCustomerCommand).Assembly));
-
+builder.Services.AddApplicationServices();
+builder.Services.AddInfrastructureServices(builder.Configuration);
+//builder.Services.AddInfrastructureServicesForIAC(builder.Configuration);
+//builder.Services.AddInternalServices(builder.Configuration);
+//builder.Services.AddExternalServices(builder.Configuration);
+//builder.Services.AddSharedServices(builder.Configuration);
 
 
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "E-Commerce IAC API",
+        Title = "E-Commerce API",
         Version = "v1",
-        Description = "Identity and Access Control (IAC) module for E-Commerce System"
     });
 
     // Optional: Enable XML comments if you have them enabled in project properties

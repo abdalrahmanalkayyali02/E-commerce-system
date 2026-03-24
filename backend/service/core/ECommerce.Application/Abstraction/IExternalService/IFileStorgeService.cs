@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.IO;
+using System.Threading.Tasks;
 
 namespace ECommerce.Application.Abstraction.IExternalService
 {
     public interface IFileStorgeService
     {
-        Task<string> UploadAsync(Stream file);
-        Task<string> UpdateAsync(Stream file, string url);
-        Task DeleteAsync(string url);
+        Task<string> UploadAsync(Stream fileStream);
+
+        Task<string> UpdateAsync(Stream file, string oldFileUrl);
+
+        Task DeleteAsync(string fileUrl);
     }
 }

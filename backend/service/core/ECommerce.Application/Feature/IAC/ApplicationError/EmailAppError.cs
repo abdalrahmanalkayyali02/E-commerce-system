@@ -12,5 +12,15 @@ namespace ECommerce.Application.Feature.IAC.ApplicationError
           "UserDuplicateEmail",
           "The Email is already used "
          );
+
+
+        public static readonly Error NotFound = Error.NotFound
+         (
+          "UserEmailNotFound",
+          "The Email is not found "
+         );
+
+
+
     }
 }

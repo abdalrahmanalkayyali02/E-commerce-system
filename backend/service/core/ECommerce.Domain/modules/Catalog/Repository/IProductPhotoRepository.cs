@@ -7,11 +7,11 @@ namespace ECommerce.Domain.modules.Catalog.Repository
 {
     public interface IProductPhotoRepository
     {
-        public Task<ProductPhotoEntity?> GetProductPhotoById(Guid photoID);
-        public Task AddAsync(ProductPhotoEntity photo);
-        public Task updateAsync(ProductPhotoEntity photo);
-        public Task DeleteManyAsync(ProductPhotoEntity[] photo);
-        public Task DeleteAsyncById(Guid id);
+        public Task<ProductPhotoEntity?> GetProductPhotoById(Guid photoID,CancellationToken ct=default);
+        public Task AddAsync(ProductPhotoEntity photo, CancellationToken ct=default);
+        public void updateAsync(ProductPhotoEntity photo,CancellationToken ct=default);
+        public void DeleteManyAsync(ProductPhotoEntity[] photo,CancellationToken ct= default);
+        public void SoftDelete(ProductPhotoEntity entity,CancellationToken ct=default);
     }
 
 }
