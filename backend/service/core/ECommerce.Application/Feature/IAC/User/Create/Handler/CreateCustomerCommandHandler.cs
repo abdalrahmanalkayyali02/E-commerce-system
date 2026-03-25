@@ -98,7 +98,7 @@ public class CreateCustomerCommandHandler : IRequestHandler<CreateCustomerComman
                 emailResult.Value,
                 phoneResult.Value,
                 hashedPasswordVo.Value,
-                UserRole.Customer
+                UserType.Customer
             );
 
             newUser.SetRegisterOTP(generatedOtp.Value);
@@ -115,7 +115,7 @@ public class CreateCustomerCommandHandler : IRequestHandler<CreateCustomerComman
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             // 7. Communication
-            await _emailGateway.SendOtpEmailAsync(emailResult.Value.Value, generatedOtp.Value, EmailOtpType.Registration);
+            await _emailGateway.SendOtpEmailAsync(emailResult.Value.Value, generatedOtp.Value, OtpType.registration);
 
             return Result<CreateUserResponse>.Success(
                 new CreateUserResponse("Registration successful. Please check your email for the OTP."));

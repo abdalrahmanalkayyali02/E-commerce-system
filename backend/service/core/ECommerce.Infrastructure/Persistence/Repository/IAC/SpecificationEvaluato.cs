@@ -1,27 +1,45 @@
-﻿using Common.Specfication;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
+using System.Linq;
+using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
+using Common.Specfication;
 
 namespace ECommerce.Infrastructure.Persistence.Repository.IAC
 {
-    public class SpecificationEvaluator<TEntity, TModel> where TModel : class
+    public static class SpecificationEvaluator<TEntity, TModel>
+        where TEntity : class
+        where TModel : class
     {
-        public static IQueryable<TEntity> GetQuery(
+        public static IQueryable<TModel> GetQuery(
             IQueryable<TModel> inputQuery,
-            ISpecification<TEntity> spec,
-            Func<TModel, TEntity> mapper)
+            ISpecification<TEntity> spec)
         {
-
-            var entities = inputQuery.AsEnumerable().Select(mapper).AsQueryable();
+            var query = inputQuery;
 
             if (spec.Criteria != null)
             {
-                entities = entities.Where(spec.Criteria);
+
+                var criteria = spec.Criteria as Expression<Func<TModel, bool>>;
+                if (criteria != null)
+                {
+                    query = query.Where(criteria);
+                }
             }
 
-            return entities;
+            if (spec.Includes != null)
+            {
+                foreach (var include in spec.Includes)
+                {
+                    var castedInclude = include as Expression<Func<TModel, object>>;
+                    if (castedInclude != null)
+                    {
+                        query = query.Include(castedInclude);
+                    }
+                }
+            }
+
+
+            return query;
         }
     }
-
 }

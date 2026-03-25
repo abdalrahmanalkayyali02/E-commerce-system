@@ -6,11 +6,9 @@ namespace ECommerce.Infrastructure.Persistence.Mapper.IAC
 {
     public static class UserOTPMapper
     {
-        // Domain => Persistence 
-
         public static UserOtpDataModel FromDomainToPersistence(UserOTPEntity domain)
         {
-            var model = new UserOtpDataModel
+            return new UserOtpDataModel
             {
                 ID = domain.ID,
                 userID = domain.userID,
@@ -19,28 +17,29 @@ namespace ECommerce.Infrastructure.Persistence.Mapper.IAC
                 ExpiresAt = domain.ExpiresAt,
                 IsUsed = domain.IsUsed,
                 IsVerified = domain.IsVerified,
-                FailedAttempts = domain.FailedAttempts
+                FailedAttempts = domain.FailedAttempts,
+                OTPtype = domain.OTPtype,
+                UpdateAt = domain.UpdateAt,
+                TimeVerfied = domain.TimeVerfied
             };
-
-            return model;
         }
 
-
         // Persistence => Domain
-
         public static UserOTPEntity FromPersistenceToDomain(UserOtpDataModel model)
         {
-            var domain = new UserOTPEntity(
-                iD: model.ID,
-                userID: model.userID,
+            return new UserOTPEntity(
+                id: model.ID,
+                userId: model.userID,
                 code: OTP.Reconstructing(model.Code),
+                type: model.OTPtype,
                 generatedAt: model.GeneratedAt,
                 expiresAt: model.ExpiresAt,
+                updateAt: model.UpdateAt,
+                timeVerfied: model.TimeVerfied,
                 isUsed: model.IsUsed,
                 isVerified: model.IsVerified,
                 failedAttempts: model.FailedAttempts
-                );
-            return domain;
+            );
         }
     }
 }

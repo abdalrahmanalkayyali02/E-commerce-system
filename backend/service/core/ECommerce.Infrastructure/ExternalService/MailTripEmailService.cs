@@ -15,7 +15,7 @@ namespace ECommerce.Infrastructure.ExternalService
             _config = config;
         }
 
-        public async Task SendOtpEmailAsync(string userEmail, string otp, EmailOtpType type)
+        public async Task SendOtpEmailAsync(string userEmail, string otp, OtpType type)
         {
             var host = _config["MailSettings:Host"] ?? "live.smtp.mailtrap.io";
             var port = int.Parse(_config["MailSettings:Port"] ?? "587");
@@ -51,7 +51,7 @@ namespace ECommerce.Infrastructure.ExternalService
             }
         }
 
-        private (string Subject, string Body) GetTemplate(EmailOtpType type, string otp)
+        private (string Subject, string Body) GetTemplate(OtpType type, string otp)
         {
             // E-commerce Styling: Dark Slate and Gold/Amber accents
             const string primaryColor = "#0f172a"; // Deep Slate
@@ -96,13 +96,13 @@ namespace ECommerce.Infrastructure.ExternalService
 
             return type switch
             {
-                EmailOtpType.Registration => (
+                OtpType.registration => (
                     "Welcome! Verify your E-Commerce Store account",
                     GetHtmlWrapper("Finish Setting Up Your Account",
                         "<p>Welcome to our community! You're just one step away from exclusive deals and a faster checkout experience. Please verify your email using the code below.</p>")
                 ),
 
-                EmailOtpType.ForgotPassword => (
+                OtpType.forgotPassword => (
                     "Password Reset: Verification Code",
                     GetHtmlWrapper("Security Verification",
                         "<p>We received a request to reset your store password. Use the following code to authorize this change. If this wasn't you, please secure your account immediately.</p>")

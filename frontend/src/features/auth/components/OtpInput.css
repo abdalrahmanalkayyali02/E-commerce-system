@@ -1,0 +1,128 @@
+/* OTP Input Component */
+
+.otp-input {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+}
+
+/* Individual cell */
+.otp-cell {
+    width: 54px;
+    height: 62px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    color: var(--text-primary);
+    background: var(--bg-input);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    outline: none;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    caret-color: var(--primary);
+    letter-spacing: 0;
+}
+
+.otp-cell:focus {
+    border-color: var(--primary);
+    background: rgba(108, 99, 255, 0.08);
+    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2), 0 0 18px rgba(108, 99, 255, 0.15);
+    transform: translateY(-2px);
+}
+
+.otp-cell--filled {
+    border-color: rgba(108, 99, 255, 0.5);
+    background: rgba(108, 99, 255, 0.07);
+}
+
+/* Separator between cell 3 and 4 */
+.otp-separator {
+    font-size: 20px;
+    color: var(--text-muted);
+    user-select: none;
+    padding: 0 2px;
+}
+
+/* Success state */
+.otp-input--success .otp-cell {
+    border-color: var(--success);
+    background: rgba(67, 230, 197, 0.08);
+    color: var(--success);
+    animation: otp-success-pop 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.otp-input--success .otp-separator {
+    color: var(--success);
+}
+
+@keyframes otp-success-pop {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.12);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Error state */
+.otp-input--error .otp-cell {
+    border-color: var(--error);
+    background: rgba(255, 101, 132, 0.08);
+    color: var(--error);
+    animation: otp-shake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+.otp-input--error .otp-separator {
+    color: var(--error);
+}
+
+@keyframes otp-shake {
+
+    10%,
+    90% {
+        transform: translateX(-2px);
+    }
+
+    20%,
+    80% {
+        transform: translateX(4px);
+    }
+
+    30%,
+    50%,
+    70% {
+        transform: translateX(-6px);
+    }
+
+    40%,
+    60% {
+        transform: translateX(6px);
+    }
+}
+
+/* Disabled */
+.otp-cell:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .otp-cell {
+        width: 44px;
+        height: 52px;
+        font-size: 20px;
+        border-radius: 10px;
+    }
+
+    .otp-input {
+        gap: 7px;
+    }
+}

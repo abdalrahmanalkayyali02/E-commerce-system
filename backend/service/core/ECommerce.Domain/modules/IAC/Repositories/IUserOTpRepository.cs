@@ -1,4 +1,6 @@
-﻿using ECommerce.Domain.modules.IAC.Entity;
+﻿using Common.Specfication;
+using ECommerce.Domain.modules.IAC.Entity;
+using ECommerce.Domain.Modules.IAC.Entity;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,6 +13,10 @@ namespace ECommerce.Domain.modules.IAC.Repositories
         public void Update (UserOTPEntity userOTPEntity, CancellationToken cancellationToken = default);
 
         public void SoftDelete (UserOTPEntity userOTPEntity,CancellationToken cancellation = default);
+
+        public Task<UserOTPEntity?> GetEntityWithSpec(ISpecification<UserOTPEntity> spec, CancellationToken cancellationToken = default);
+
+
         // get otp by userid, and type // and check if the otp is valid (not expired and not used) for last one 
         // if last otp for forget password and other is active but last one is verfied the other with same type should be invalid
         // if last otp for forget password and other is active but last one is not verfied the other with same type should be invalid

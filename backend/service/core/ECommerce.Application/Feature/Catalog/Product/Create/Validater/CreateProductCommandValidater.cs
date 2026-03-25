@@ -3,7 +3,7 @@ using ECommerce.Domain.modules.Catalog.Value_Object;
 using FluentValidation;
 using System.Linq;
 
-namespace ECommerce.Application.Feature.Catalog.Product.Create.Validator
+namespace ECommerce.Application.Feature.Catalog.Product.Create.Validater
 {
     public class CreateProductCommandValidator : AbstractValidator<CreateProductCommand>
     {

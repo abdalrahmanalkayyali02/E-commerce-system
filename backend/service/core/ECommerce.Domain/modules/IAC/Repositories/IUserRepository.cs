@@ -14,7 +14,7 @@ namespace ECommerce.Domain.modules.IAC.Repositories
         void SoftDelete(UserEntity user, CancellationToken cancellation = default);
 
         Task<UserEntity?> GetEntityWithSpec(ISpecification<UserEntity> spec, CancellationToken cancellationToken = default);
-
+ 
         Task<IEnumerable<UserEntity>> GetAllUsersAsync(Expression<Func<UserEntity, bool>> predicate = null, CancellationToken cancellationToken = default);
     }
 }

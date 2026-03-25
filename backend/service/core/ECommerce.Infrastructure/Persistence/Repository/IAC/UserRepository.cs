@@ -50,19 +50,19 @@ namespace ECommerce.Infrastructure.Persistence.Repository.IAC
             return await entityQuery.ToListAsync(cancellationToken);
         }
 
-        public async Task<UserEntity?> GetEntityWithSpec(ISpecification<UserEntity> spec, CancellationToken cancellationToken = default)
+        public async Task<UserEntity?> GetEntityWithSpec(
+          ISpecification<UserEntity> spec,
+          CancellationToken cancellationToken = default)
         {
-            var query = _context.Users.AsNoTracking();
+            IQueryable<UserDataModel> query = _context.Users.AsNoTracking();
 
-            return SpecificationEvaluator<UserEntity, UserDataModel>
-                .GetQuery(query, spec, model => UserMapper.FromPersistenceToDomain(model))
-                .FirstOrDefault(); 
+            var evaluatedQuery = query.Select(m => UserMapper.FromPersistenceToDomain(m));
+            
+            var finalQuery = SpecificationEvaluator<UserEntity>.GetQuery(evaluatedQuery, spec);
+            
+            return await finalQuery.FirstAsync(cancellationToken);
+
         }
-
-
-
-
-
         public void  SoftDelete(UserEntity user, CancellationToken cancellation = default)
         {
             var model = UserMapper.FromDomainToPersistence(user);

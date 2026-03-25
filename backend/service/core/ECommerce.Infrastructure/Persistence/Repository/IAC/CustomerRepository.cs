@@ -1,6 +1,9 @@
-﻿using ECommerce.Domain.modules.IAC.Entity;
+﻿using Common.Specfication;
+using ECommerce.Domain.modules.IAC.Entity;
 using ECommerce.Domain.modules.IAC.Repositories;
 using ECommerce.Infrastructure.Persistence.Mapper.IAC;
+using ECommerce.Infrastructure.Persistence.Model.IAC;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -22,6 +25,17 @@ namespace ECommerce.Infrastructure.Persistence.Repository.IAC
             var model = CustomerMapper.FromDomainToPersistence(entity);
 
             await _context.Customers.AddAsync(model, cancellation);
+        }
+
+        public async Task<CustomerEntity?> GetEntityWithSpec(ISpecification<CustomerEntity> spec, CancellationToken cancellationToken = default)
+        {
+            IQueryable<CustomerDataModel> query = _context.Customers.AsNoTracking();
+
+            var evaluatedQuery = query.Select(m => CustomerMapper.FromPersistenceToDomain(m));
+
+            var finalQuery = SpecificationEvaluator<CustomerEntity>.GetQuery(evaluatedQuery, spec);
+
+            return await finalQuery.FirstOrDefaultAsync(cancellationToken);
         }
 
         public void Update(CustomerEntity entity, CancellationToken cancellation = default)

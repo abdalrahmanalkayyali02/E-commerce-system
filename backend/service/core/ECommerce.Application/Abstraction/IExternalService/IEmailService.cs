@@ -7,7 +7,7 @@ namespace ECommerce.Application.Abstraction.IExternalService
 {
     public interface IEmailService
     {
-        Task SendOtpEmailAsync(string userEmail, string otp, EmailOtpType type);
+        Task SendOtpEmailAsync(string userEmail, string otp, OtpType type);
     }
 }
 

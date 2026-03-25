@@ -37,7 +37,7 @@ namespace ECommerce.Infrastructure.Persistence.Seed
                     // تخزين DateOnly في الـ Model (سليم جداً لـ Postgres Date)
                     //DateOfBirth = StaticBirthDate.AddYears(-i),
 
-                    Role = i <= 2 ? UserRole.Admin : (i <= 6 ? UserRole.Customer : UserRole.Seller),
+                    Role = i <= 2 ? UserType.Admin : (i <= 6 ? UserType.Customer : UserType.Seller),
                     AccountStatus = AccountStatus.Active,
                     profilePhoto = "default.jpg",
 

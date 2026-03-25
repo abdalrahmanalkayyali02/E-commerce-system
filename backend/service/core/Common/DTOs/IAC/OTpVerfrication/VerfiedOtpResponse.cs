@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Common.DTOs.IAC.OTpVerfrication
 {
-    public record VerfiedOtpResponse(bool VerfiedEmail, AccountStatus AccountStatus, string token);
+    public record VerfiedOtpResponse(string message,bool VerfiedEmail, AccountStatus AccountStatus, string token);
     
     
 }

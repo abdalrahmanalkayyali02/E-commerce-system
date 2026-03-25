@@ -8,5 +8,6 @@ namespace Common.Enum
     {
         Active = 1,
         Inactive = 2,
+        LocKed = 3,
     }
 }

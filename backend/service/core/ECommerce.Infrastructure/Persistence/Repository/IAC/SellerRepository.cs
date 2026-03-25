@@ -1,6 +1,8 @@
-﻿using ECommerce.Domain.modules.IAC.Entity;
+﻿using Common.Specfication;
+using ECommerce.Domain.modules.IAC.Entity;
 using ECommerce.Domain.modules.IAC.Repositories;
 using ECommerce.Infrastructure.Persistence.Mapper.IAC;
+using ECommerce.Infrastructure.Persistence.Model.IAC;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -68,6 +70,17 @@ namespace ECommerce.Infrastructure.Persistence.Repository.IAC
                 .ToListAsync(cancellationToken);
 
             return sellers.Select(SellerMapper.FromPersistenceToDomain);
+        }
+
+        public async Task<SellerEntity?> GetEntityWithSpec(ISpecification<SellerEntity> spec, CancellationToken cancellationToken = default)
+        {
+            IQueryable<SellerDataModel> query = _context.Sellers.AsNoTracking();
+
+            var evaluatedQuery = query.Select(m => SellerMapper.FromPersistenceToDomain(m));
+
+            var finalQuery = SpecificationEvaluator<SellerEntity>.GetQuery(evaluatedQuery, spec);
+
+            return await finalQuery.FirstOrDefaultAsync(cancellationToken);
         }
     }
 }

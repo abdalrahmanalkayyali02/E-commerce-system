@@ -26,7 +26,7 @@ namespace ECommerce.Infrastructure.Persistence.Mapper.IAC
             model.DateOfBirth = user.DateOfBirth.Value;
             //model.DateOfBirth = DateTime.SpecifyKind(user.DateOfBirth.Value, DateTimeKind.Utc);
             model.profilePhoto = user.ProfilePhoto;
-            model.Role = user.Role;
+            model.Role = user.userType;
             model.AccountStatus = user.AccountStatus;
             model.CreateAt = DateTime.SpecifyKind(user.CreatedAt, DateTimeKind.Utc);
             model.UpdateAt = DateTime.SpecifyKind(user.UpdatedAt, DateTimeKind.Utc);
@@ -34,6 +34,7 @@ namespace ECommerce.Infrastructure.Persistence.Mapper.IAC
                 ? DateTime.SpecifyKind(user.DeletedAt.Value, DateTimeKind.Utc)
                 : null;
             model.isDelete = user.IsDeleted;
+            model.ResetPasswordAllowedUntil = user.ResetPasswordAllowedUntil;
 
             return model;
         }
@@ -51,7 +52,7 @@ namespace ECommerce.Infrastructure.Persistence.Mapper.IAC
                 isEmailConfirmed: model.IsEmailConfirmed,
                 phoneNumber: PhoneNumber.Reconstruct(model.phoneNumber),
                 password: Password.Reconstruct(model.password),
-                role: model.Role,
+                userType: model.Role,
                 accountStatus: model.AccountStatus,
                 profilePhoto: model.profilePhoto,
 
@@ -60,7 +61,9 @@ namespace ECommerce.Infrastructure.Persistence.Mapper.IAC
                 deletedAt: model.DeleteAt.HasValue
                     ? DateTime.SpecifyKind(model.DeleteAt.Value, DateTimeKind.Utc)
                     : null,
-                isDeleted: model.isDelete
+                isDeleted: model.isDelete,
+                ResetPasswordAllowedUntil: model.ResetPasswordAllowedUntil
+                
             );
         }
     }

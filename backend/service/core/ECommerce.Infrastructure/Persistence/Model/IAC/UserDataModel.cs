@@ -16,7 +16,7 @@ namespace ECommerce.Infrastructure.Persistence.Model.IAC
         public bool IsEmailConfirmed { get; set; }
         public string phoneNumber { get; set; } 
         public string password { get; set; }
-        public UserRole Role {  get; set; }
+        public UserType Role {  get; set; }
         public AccountStatus AccountStatus { get; set; }
         public string? profilePhoto { get; set; }
         
@@ -25,7 +25,7 @@ namespace ECommerce.Infrastructure.Persistence.Model.IAC
         public DateTime UpdateAt { get; set; }
         public bool isDelete { get; set; } = false;
         public DateTime? DeleteAt { get; set; }
-
+        public DateTime? ResetPasswordAllowedUntil { get;  set; }
 
     }
 }

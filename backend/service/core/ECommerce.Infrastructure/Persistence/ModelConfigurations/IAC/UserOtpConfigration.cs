@@ -1,29 +1,34 @@
-﻿using ECommerce.Domain.modules.IAC.ValueObject;
-using ECommerce.Infrastructure.Persistence.Model.IAC;
+﻿using ECommerce.Infrastructure.Persistence.Model.IAC;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ECommerce.Infrastructure.Persistence.ModelConfigurations.IAC
-
 {
     public class UserOtpConfiguration : IEntityTypeConfiguration<UserOtpDataModel>
     {
         public void Configure(EntityTypeBuilder<UserOtpDataModel> builder)
         {
-            builder.ToTable("UserOTPs", "iac"); 
+            builder.ToTable("UserOTPs", "iac");
 
             builder.HasKey(x => x.ID);
 
             builder.Property(x => x.Code)
                    .HasColumnName("Code")
                    .HasMaxLength(6)
-                   .IsRequired(false);
+                   .IsRequired();
 
             builder.Property(x => x.GeneratedAt)
                 .IsRequired();
 
             builder.Property(x => x.ExpiresAt)
                 .IsRequired();
+
+            builder.Property(x => x.UpdateAt)
+                .IsRequired()
+                .HasDefaultValueSql("CURRENT_TIMESTAMP"); 
+
+            builder.Property(x => x.TimeVerfied)
+                .IsRequired(false);
 
             builder.Property(x => x.IsUsed)
                 .HasDefaultValue(false);
@@ -34,14 +39,23 @@ namespace ECommerce.Infrastructure.Persistence.ModelConfigurations.IAC
             builder.Property(x => x.FailedAttempts)
                 .HasDefaultValue(0);
 
-            builder.HasOne<UserDataModel>()
-                .WithMany() 
-                .HasForeignKey(x => x.userID)
-                .OnDelete(DeleteBehavior.Cascade); // for if user deleted delete all user otp 
+            builder.Property(x => x.OTPtype)
+                .HasConversion<string>()
+                .HasMaxLength(30)
+                .IsRequired();
 
-            // for indexing 
+            builder.HasOne<UserDataModel>()
+                .WithMany()
+                .HasForeignKey(x => x.userID)
+                .OnDelete(DeleteBehavior.Cascade);
+
+
             builder.HasIndex(x => x.userID);
-            builder.HasIndex(x => new { x.userID, x.Code }).IsUnique(); 
+
+            
+            builder.HasIndex(x => new { x.userID, x.Code }).IsUnique();
+
+            builder.HasIndex(x => new { x.userID, x.UpdateAt, x.IsUsed });
         }
     }
 }

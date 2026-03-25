@@ -1,4 +1,5 @@
-﻿using ECommerce.Domain.modules.IAC.Entity;
+﻿using Common.Specfication;
+using ECommerce.Domain.modules.IAC.Entity;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,6 +11,8 @@ namespace ECommerce.Domain.modules.IAC.Repositories
         Task AddAsync(SellerEntity entity, CancellationToken cancellation = default);
 
         void Update(SellerEntity entity, CancellationToken cancellation = default);
+        public Task<SellerEntity?> GetEntityWithSpec(ISpecification<SellerEntity> spec, CancellationToken cancellationToken = default);
+
 
         Task<IEnumerable<SellerEntity>> GetAllSellerNotVerfiedSellerDocument(CancellationToken cancellationToken = default);
 

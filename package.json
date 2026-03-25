@@ -1,0 +1,17 @@
+{
+    "name": "traning-project-root",
+    "version": "1.0.0",
+    "description": "Root package to run backend and frontend",
+    "main": "index.js",
+    "scripts": {
+        "start:frontend": "cmd /c \"npm start --prefix frontend\"",
+        "start:backend": "dotnet watch run --project backend",
+        "dev": "npx concurrently \"npm run start:frontend\" \"npm run start:backend\""
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "concurrently": "^8.2.2"
+    }
+}

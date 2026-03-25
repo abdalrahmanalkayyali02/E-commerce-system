@@ -15,7 +15,7 @@ namespace ECommerce.Infrastructure.ExternalService
             throw new NotImplementedException();
         }
 
-        public Task SendToRoleAsync(UserRole roleName, string message, string subject = null)
+        public Task SendToRoleAsync(UserType roleName, string message, string subject = null)
         {
             throw new NotImplementedException();
         }

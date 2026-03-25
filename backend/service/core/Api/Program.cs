@@ -1,3 +1,4 @@
+using Api.Constraints;
 using ECommerce.Application.Feature.IAC.User.Create.Command;
 using ECommerce.Infrastructure.DIC;
 using ECommerce.Infrastructure.Persistence;
@@ -19,10 +20,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
-//builder.Services.AddInfrastructureServicesForIAC(builder.Configuration);
-//builder.Services.AddInternalServices(builder.Configuration);
-//builder.Services.AddExternalServices(builder.Configuration);
-//builder.Services.AddSharedServices(builder.Configuration);
+
+
+builder.Services.Configure<RouteOptions>(options =>
+{
+    // This connects the name in your [HttpPost("{type:otpType}")] 
+    // to the class logic we just wrote.
+    options.ConstraintMap.Add("otpType", typeof(OtpTypeRouteConstraint));
+});
 
 
 builder.Services.AddSwaggerGen(options =>

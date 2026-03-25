@@ -34,7 +34,8 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                     CreateAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     UpdateAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     isDelete = table.Column<bool>(type: "boolean", nullable: false),
-                    DeleteAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
+                    DeleteAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    ResetPasswordAllowedUntil = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -99,12 +100,15 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                 {
                     ID = table.Column<Guid>(type: "uuid", nullable: false),
                     userID = table.Column<Guid>(type: "uuid", nullable: false),
-                    Code = table.Column<string>(type: "character varying(6)", maxLength: 6, nullable: true),
-                    GeneratedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ExpiresAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Code = table.Column<string>(type: "character varying(6)", maxLength: 6, nullable: false),
                     IsUsed = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
                     IsVerified = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    FailedAttempts = table.Column<int>(type: "integer", nullable: false, defaultValue: 0)
+                    FailedAttempts = table.Column<int>(type: "integer", nullable: false, defaultValue: 0),
+                    OTPtype = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
+                    GeneratedAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    ExpiresAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    UpdateAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    TimeVerfied = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -130,6 +134,12 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                 table: "UserOTPs",
                 columns: new[] { "userID", "Code" },
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserOTPs_userID_UpdateAt_IsUsed",
+                schema: "iac",
+                table: "UserOTPs",
+                columns: new[] { "userID", "UpdateAt", "IsUsed" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",

@@ -98,7 +98,7 @@ namespace ECommerce.Application.Feature.IAC.User.Create.Handler
                     emailVo.Value,
                     phoneNumberVo.Value,
                     hashedPassVo.Value,
-                    UserRole.Seller
+                    UserType.Seller
                 );
 
                 newUser.SetRegisterOTP(generatedOtp.Value);
@@ -125,7 +125,7 @@ namespace ECommerce.Application.Feature.IAC.User.Create.Handler
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
 
                 // 7. Communication
-                await _emailGatway.SendOtpEmailAsync(emailVo.Value.Value, generatedOtp.Value, EmailOtpType.Registration);
+                await _emailGatway.SendOtpEmailAsync(emailVo.Value.Value, generatedOtp.Value, OtpType.registration);
                // await _notificationGatway.SendToRoleAsync(UserRole.Admin, "Seller Verification", "New Seller registered and needs document review.");
 
                 return Result<CreateUserResponse>.Success(new CreateUserResponse("Seller registered successfully. Please verify your email with the OTP sent."));

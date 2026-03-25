@@ -4,10 +4,11 @@ using System.Text;
 
 namespace Common.Enum
 {
-    public enum EmailOtpType
+    public enum UserType
     {
-        Registration = 0,
-        Resend = 1,
-        ForgotPassword = 2,
+        Admin = 1,
+        Seller = 2,
+        Customer = 3,
+        Guests = 4,
     }
 }

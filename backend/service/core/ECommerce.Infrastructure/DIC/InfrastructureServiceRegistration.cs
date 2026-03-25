@@ -1,9 +1,10 @@
 ﻿using ECommerce.Application.Abstraction.Data;
 using ECommerce.Application.Abstraction.IExternalService;
 using ECommerce.Application.Feature.Catalog.Product.Create.Command;
-using ECommerce.Application.Feature.Catalog.Product.Create.Validator;
+using ECommerce.Application.Feature.Catalog.Product.Create.Validater;
 using ECommerce.Application.Feature.IAC.User.Create.Command;
 using ECommerce.Application.Feature.IAC.User.Create.Validater;
+using ECommerce.Application.Feature.IAC.User.GetProfile.Strategy;
 using ECommerce.Domain.modules.Catalog.Repository;
 using ECommerce.Domain.modules.IAC.Repositories;
 using ECommerce.Infrastructure.ExternalService;
@@ -38,6 +39,7 @@ namespace ECommerce.Infrastructure.DIC
         public static IServiceCollection AddInternalServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<IPasswordService, BCryptPasswordService>();
+            services.AddScoped<IJWTService, JWTService>();
 
             return services;
         }
@@ -52,6 +54,12 @@ namespace ECommerce.Infrastructure.DIC
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<ISellerRepository, SellerRepository>();
             services.AddScoped<IUserOTpRepository, UserOtpRepository>();
+
+            services.AddScoped<ProfileStrategyContext>();
+            services.AddScoped<IProfileStrategy,CustomerProfileStrategy>();
+            services.AddScoped<IProfileStrategy,UserProfileStrategy>();
+            services.AddScoped<IProfileStrategy,SellerProfileStrategy>();
+
 
             services.AddScoped<IProductRepository,ProductRepository>();
             services.AddScoped<IProductAttributeRepository, ProductAttributeRepository>();

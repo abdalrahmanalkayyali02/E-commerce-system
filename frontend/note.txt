@@ -1,0 +1,4 @@
+- need to make backup for DB 
+- need to make restore for DB 
+- make sure that finish IAC domain and application and controller for today at least 
+- start learning react JS 

@@ -1,6 +1,10 @@
-﻿using ECommerce.Domain.modules.IAC.Entity;
+﻿using Common.Specfication;
+using ECommerce.Domain.modules.IAC.Entity;
 using ECommerce.Domain.modules.IAC.Repositories;
+using ECommerce.Domain.Modules.IAC.Entity;
 using ECommerce.Infrastructure.Persistence.Mapper.IAC;
+using ECommerce.Infrastructure.Persistence.Model.IAC;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -33,6 +37,18 @@ namespace ECommerce.Infrastructure.Persistence.Repository.IAC
             }
         }
 
+        public async Task<UserOTPEntity?> GetEntityWithSpec(
+                    ISpecification<UserOTPEntity> spec,
+                    CancellationToken cancellationToken = default)
+        {
+            IQueryable<UserOtpDataModel> query = _context.UserOtps.AsNoTracking();
+
+            var evaluatedQuery = query.Select(m => UserOTPMapper.FromPersistenceToDomain(m));
+
+            var finalQuery = SpecificationEvaluator<UserOTPEntity>.GetQuery(evaluatedQuery, spec);
+
+            return await finalQuery.FirstOrDefaultAsync(cancellationToken);
+        }
         public  void SoftDelete(UserOTPEntity userOTPEntity, CancellationToken cancellation = default)
         {
             var model = UserOTPMapper.FromDomainToPersistence(userOTPEntity);

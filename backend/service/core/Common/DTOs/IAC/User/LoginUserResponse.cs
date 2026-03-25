@@ -10,7 +10,6 @@ namespace Common.DTOs.IAC.User
         public string Token { get; }
         public bool IsEmailVerfied { get; }
         public AccountStatus AccountStatus { get; }
-
        
     }
     

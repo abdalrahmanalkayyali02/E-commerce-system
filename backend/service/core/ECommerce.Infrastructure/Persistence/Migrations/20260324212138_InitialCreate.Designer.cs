@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ECommerce.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260319023310_InitialCreate")]
+    [Migration("20260324212138_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -25,7 +25,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("ECommerce.Infrastructure.Persistence.Model.CustomerDataModel", b =>
+            modelBuilder.Entity("ECommerce.Infrastructure.Persistence.Model.IAC.CustomerDataModel", b =>
                 {
                     b.Property<Guid>("CustomrID")
                         .HasColumnType("uuid");
@@ -46,7 +46,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                     b.ToTable("Customers", "iac");
                 });
 
-            modelBuilder.Entity("ECommerce.Infrastructure.Persistence.Model.SellerDataModel", b =>
+            modelBuilder.Entity("ECommerce.Infrastructure.Persistence.Model.IAC.SellerDataModel", b =>
                 {
                     b.Property<Guid>("sellerID")
                         .HasColumnType("uuid");
@@ -96,7 +96,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                     b.ToTable("Sellers", "iac");
                 });
 
-            modelBuilder.Entity("ECommerce.Infrastructure.Persistence.Model.UserDataModel", b =>
+            modelBuilder.Entity("ECommerce.Infrastructure.Persistence.Model.IAC.UserDataModel", b =>
                 {
                     b.Property<Guid>("id")
                         .ValueGeneratedOnAdd()
@@ -135,6 +135,9 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
+
+                    b.Property<DateTime?>("ResetPasswordAllowedUntil")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Role")
                         .IsRequired()
@@ -176,13 +179,14 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                     b.ToTable("Users", "iac");
                 });
 
-            modelBuilder.Entity("ECommerce.Infrastructure.Persistence.Model.UserOtpDataModel", b =>
+            modelBuilder.Entity("ECommerce.Infrastructure.Persistence.Model.IAC.UserOtpDataModel", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Code")
+                        .IsRequired()
                         .HasMaxLength(6)
                         .HasColumnType("character varying(6)")
                         .HasColumnName("Code");
@@ -208,6 +212,19 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                         .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
+                    b.Property<string>("OTPtype")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
+
+                    b.Property<DateTime?>("TimeVerfied")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("UpdateAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp without time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
                     b.Property<Guid>("userID")
                         .HasColumnType("uuid");
 
@@ -218,30 +235,32 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                     b.HasIndex("userID", "Code")
                         .IsUnique();
 
+                    b.HasIndex("userID", "UpdateAt", "IsUsed");
+
                     b.ToTable("UserOTPs", "iac");
                 });
 
-            modelBuilder.Entity("ECommerce.Infrastructure.Persistence.Model.CustomerDataModel", b =>
+            modelBuilder.Entity("ECommerce.Infrastructure.Persistence.Model.IAC.CustomerDataModel", b =>
                 {
-                    b.HasOne("ECommerce.Infrastructure.Persistence.Model.UserDataModel", null)
+                    b.HasOne("ECommerce.Infrastructure.Persistence.Model.IAC.UserDataModel", null)
                         .WithOne()
-                        .HasForeignKey("ECommerce.Infrastructure.Persistence.Model.CustomerDataModel", "CustomrID")
+                        .HasForeignKey("ECommerce.Infrastructure.Persistence.Model.IAC.CustomerDataModel", "CustomrID")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ECommerce.Infrastructure.Persistence.Model.SellerDataModel", b =>
+            modelBuilder.Entity("ECommerce.Infrastructure.Persistence.Model.IAC.SellerDataModel", b =>
                 {
-                    b.HasOne("ECommerce.Infrastructure.Persistence.Model.UserDataModel", null)
+                    b.HasOne("ECommerce.Infrastructure.Persistence.Model.IAC.UserDataModel", null)
                         .WithOne()
-                        .HasForeignKey("ECommerce.Infrastructure.Persistence.Model.SellerDataModel", "sellerID")
+                        .HasForeignKey("ECommerce.Infrastructure.Persistence.Model.IAC.SellerDataModel", "sellerID")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ECommerce.Infrastructure.Persistence.Model.UserOtpDataModel", b =>
+            modelBuilder.Entity("ECommerce.Infrastructure.Persistence.Model.IAC.UserOtpDataModel", b =>
                 {
-                    b.HasOne("ECommerce.Infrastructure.Persistence.Model.UserDataModel", null)
+                    b.HasOne("ECommerce.Infrastructure.Persistence.Model.IAC.UserDataModel", null)
                         .WithMany()
                         .HasForeignKey("userID")
                         .OnDelete(DeleteBehavior.Cascade)

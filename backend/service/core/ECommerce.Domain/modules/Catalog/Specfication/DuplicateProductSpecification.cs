@@ -1,7 +1,7 @@
 ﻿using Common.Specfication;
 using ECommerce.Domain.modules.Catalog.Entity;
 
-namespace ECommerce.Domain.modules.Catalog.Specification
+namespace ECommerce.Domain.modules.Catalog.Specfication
 {
     public class DuplicateProductSpecification : BaseSpecification<ProductEntity>
     {
