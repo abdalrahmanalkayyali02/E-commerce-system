@@ -42,15 +42,6 @@ namespace Common.Reposotries
             _db.Entry(entity).State = EntityState.Modified;
         }
 
-        public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
-        {
-            var entity = await GetByIdAsync(id, cancellationToken);
-            if (entity != null)
-            {
-                _model.Remove(entity);
-            }
-        }
-
         public void SoftDelete(TModel entity)
         {
             _model.Attach(entity);
@@ -63,6 +54,9 @@ namespace Common.Reposotries
             }
         }
 
-     
+        public Task<TModel?> GetValueBySpecfication(Expression<Func<TModel, bool>> predicate, Expression<Func<TModel, object>> selector, CancellationToken ct = default)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

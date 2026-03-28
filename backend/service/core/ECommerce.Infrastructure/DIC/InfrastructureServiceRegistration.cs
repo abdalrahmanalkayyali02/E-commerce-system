@@ -2,15 +2,21 @@
 using ECommerce.Application.Abstraction.IExternalService;
 using ECommerce.Application.Feature.Catalog.Product.Create.Command;
 using ECommerce.Application.Feature.Catalog.Product.Create.Validater;
-using ECommerce.Application.Feature.IAC.User.Create.Command;
-using ECommerce.Application.Feature.IAC.User.Create.Validater;
-using ECommerce.Application.Feature.IAC.User.GetProfile.Strategy;
+using ECommerce.Application.Feature.userMangement.User.Create.Command;
+using ECommerce.Application.Feature.userMangement.User.Create.Validater;
+using ECommerce.Application.Feature.userMangement.User.Login.Command;
+using ECommerce.Application.Feature.userMangement.User.Login.Validater;
+using ECommerce.Application.Feature.userMangement.User.Profile;
+using ECommerce.Application.Feature.userMangement.User.Profile.Strategy;
+using ECommerce.Application.Feature.userMangement.User.Profile.UpdateProfile.Command;
+using ECommerce.Application.Feature.userMangement.User.Profile.UpdateProfile.Validater;
+using ECommerce.Application.Feature.userMangement.User.UpdateForgetPassword.Command;
 using ECommerce.Domain.modules.Catalog.Repository;
-using ECommerce.Domain.modules.IAC.Repositories;
+using ECommerce.Domain.modules.UserMangement.Repositories;
 using ECommerce.Infrastructure.ExternalService;
 using ECommerce.Infrastructure.Persistence.Repository;
 using ECommerce.Infrastructure.Persistence.Repository.Catalog;
-using ECommerce.Infrastructure.Persistence.Repository.IAC;
+using ECommerce.Infrastructure.Persistence.Repository.UserMangement;
 using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -56,9 +62,11 @@ namespace ECommerce.Infrastructure.DIC
             services.AddScoped<IUserOTpRepository, UserOtpRepository>();
 
             services.AddScoped<ProfileStrategyContext>();
-            services.AddScoped<IProfileStrategy,CustomerProfileStrategy>();
-            services.AddScoped<IProfileStrategy,UserProfileStrategy>();
-            services.AddScoped<IProfileStrategy,SellerProfileStrategy>();
+            services.AddScoped<IProfileStrategy, UserProfileStrategy>();
+            services.AddScoped<IProfileStrategy, CustomerProfileStrategy>();
+            services.AddScoped<IProfileStrategy, SellerProfileStrategy>();
+
+
 
 
             services.AddScoped<IProductRepository,ProductRepository>();
@@ -73,6 +81,12 @@ namespace ECommerce.Infrastructure.DIC
             services.AddScoped<IValidator<CreateCustomerCommand>, CreateCustomerValidator>();
             services.AddScoped<IValidator<CreateSellerCommand>, CreateSellerValidater>();
             services.AddScoped<IValidator<CreateProductCommand>, CreateProductCommandValidator>();
+            services.AddScoped<IValidator<LoginUserCommand>, LoginValidater>();
+            services.AddScoped<IValidator<updateForgetPasswordCommand>, UpdateForgetPasswordCommandValidater>();
+            services.AddScoped<IValidator<userProfileCommand>,userProfileCommandValidater>();
+            services.AddScoped<IValidator<customerProfileCommand>, customerProfileCommandValidater>();
+            services.AddScoped<IValidator<sellerProfileCommand>, sellerProfileCommandValidater>();
+
 
 
             return services;

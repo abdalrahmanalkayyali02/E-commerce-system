@@ -36,7 +36,7 @@ public abstract class BaseApiController : ControllerBase
                 return StatusCode(statusCode, new
                 {
                     Data = (object)null,
-                    Errors = errors.Select(e => new  // ✅ All errors returned
+                    Errors = errors.Select(e => new  
                     {
                         e.Code,
                         e.Description,

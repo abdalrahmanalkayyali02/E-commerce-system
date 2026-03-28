@@ -1,7 +1,9 @@
 ﻿using ECommerce.Application.Feature.Catalog.Product.Create.Command;
-using ECommerce.Application.Feature.IAC.OtpVerification.Verified.Command;
-using ECommerce.Application.Feature.IAC.User.Create.Command;
-using ECommerce.Application.Feature.IAC.User.GetProfile.Queries;
+using ECommerce.Application.Feature.userMangement.OtpVerification.Verified.Command;
+using ECommerce.Application.Feature.userMangement.User.Create.Command;
+using ECommerce.Application.Feature.userMangement.User.Login.Command;
+using ECommerce.Application.Feature.userMangement.User.Profile.GetProfile.Queries;
+using ECommerce.Application.Feature.userMangement.User.UpdateForgetPassword.Command;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -21,6 +23,8 @@ namespace ECommerce.Infrastructure.DIC
                 cfg.RegisterServicesFromAssemblies(typeof(VerfiedOtpCommand).Assembly);
                 cfg.RegisterServicesFromAssemblies(typeof(ResendOtpCommand).Assembly);
                 cfg.RegisterServicesFromAssemblies(typeof(GetUserByIdQueries).Assembly);
+                cfg.RegisterServicesFromAssemblies(typeof(LoginUserCommand).Assembly);
+                cfg.RegisterServicesFromAssemblies(typeof(updateForgetPasswordCommand).Assembly);
 
                 cfg.RegisterServicesFromAssembly(typeof(CreateProductCommand).Assembly);
 

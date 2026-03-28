@@ -5,13 +5,8 @@ using System.Text;
 
 namespace Common.DTOs.IAC.User
 {
-    public record LoginUserResponse(string Token, bool isEmailVerfied, AccountStatus accountStatus)
-    {
-        public string Token { get; }
-        public bool IsEmailVerfied { get; }
-        public AccountStatus AccountStatus { get; }
-       
-    }
+    public record LoginUserResponse(string Token, bool isEmailVerfied, AccountStatus accountStatus);
+    
     
     
 }

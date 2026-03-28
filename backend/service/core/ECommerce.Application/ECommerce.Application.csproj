@@ -20,9 +20,7 @@
     <Folder Include="Feature\Catalog\ApplicationError\" />
     <Folder Include="Feature\Catalog\Product\Delete\" />
     <Folder Include="Feature\Catalog\Product\Update\" />
-    <Folder Include="Feature\IAC\User\UpdateProfile\Command\" />
-    <Folder Include="Feature\IAC\User\UpdateProfile\Handler\" />
-    <Folder Include="Feature\IAC\User\UpdateProfile\Validater\" />
+    <Folder Include="Feature\Notification\AppliationError\" />
   </ItemGroup>
 
   <PropertyGroup>

@@ -1,6 +1,6 @@
 ﻿using ECommerce.Application.Abstraction.Data;
 using ECommerce.Domain.modules.Catalog.Repository;
-using ECommerce.Domain.modules.IAC.Repositories;
+using ECommerce.Domain.modules.UserMangement.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECommerce.Infrastructure.Persistence.Repository

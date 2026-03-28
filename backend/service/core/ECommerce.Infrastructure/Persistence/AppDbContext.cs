@@ -1,4 +1,4 @@
-﻿using ECommerce.Infrastructure.Persistence.Model.IAC;
+﻿using ECommerce.Infrastructure.Persistence.Model.UserMangement;
 using ECommerce.Infrastructure.Persistence.Seed;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;

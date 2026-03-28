@@ -2,9 +2,8 @@
 using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-using Common.Specfication;
 
-namespace ECommerce.Infrastructure.Persistence.Repository.IAC
+namespace Common.Specfication
 {
     public static class SpecificationEvaluator<TEntity, TModel>
         where TEntity : class

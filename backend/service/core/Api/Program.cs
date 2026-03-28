@@ -1,14 +1,22 @@
 using Api.Constraints;
-using ECommerce.Application.Feature.IAC.User.Create.Command;
 using ECommerce.Infrastructure.DIC;
 using ECommerce.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
+using System.Text;
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+});
+
+
+
 builder.Services.AddEndpointsApiExplorer();
 
 // --- 2. DATABASE CONFIGURATION ---
@@ -24,9 +32,36 @@ builder.Services.AddInfrastructureServices(builder.Configuration);
 
 builder.Services.Configure<RouteOptions>(options =>
 {
-    // This connects the name in your [HttpPost("{type:otpType}")] 
-    // to the class logic we just wrote.
     options.ConstraintMap.Add("otpType", typeof(OtpTypeRouteConstraint));
+});
+
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    var jwtSetting = builder.Configuration.GetSection("JWTSettings");
+    var secretKey = jwtSetting["SecretKey"];
+
+    if (string.IsNullOrEmpty(secretKey))
+    {
+        throw new InvalidOperationException("JWT SecretKey is missing in configuration!");
+    }
+
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ClockSkew = TimeSpan.Zero,
+        ValidIssuer = jwtSetting["Issuer"],
+        ValidAudience = jwtSetting["Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+    };
 });
 
 
@@ -61,6 +96,8 @@ if (app.Environment.IsDevelopment())
         options.RoutePrefix = string.Empty; // Set Swagger as the default landing page
     });
 }
+
+
 
 // Ensure proper routing and security order
 app.UseHttpsRedirection();

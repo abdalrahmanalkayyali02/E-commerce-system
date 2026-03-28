@@ -1,5 +1,5 @@
 ﻿using Common.Enum;
-using ECommerce.Infrastructure.Persistence.Model.IAC;
+using ECommerce.Infrastructure.Persistence.Model.UserMangement;
 using System;
 using System.Collections.Generic;
 

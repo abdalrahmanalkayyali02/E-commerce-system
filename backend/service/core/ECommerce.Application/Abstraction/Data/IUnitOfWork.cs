@@ -1,6 +1,6 @@
 ﻿using Common.Reposotries;
 using ECommerce.Domain.modules.Catalog.Repository;
-using ECommerce.Domain.modules.IAC.Repositories;
+using ECommerce.Domain.modules.UserMangement.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Text;

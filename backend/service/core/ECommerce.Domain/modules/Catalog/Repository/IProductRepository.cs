@@ -1,6 +1,5 @@
 ﻿using Common.Specfication;
 using ECommerce.Domain.modules.Catalog.Entity;
-using ECommerce.Domain.Modules.IAC.Entity;
 using System;
 using System.Collections.Generic;
 using System.Text;

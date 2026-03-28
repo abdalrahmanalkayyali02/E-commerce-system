@@ -21,6 +21,8 @@ namespace Common.Result
         public static Error Validation(string code, string description) => new(code, description, ErrorKind.Validation);
         public static Error Conflict(string code, string description) => new(code, description, ErrorKind.Conflict);
         public static Error Failure(string code, string description) => new(code, description, ErrorKind.Failure);
+        public static Error Unexpected(string code, string description) => new(code, description, ErrorKind.Unexpected);
+        
 
         public static readonly Error None = new(string.Empty, string.Empty, ErrorKind.Failure);
     }
