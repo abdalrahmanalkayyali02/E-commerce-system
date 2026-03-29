@@ -21,6 +21,7 @@ namespace ECommerce.Infrastructure.Persistence.Mapper.UserMangement
                 OTPtype = domain.OTPtype,
                 UpdateAt = domain.UpdateAt,
                 TimeVerfied = domain.TimeVerfied
+                
             };
         }
 

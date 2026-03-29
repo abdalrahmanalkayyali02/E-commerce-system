@@ -194,11 +194,13 @@ namespace ECommerce.Domain.modules.UserMangement.Entity
 
             if (Password == newPassword)
             {
-                return Result<Success>.Failure(Error.Validation("Reset.SamePassword", "New password cannot be the same as the current password."));
+                return Result<Success>.Failure(Error.Validation("Reset.SamePassword", "New password cannot be the same."));
             }
 
             Password = newPassword;
-            ResetPasswordAllowedUntil = null; 
+
+            ResetPasswordAllowedUntil = null;
+
             UpdatedAt = DateTime.UtcNow;
 
             return Result<Success>.Success(new Success());

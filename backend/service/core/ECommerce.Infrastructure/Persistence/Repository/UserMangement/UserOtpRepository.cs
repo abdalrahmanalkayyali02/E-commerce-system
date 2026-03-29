@@ -42,8 +42,8 @@ namespace ECommerce.Infrastructure.Persistence.Repository.UserMangement
         public async Task<UserOTPEntity?> GetLastOtpOfType(Guid userId, OtpType type, CancellationToken cancellation = default)
         {
             var model = await _context.UserOtps
-                    .AsNoTracking() // <--- Add this! Tells EF "Don't track this, I'm just reading it"
-                    .Where(u => u.userID == userId && u.OTPtype == type && !u.IsUsed && !u.IsVerified)
+                    .AsNoTracking() 
+                    .Where(u => u.userID == userId && u.OTPtype == type)
                     .OrderByDescending(u => u.GeneratedAt)
                     .FirstOrDefaultAsync(cancellation);
 

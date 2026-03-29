@@ -33,7 +33,6 @@ namespace ECommerce.Application.Feature.userMangement.User.UpdateForgetPassword.
 
         public async Task<Result<UpdateForgetPasswordReponse>> Handle(updateForgetPasswordCommand command, CancellationToken ct)
         {
-            // 1. Fluent Validation Check
             var validationResult = await _validator.ValidateAsync(command, ct);
             if (!validationResult.IsValid)
             {
@@ -41,57 +40,41 @@ namespace ECommerce.Application.Feature.userMangement.User.UpdateForgetPassword.
                     Error.Validation("Input.Invalid", validationResult.Errors.First().ErrorMessage));
             }
 
-            // 2. Identify User
             var userEntity = await _unitOfWork.Users.GetUserByEmail(command.email, ct);
             if (userEntity is null)
             {
                 return Result<UpdateForgetPasswordReponse>.Failure(EmailAppError.NotFound);
             }
 
-            // 3. Security Check: The 10-Minute Sliding Window
-            // Pass userEntity.Id to ensure we get the OTP for THIS specific user
-            var lastOtp = await _unitOfWork.UserOTp.GetLastOtpOfType(userEntity.Id, OtpType.forgotPassword, ct);
-
-            if (lastOtp == null || !lastOtp.IsVerified)
+            var passwordVoResult = Password.From(command.password);
+            if (passwordVoResult.IsError)
             {
-                return Result<UpdateForgetPasswordReponse>.Failure(
-                    Error.Validation("OTP.Required", "You must verify your OTP before resetting your password."));
+                return Result<UpdateForgetPasswordReponse>.Failure(passwordVoResult.Errors);
             }
 
-    
-            var criticalTime = lastOtp.TimeVerfied!.Value.AddMinutes(10);
+            string hashedPassword = _passwordService.PasswordHash(passwordVoResult.Value.Value);
+            var hashedVo = Password.Reconstruct(hashedPassword);
 
-            if (DateTime.UtcNow > criticalTime)
+            var resetResult = userEntity.CompletePasswordReset(hashedVo);
+
+            if (resetResult.IsError)
             {
-                return Result<UpdateForgetPasswordReponse>.Failure(
-                    Error.Validation("OTP.WindowExpired", "The 10-minute window since verification has ended. Please request a new OTP.")
-                );
+                return Result<UpdateForgetPasswordReponse>.Failure(resetResult.Errors);
             }
-
-            var passwordVo = Password.From(command.password);
-            if (passwordVo.IsError)
-            {
-                return Result<UpdateForgetPasswordReponse>.Failure(passwordVo.Errors);
-            }
-
-            string hashedPassword = _passwordService.PasswordHash(passwordVo.Value.Value);
-
-            userEntity.CompletePasswordReset(Password.Reconstruct(hashedPassword));
 
             _unitOfWork.Users.Update(userEntity);
-
             var saveResult = await _unitOfWork.SaveChangesAsync(ct);
 
             if (saveResult <= 0)
             {
                 return Result<UpdateForgetPasswordReponse>.Failure(
-                    Error.Failure("Database.Error", "Failed to update password. Please try again."));
+                    Error.Failure("Database.Error", "Failed to finalize password update."));
             }
 
             var token = _jwtService.GenerateToken(userEntity.Id.ToString(), userEntity.userType.ToString());
 
             return Result<UpdateForgetPasswordReponse>.Success(new UpdateForgetPasswordReponse(
-                "Password updated successfully.",
+                "Password updated successfully. Your session is now secure.",
                 token,
                 userEntity.IsEmailConfirmed,
                 userEntity.AccountStatus));
