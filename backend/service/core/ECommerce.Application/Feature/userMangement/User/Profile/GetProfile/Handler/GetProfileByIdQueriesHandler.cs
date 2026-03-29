@@ -1,5 +1,4 @@
-﻿using Common.DTOs.IAC.User;
-using Common.Impl.Result;
+﻿using Common.Impl.Result;
 using Common.Result;
 using ECommerce.Application.Feature.userMangement.User.Profile;
 using ECommerce.Application.Feature.userMangement.User.Profile.GetProfile.Queries;

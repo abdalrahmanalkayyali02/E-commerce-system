@@ -1,6 +1,5 @@
 using Api.Constraints;
 using Api.Middleware;
-using ECommerce.Api.Middleware;
 using ECommerce.Infrastructure.DIC;
 using ECommerce.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

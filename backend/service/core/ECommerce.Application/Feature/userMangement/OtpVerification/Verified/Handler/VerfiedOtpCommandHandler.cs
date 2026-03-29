@@ -4,13 +4,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Common.Enum;
 using Common.Impl.Result;
-using Common.DTOs.IAC.OTpVerfrication;
 using ECommerce.Application.Abstraction.Data;
 using Common.Result;
 using ECommerce.Application.Abstraction.IExternalService;
 using ECommerce.Domain.modules.UserMangement.DomainError;
 using ECommerce.Application.Feature.userMangement.OtpVerification.Verified.Command;
-using ECommerce.Application.Feature.userMangement.ApplicationError;
+using Common.DTOs.UserMangement.OTpVerfrication;
+using Common.Exceptions.System.userMangement;
 
 namespace ECommerce.Application.Feature.userMangement.OtpVerification.Verified.Handler
 {

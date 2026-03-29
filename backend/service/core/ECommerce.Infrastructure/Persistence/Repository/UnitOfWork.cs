@@ -13,6 +13,7 @@ namespace ECommerce.Infrastructure.Persistence.Repository
         public ICustomerRepository Customer { get; }
         public ISellerRepository Seller { get; }
         public IUserOTpRepository UserOTp { get; }
+        public INotificationRepository Notification { get; }
 
         public IProductRepository productRepository { get; }
 
@@ -33,6 +34,9 @@ namespace ECommerce.Infrastructure.Persistence.Repository
               IProductAttributeRepository ProductAttributeRepository,
               IProductCatogryRepository ProductCatogryRepository,
               IProductPhotoRepository ProductPhotoRepository
+            ,
+              INotificationRepository notification
+
              )
         {
             _context = context;
@@ -44,6 +48,7 @@ namespace ECommerce.Infrastructure.Persistence.Repository
             this.ProductPhotoRepository = ProductPhotoRepository;
             this.ProductCatogryRepository = ProductCatogryRepository;
             this.ProductAttributeRepository = ProductAttributeRepository;
+            Notification = notification;
         }
 
         public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

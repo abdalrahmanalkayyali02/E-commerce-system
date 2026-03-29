@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Exceptions\System\" />
     <Folder Include="Middleware\" />
   </ItemGroup>
 

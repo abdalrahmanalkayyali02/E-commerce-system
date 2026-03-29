@@ -1,5 +1,4 @@
-﻿using Common.DTOs.IAC.User;
-using Common.Enum;
+﻿using Common.Enum;
 using Common.Impl.Result;
 using MediatR;
 using System;

@@ -9,7 +9,7 @@ namespace ECommerce.Infrastructure.Persistence.ModelConfigurations.UserMangement
         public void Configure(EntityTypeBuilder<CustomerDataModel> builder)
         {
             // 1. Table Mapping
-            builder.ToTable("Customers", "iac");
+            builder.ToTable("Customers");
 
             // 2. Primary Key
             builder.HasKey(c => c.CustomrID);

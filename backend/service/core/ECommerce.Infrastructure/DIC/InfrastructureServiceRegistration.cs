@@ -2,6 +2,8 @@
 using ECommerce.Application.Abstraction.IExternalService;
 using ECommerce.Application.Feature.Catalog.Product.Create.Command;
 using ECommerce.Application.Feature.Catalog.Product.Create.Validater;
+using ECommerce.Application.Feature.Notification.usersNotification.GetAllNotifications.Query;
+using ECommerce.Application.Feature.Notification.usersNotification.GetAllNotifications.Validator;
 using ECommerce.Application.Feature.userMangement.User.Create.Command;
 using ECommerce.Application.Feature.userMangement.User.Create.Validater;
 using ECommerce.Application.Feature.userMangement.User.Login.Command;
@@ -16,6 +18,7 @@ using ECommerce.Domain.modules.UserMangement.Repositories;
 using ECommerce.Infrastructure.ExternalService;
 using ECommerce.Infrastructure.Persistence.Repository;
 using ECommerce.Infrastructure.Persistence.Repository.Catalog;
+using ECommerce.Infrastructure.Persistence.Repository.Notification;
 using ECommerce.Infrastructure.Persistence.Repository.UserMangement;
 using FluentValidation;
 using Microsoft.Extensions.Configuration;
@@ -73,9 +76,12 @@ namespace ECommerce.Infrastructure.DIC
             services.AddScoped<IProductAttributeRepository, ProductAttributeRepository>();
             services.AddScoped<IProductCatogryRepository,ProductCategoryRepository>();
             services.AddScoped<IProductPhotoRepository,ProductPhotoRepository>();
-            
 
-            
+
+            services.AddScoped<INotificationRepository, NotificationRepository>();
+
+
+
 
             // Validator Registration
             services.AddScoped<IValidator<CreateCustomerCommand>, CreateCustomerValidator>();
@@ -86,6 +92,7 @@ namespace ECommerce.Infrastructure.DIC
             services.AddScoped<IValidator<userProfileCommand>,userProfileCommandValidater>();
             services.AddScoped<IValidator<customerProfileCommand>, customerProfileCommandValidater>();
             services.AddScoped<IValidator<sellerProfileCommand>, sellerProfileCommandValidater>();
+            services.AddScoped<IValidator<GetAllNotificationQuery>,GetAllNotificationQueryValidator>();
 
 
 

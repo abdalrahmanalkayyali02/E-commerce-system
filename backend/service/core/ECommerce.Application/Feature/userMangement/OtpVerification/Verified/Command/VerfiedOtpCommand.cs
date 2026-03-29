@@ -1,4 +1,4 @@
-﻿using Common.DTOs.IAC.OTpVerfrication;
+﻿using Common.DTOs.UserMangement.OTpVerfrication;
 using Common.Enum;
 using Common.Impl.Result;
 using MediatR;

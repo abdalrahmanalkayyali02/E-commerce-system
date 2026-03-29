@@ -1,4 +1,4 @@
-﻿using Common.DTOs.IAC.User;
+﻿using Common.DTOs.UserMangement.User;
 using Common.Impl.Result;
 using ECommerce.Application.Feature.userMangement.User.Profile;
 using ECommerce.Application.Feature.userMangement.User.Profile.UpdateProfile.Command;

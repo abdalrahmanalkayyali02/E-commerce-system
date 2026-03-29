@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 using Common.Impl.Result;
-using Common.DTOs.IAC.User;
+using Common.DTOs.UserMangement.User;
 
 namespace ECommerce.Application.Feature.userMangement.User.Create.Command
 {

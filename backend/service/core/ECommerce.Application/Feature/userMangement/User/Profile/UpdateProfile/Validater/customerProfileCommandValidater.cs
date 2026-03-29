@@ -21,8 +21,9 @@ namespace ECommerce.Application.Feature.userMangement.User.Profile.UpdateProfile
                 .WithMessage("Invalid phone number format.");
 
             RuleFor(x => x.address)
-                .Must(addr => string.IsNullOrEmpty(addr) || !Address.Create(addr).IsError)
-                .WithMessage("Invalid address format.");
+            .Must(addr => !Address.Create(addr!).IsError)
+            .When(x => !string.IsNullOrEmpty(x.address))
+            .WithMessage("Invalid business address format.");
         }
     }
 }

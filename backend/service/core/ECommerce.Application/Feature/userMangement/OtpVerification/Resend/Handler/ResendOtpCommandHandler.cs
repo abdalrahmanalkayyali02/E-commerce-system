@@ -1,9 +1,8 @@
-﻿using Common.DTOs.IAC.OTpVerfrication;
+﻿using Common.Exceptions.System.userMangement;
 using Common.Impl.Result;
 using Common.Result;
 using ECommerce.Application.Abstraction.Data;
 using ECommerce.Application.Abstraction.IExternalService;
-using ECommerce.Application.Feature.userMangement.ApplicationError;
 using ECommerce.Application.Feature.userMangement.OtpVerification.Verified.Command;
 using ECommerce.Domain.modules.UserMangement.Entity;
 using ECommerce.Domain.modules.UserMangement.ValueObject;

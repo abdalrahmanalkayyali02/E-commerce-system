@@ -2,7 +2,7 @@
 using Common.Result;
 using System.Net;
 
-namespace ECommerce.Api.Middleware
+namespace Api.Middleware
 {
     public class IsAuthMiddleware
     {

@@ -8,7 +8,7 @@ namespace ECommerce.Infrastructure.Persistence.ModelConfigurations.UserMangement
     {
         public void Configure(EntityTypeBuilder<UserDataModel> builder)
         {
-            builder.ToTable("Users", "iac");
+            builder.ToTable("Users");
 
             builder.HasKey(u => u.id);
 

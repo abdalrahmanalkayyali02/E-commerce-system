@@ -8,7 +8,7 @@ namespace ECommerce.Infrastructure.Persistence.ModelConfigurations.UserMangement
     {
         public void Configure(EntityTypeBuilder<UserOtpDataModel> builder)
         {
-            builder.ToTable("UserOTPs", "iac");
+            builder.ToTable("UserOTPs");
 
             builder.HasKey(x => x.ID);
 

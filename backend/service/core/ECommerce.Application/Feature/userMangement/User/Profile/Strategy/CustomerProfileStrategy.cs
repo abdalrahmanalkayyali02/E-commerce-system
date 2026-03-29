@@ -1,9 +1,9 @@
-﻿using Common.DTOs.IAC.User;
+﻿using Common.DTOs.UserMangement.User;
 using Common.Enum;
+using Common.Exceptions.System.userMangement;
 using Common.Impl.Result;
 using Common.Result;
 using ECommerce.Application.Abstraction.Data;
-using ECommerce.Application.Feature.userMangement.ApplicationError;
 using ECommerce.Application.Feature.userMangement.User.Profile;
 using ECommerce.Application.Feature.userMangement.User.Profile.UpdateProfile.Command;
 using ECommerce.Domain.modules.UserMangement.ValueObject;

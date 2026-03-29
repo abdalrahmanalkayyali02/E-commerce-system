@@ -6,9 +6,9 @@ namespace Common.Enum
 {
     public enum NotificationPriority
     {
-        Low,
-        Normal,
-        High,
-        Urgent
+        Low = 0,
+        Normal = 1,
+        High = 2,
+        Urgent = 3,
     }
 }

@@ -9,18 +9,17 @@ namespace ECommerce.Infrastructure.Persistence.ModelConfigurations.UserMangement
         public void Configure(EntityTypeBuilder<SellerDataModel> builder)
         {
             // 1. Table Mapping
-            builder.ToTable("Sellers", "iac");
+            builder.ToTable("Sellers");
 
             // 2. Primary Key
             builder.HasKey(s => s.sellerID);
 
-            // 3. Property Constraints
             builder.Property(s => s.shopName)
                 .IsRequired()
-                .HasMaxLength(100); // Increased from 10 to 100 for realistic shop names
+                .HasMaxLength(100); 
 
             builder.Property(s => s.shopPhoto)
-                .IsRequired(false); // Allow nullable if they haven't uploaded yet
+                .IsRequired(false); 
 
             builder.Property(s => s.address)
                 .IsRequired()

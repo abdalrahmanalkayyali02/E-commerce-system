@@ -6,10 +6,10 @@ namespace Common.Enum
 {
     public enum NotificationType
     {
-        OrderUpdate,
-        PaymentReceived,
-        SystemMaintenance,
-        Promotion,
-        TournamentAlert
+        OrderUpdate = 0,
+        PaymentReceived = 1,
+        SystemMaintenance = 2,
+        Promotion =3,
+        TournamentAlert = 4
     }
 }

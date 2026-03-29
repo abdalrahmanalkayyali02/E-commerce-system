@@ -14,6 +14,8 @@ namespace ECommerce.Application.Abstraction.Data
         ICustomerRepository Customer { get; }
         ISellerRepository Seller { get; }
         IUserOTpRepository UserOTp { get; }
+        INotificationRepository Notification { get; }
+
         IProductRepository productRepository { get; }
         IProductAttributeRepository ProductAttributeRepository { get; }
         IProductCatogryRepository ProductCatogryRepository { get; }

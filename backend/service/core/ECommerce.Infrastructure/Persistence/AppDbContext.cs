@@ -1,4 +1,5 @@
-﻿using ECommerce.Infrastructure.Persistence.Model.UserMangement;
+﻿using ECommerce.Infrastructure.Persistence.Model.Notification;
+using ECommerce.Infrastructure.Persistence.Model.UserMangement;
 using ECommerce.Infrastructure.Persistence.Seed;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -13,6 +14,7 @@ namespace ECommerce.Infrastructure.Persistence
         public DbSet<UserDataModel> Users { get; set; }
         public DbSet<CustomerDataModel> Customers { get; set; }
         public DbSet<UserOtpDataModel> UserOtps { get; set; }
+        public DbSet<notificationsModel> Notifications { get; set; }
 
         public DbSet<SellerDataModel> Sellers { get; set; }
 
