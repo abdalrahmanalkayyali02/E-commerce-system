@@ -136,13 +136,7 @@ namespace ECommerce.Application.Feature.userMangement.User.Profile.Strategy
                 sellerEntity.updateShopAddress(address.Value);
             }
 
-            if (!string.IsNullOrEmpty(command.verifiedSellerDocument))
-            {
-
-                sellerEntity.updateVerfiedSellerDocument(command.verifiedSellerDocument);
-            }
-
-
+     
              _unitOfWork.Users.Update(userEntity);
             _unitOfWork.Seller.Update(sellerEntity);
             await _unitOfWork.SaveChangesAsync(ct);

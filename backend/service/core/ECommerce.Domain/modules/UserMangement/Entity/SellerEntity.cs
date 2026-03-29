@@ -109,43 +109,6 @@ namespace ECommerce.Domain.modules.UserMangement.Entity
             UpdateAt = DateTime.UtcNow;
             return Result<Success>.Success(new Success());
         }
-
-        public Result<Success> UpdateVerifiedSellerDocument(string verifiedSellerDocument)
-        {
-            if (verfiedSellerDocument == verifiedSellerDocument)
-            {
-                return Result<Success>.Success(new Success());
-            }
-
-            var allowedExtensions = new[] { ".pdf", ".jpg", ".jpeg", ".png" };
-            bool isValidExtension = false;
-
-            foreach (var ext in allowedExtensions)
-            {
-                if (verifiedSellerDocument.EndsWith(ext, StringComparison.OrdinalIgnoreCase))
-                {
-                    isValidExtension = true;
-                    break;
-                }
-            }
-
-            if (!isValidExtension)
-            {
-                return Result<Success>.Failure(
-                    Error.Validation("Seller.InvalidDocument", "Document must be a PDF or an Image (JPG/PNG).")
-                );
-            }
-
-            verfiedSellerDocument = verifiedSellerDocument;
-            isVerfiedSellerDocumentBeenViewed = false;
-            isVerifiedByAdmin = false;
-            UpdateAt = DateTime.UtcNow;
-
-            // later maybe will will make even reaise for the admin 
-
-            return Result<Success>.Success(new Success());
-        }
-
         public Result<Success> markAsVerfied()
         {
             if (isVerifiedByAdmin)
@@ -205,13 +168,30 @@ namespace ECommerce.Domain.modules.UserMangement.Entity
         public Result<Success> updateVerfiedSellerDocument(string verfiedSellerDocument)
         {
             if (isVerifiedByAdmin)
-                return Error.Conflict("Seller.AlreadyVerified", "Cannot update verified seller document when the seller is already verified.");
+                return Error.Conflict("Seller.AlreadyVerified", "Cannot update document once verified by admin.");
 
             if (string.IsNullOrWhiteSpace(verfiedSellerDocument))
-                return Error.Validation("Seller.InvalidSellerDocument", "Seller document cannot be empty.");
+                return Error.Validation("Seller.InvalidDocument", "Document path/URL cannot be empty.");
+
+            if (this.verfiedSellerDocument == verfiedSellerDocument)
+                return Result<Success>.Success(new Success());
+
+            var allowedExtensions = new[] { ".pdf", ".jpg", ".jpeg", ".png" };
+            bool isValidExtension = allowedExtensions.Any(ext =>
+                verfiedSellerDocument.EndsWith(ext, StringComparison.OrdinalIgnoreCase));
+
+            if (!isValidExtension)
+            {
+                return Result<Success>.Failure(
+                    Error.Validation("Seller.InvalidExtension", "Document must be PDF, JPG, or PNG."));
+            }
+
+            isVerfiedSellerDocumentBeenViewed = false;
+            isVerifiedByAdmin = false;
 
             this.verfiedSellerDocument = verfiedSellerDocument;
             UpdateAt = DateTime.UtcNow;
+
             return Result<Success>.Success(new Success());
         }
 

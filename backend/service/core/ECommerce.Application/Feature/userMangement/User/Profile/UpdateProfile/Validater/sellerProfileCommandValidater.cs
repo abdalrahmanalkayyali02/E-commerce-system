@@ -21,12 +21,10 @@ namespace ECommerce.Application.Feature.userMangement.User.Profile.UpdateProfile
                 .WithMessage("Invalid phone number format.");
 
             RuleFor(x => x.address)
-                .NotEmpty().WithMessage("Business address is required for sellers.")
-                .Must(addr => !Address.Create(addr!).IsError)
-                .WithMessage("Invalid business address format.");
+            .Must(addr => !Address.Create(addr!).IsError)
+            .When(x => !string.IsNullOrEmpty(x.address))
+            .WithMessage("Invalid business address format.");
 
-            RuleFor(x => x.verifiedSellerDocument)
-                .NotEmpty().WithMessage("Verification document is required for sellers.");
         }
     }
 }

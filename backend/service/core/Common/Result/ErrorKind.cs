@@ -22,6 +22,9 @@ namespace Common.Result
         public static Error Conflict(string code, string description) => new(code, description, ErrorKind.Conflict);
         public static Error Failure(string code, string description) => new(code, description, ErrorKind.Failure);
         public static Error Unexpected(string code, string description) => new(code, description, ErrorKind.Unexpected);
+        public static Error Forbidden(string code, string description) => new(code, description, ErrorKind.Forbidden);
+        public static Error Unauthorized(string code, string description) => new(code, description, ErrorKind.Unauthorized);
+
         
 
         public static readonly Error None = new(string.Empty, string.Empty, ErrorKind.Failure);

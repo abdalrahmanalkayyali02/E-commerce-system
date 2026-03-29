@@ -14,8 +14,7 @@ namespace ECommerce.Application.Feature.userMangement.User.Profile.UpdateProfile
        string? LastName,
        string? phoneNumber,
        string? profilePhoto,
-       string? address,
-       string? verifiedSellerDocument
+       string? address
     ) : IRequest<Result<UpdateUserProfileResponse>>;
     
 }
