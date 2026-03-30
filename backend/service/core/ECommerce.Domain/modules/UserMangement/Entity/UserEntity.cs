@@ -246,5 +246,11 @@ namespace ECommerce.Domain.modules.UserMangement.Entity
             AccountStatus = AccountStatus.LocKed;
             UpdatedAt = DateTime.UtcNow;
         }
+
+        public void MarkAsUnlock()
+        {
+            AccountStatus = AccountStatus.Active;
+            UpdatedAt = DateTime.UtcNow;
+        }
     }
 }

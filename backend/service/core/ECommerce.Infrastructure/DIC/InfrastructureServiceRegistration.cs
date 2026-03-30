@@ -1,5 +1,7 @@
 ﻿using ECommerce.Application.Abstraction.Data;
 using ECommerce.Application.Abstraction.IExternalService;
+using ECommerce.Application.Feature.Adminstration.ManegeUser.GetAllUserByFilterQueryForUserType.Query;
+using ECommerce.Application.Feature.Adminstration.ManegeUser.GetAllUserByFilterQueryForUserType.Validator;
 using ECommerce.Application.Feature.Catalog.Product.Create.Command;
 using ECommerce.Application.Feature.Catalog.Product.Create.Validater;
 using ECommerce.Application.Feature.Notification.usersNotification.GetAllNotifications.Query;
@@ -93,6 +95,7 @@ namespace ECommerce.Infrastructure.DIC
             services.AddScoped<IValidator<customerProfileCommand>, customerProfileCommandValidater>();
             services.AddScoped<IValidator<sellerProfileCommand>, sellerProfileCommandValidater>();
             services.AddScoped<IValidator<GetAllNotificationQuery>,GetAllNotificationQueryValidator>();
+            services.AddScoped<IValidator<GetAllUsersByFilterQuery>, GetAllUsersByFilterQueryValidator>();
 
 
 

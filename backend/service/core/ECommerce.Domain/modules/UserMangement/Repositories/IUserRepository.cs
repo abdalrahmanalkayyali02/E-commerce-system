@@ -1,4 +1,6 @@
-﻿using Common.Impl.Result;
+﻿using Common.Collection;
+using Common.Enum;
+using Common.Impl.Result;
 using Common.Specfication;
 using ECommerce.Domain.modules.UserMangement.Entity;
 using MediatR;
@@ -20,8 +22,9 @@ namespace ECommerce.Domain.modules.UserMangement.Repositories
         Task<UserEntity?> GetUserByPhoneNumber(string phoneNumber, CancellationToken ct = default);
         Task<UserEntity?> GetUserByUserName(string userName, CancellationToken ct = default);
 
-        Task<UserEntity?> GetUserByCriteria(Guid? id=null,string? userName=null, 
-            string? PhoneNumber=null, string? Email=null, CancellationToken ct = default);
+        Task<UserEntity?> GetUserByCriteria(Guid? id = null, string? userName = null,
+            string? PhoneNumber = null, string? Email = null, CancellationToken ct = default);
         Task<IEnumerable<UserEntity>> GetAllUsersAsync(Expression<Func<UserEntity, bool>> predicate = null, CancellationToken cancellationToken = default);
+        Task<IPagedList<UserEntity>> GetUsersByFilterAsync(UserType? type, int pageNumber, int pageSize, CancellationToken cancellationToken);
     }
 }

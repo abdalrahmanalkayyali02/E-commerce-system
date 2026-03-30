@@ -1,4 +1,6 @@
-﻿using Common.Specfication;
+﻿using Common.Collection;
+using Common.Enum;
+using Common.Specfication;
 using ECommerce.Domain.modules.UserMangement.Entity;
 using ECommerce.Domain.modules.UserMangement.Repositories;
 using ECommerce.Infrastructure.Persistence.Mapper.UserMangement;
@@ -133,6 +135,16 @@ namespace ECommerce.Infrastructure.Persistence.Repository.UserMangement
                 .FirstOrDefaultAsync(u => u.phoneNumber == phoneNumber && !u.isDelete, ct);
 
             return model != null ? UserMapper.FromPersistenceToDomain(model) : null;
+        }
+
+        public Task<UserEntity?> GetUserByCriteria(Guid? id = null, string? userName = null, string? PhoneNumber = null, string? Email = null, CancellationToken ct = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IPagedList<UserEntity>> GetUsersByFilterAsync(UserType? type, int pageNumber, int pageSize, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }

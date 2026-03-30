@@ -1,0 +1,11 @@
+﻿using MediatR;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace ECommerce.Application.Feature.Adminstration.ManegeShop.MarkAsViewShopDocument.Command
+{
+    public record MarkAsViewShopDocumentCommand(Guid adminId, Guid SellerId) : IRequest<bool>;
+    
+    
+}

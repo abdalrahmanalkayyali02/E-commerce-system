@@ -2,6 +2,7 @@
 using Common.DTOs.UserMangement.User;
 using Common.Enum;
 using Common.Exceptions.System.userMangement;
+using Common.Impl.Collection;
 using Common.Impl.Result;
 using Common.Result;
 using ECommerce.Application.Abstraction.Data;
@@ -52,7 +53,26 @@ namespace ECommerce.Application.Feature.Adminstration.ManegeUser.GetAllUserByFil
                         ("Access.Denied", "This operation is allowed only for admin privilege"));
                 }
 
+                var pagedEntities =  await _unitOfWork.Users.GetUsersByFilterAsync(query.UserType,query.PageNumber,query.PageSize,cancellationToken);
 
+                var userDtos = pagedEntities.Items.Select(user => new UserDto(
+                   user.Id,                
+                   user.FirstName.Value,        
+                   user.LastName.Value,          
+                   user.UserName.Value,        
+                   user.Email.Value,       
+                   user.PhoneNumber.Value,       
+                   user.AccountStatus,     
+                   user.IsDeleted          
+               )).ToList();
+
+                var resultPage = new PagedList<UserDto>(
+                    userDtos,
+                    pagedEntities.TotalCount,
+                    query.PageNumber,
+                    query.PageSize);
+
+                return Result<IPagedList<UserDto>>.Success(resultPage);
             }
 
             catch(Exception ex)

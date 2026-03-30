@@ -5,6 +5,7 @@ using Common.Impl.Result;
 using Common.Result;
 using ECommerce.Application.Abstraction.Data;
 using ECommerce.Application.Feature.Adminstration.ManegeUser.DeleteUserByCiteria.Command;
+using ECommerce.Application.Feature.Adminstration.ManegeUser.LockedUserByCiteria.Command;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ using System.Text;
 
 namespace ECommerce.Application.Feature.Adminstration.ManegeUser.LockedUserByCiteria.Handler
 {
-    public sealed class LockUserByCriteriaCommandHandler : IRequestHandler<DeleteUserByCriteriaCommand, Result<UserDto>>
+    public sealed class LockUserByCriteriaCommandHandler : IRequestHandler<LockUserByCriteriaCommand, Result<UserDto>>
     { 
         private readonly IUnitOfWork _unitOfWork;
 
@@ -21,10 +22,10 @@ namespace ECommerce.Application.Feature.Adminstration.ManegeUser.LockedUserByCit
             _unitOfWork = unitOfWork;
           }
 
-         public async Task<Result<UserDto>> Handle(DeleteUserByCriteriaCommand command, CancellationToken ct)
+         public async Task<Result<UserDto>> Handle(LockUserByCriteriaCommand command, CancellationToken ct)
           {
               try
-              
+            { 
                 var admin = await _unitOfWork.Users.GetUserByID(command.adminID, ct);
                 if (admin is null) return Result<UserDto>.Failure(UserIdAppError.NotFound);
 
@@ -71,5 +72,3 @@ namespace ECommerce.Application.Feature.Adminstration.ManegeUser.LockedUserByCit
         }
     }
 
-}
-}

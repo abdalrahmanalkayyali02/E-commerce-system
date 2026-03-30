@@ -7,7 +7,7 @@ using System.Text;
 
 namespace ECommerce.Application.Feature.userMangement.User.Profile.GetProfile.Queries
 {
-    public record GetUserByIdQueries(Guid id,UserType userType) : IRequest<Result<Object>>;
+    public record GetUserByIdQueries(Guid id) : IRequest<Result<Object>>;
     
     
 }

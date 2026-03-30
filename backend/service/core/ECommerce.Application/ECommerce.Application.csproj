@@ -17,6 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Feature\Adminstration\ManegeShop\VerfiedShop\" />
+    <Folder Include="Feature\Adminstration\ManegeShop\VerfiedSeller\" />
+    <Folder Include="Feature\Adminstration\ManegeUser\SearchAndFilter\" />
     <Folder Include="Feature\Catalog\Product\Delete\" />
     <Folder Include="Feature\Catalog\Product\Update\" />
   </ItemGroup>

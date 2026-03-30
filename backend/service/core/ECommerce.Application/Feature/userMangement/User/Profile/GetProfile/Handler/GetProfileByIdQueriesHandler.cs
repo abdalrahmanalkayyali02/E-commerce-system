@@ -17,8 +17,7 @@ namespace ECommerce.Application.Feature.userMangement.User.Profile.GetProfile.Ha
 
         public async Task<Result<object>> Handle(GetUserByIdQueries request, CancellationToken ct)
         {
-            // 1. Get the strategy from the context
-            var strategyResult = _strategyContext.GetStrategy(request.userType);
+            var strategyResult = await _strategyContext.GetStrategy(request.id);
 
             if (strategyResult.IsError)
             {

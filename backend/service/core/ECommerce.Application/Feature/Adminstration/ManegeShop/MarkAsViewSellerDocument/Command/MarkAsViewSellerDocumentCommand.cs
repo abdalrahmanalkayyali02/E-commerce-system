@@ -1,0 +1,11 @@
+﻿using Common.Impl.Result;
+using MediatR;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace ECommerce.Application.Feature.Adminstration.ManegeShop.MarkAsViewSellerDocument.Command
+{
+    public record MarkAsViewSellerDocumentCommand(Guid adminId, Guid SellerId) : IRequest<Result<bool>>;
+
+}

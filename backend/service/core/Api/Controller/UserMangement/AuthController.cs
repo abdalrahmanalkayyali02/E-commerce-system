@@ -1,5 +1,4 @@
 ﻿using Common.Enum;
-using Common.Impl.Result;
 using Common.Result;
 using ECommerce.Application.Feature.userMangement.User.Login.Command;
 using ECommerce.Application.Feature.userMangement.User.Profile.GetProfile.Queries;
@@ -44,7 +43,7 @@ namespace Api.Controller.UserMangement
                 return BadRequest(Error.Validation("Auth.InvalidData", "Token claims format is invalid."));
             }
 
-            var query = new GetUserByIdQueries(userId, userType);
+            var query = new GetUserByIdQueries(userId);
 
             var result = await _mediator.Send(query);
 

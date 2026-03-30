@@ -1,4 +1,5 @@
 ﻿using Common.Enum;
+using Common.Exceptions.System.userMangement;
 using Common.Impl.Result;
 using Common.Result;
 using ECommerce.Application.Abstraction.Data;
@@ -16,8 +17,17 @@ namespace ECommerce.Application.Feature.userMangement.User.Profile
             _unitOfWork = unitOfWork;
         }
 
-        public Result<IProfileStrategy> GetStrategy(UserType role)
+        public async Task<Result<IProfileStrategy>> GetStrategy(Guid userId)
         {
+            var userExist = await _unitOfWork.Users.GetUserByID(userId);
+
+            if (userExist == null)
+            {
+                return Result<IProfileStrategy>.Failure(UserIdAppError.NotFound);
+            }
+
+            var role = userExist.userType;
+
             var strategy = _strategies.FirstOrDefault(s => s.userType == role);
 
             if (strategy == null)
@@ -38,7 +48,8 @@ namespace ECommerce.Application.Feature.userMangement.User.Profile
                 return Result<object>.Failure(Error.NotFound("User.NotFound", "User not found."));
             }
 
-            var strategyResult = GetStrategy(user.userType);
+            var strategyResult = await GetStrategy(user.Id);
+
             if (strategyResult.IsError)
             {
                 return Result<object>.Failure(strategyResult.Errors);
@@ -46,7 +57,8 @@ namespace ECommerce.Application.Feature.userMangement.User.Profile
 
             var result = await strategyResult.Value.UpdateProfile(command, ct);
 
-            if (result.IsError) return result;
+            if (result.IsError)
+                return result;
 
             await _unitOfWork.SaveChangesAsync(ct);
 

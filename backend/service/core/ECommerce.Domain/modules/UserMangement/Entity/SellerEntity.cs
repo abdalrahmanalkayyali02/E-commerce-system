@@ -114,8 +114,19 @@ namespace ECommerce.Domain.modules.UserMangement.Entity
             if (isVerifiedByAdmin)
                 return Error.Conflict("Seller.AlreadyVerified", "Seller is already verified.");
 
+            if (isVerfiedSellerDocumentBeenViewed is false)
+            {
+                return Error.Failure("Seller.DocsNotViewed", "The personal seller document must be viewed before verification.");
+            }
+
+            if (isVerfiedShopDocumentBeenViewed is false)
+            {
+                return Error.Failure("Seller.ShopDocsNotViewed", "The shop document must be viewed before verification.");
+            }
+
             isVerifiedByAdmin = true;
             UpdateAt = DateTime.UtcNow;
+
             return Result<Success>.Success(new Success());
         }
 
@@ -151,6 +162,11 @@ namespace ECommerce.Domain.modules.UserMangement.Entity
         {
             if (isVerfiedShopDocumentBeenViewed)
                 return Error.Conflict("Seller.AlreadyViewed", "Shop document already marked as viewed.");
+
+            if (isVerfiedSellerDocumentBeenViewed is false)
+            {
+                return Error.Failure("Seller.DocsNotViewed", "The personal seller document must be viewed before.");
+            }
 
             isVerfiedShopDocumentBeenViewed = true;
             return Result<Success>.Success(new Success());
