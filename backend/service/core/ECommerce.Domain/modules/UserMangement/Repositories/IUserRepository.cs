@@ -1,5 +1,7 @@
-﻿using Common.Specfication;
+﻿using Common.Impl.Result;
+using Common.Specfication;
 using ECommerce.Domain.modules.UserMangement.Entity;
+using MediatR;
 using System.Linq.Expressions;
 
 namespace ECommerce.Domain.modules.UserMangement.Repositories
@@ -18,7 +20,8 @@ namespace ECommerce.Domain.modules.UserMangement.Repositories
         Task<UserEntity?> GetUserByPhoneNumber(string phoneNumber, CancellationToken ct = default);
         Task<UserEntity?> GetUserByUserName(string userName, CancellationToken ct = default);
 
-
+        Task<UserEntity?> GetUserByCriteria(Guid? id=null,string? userName=null, 
+            string? PhoneNumber=null, string? Email=null, CancellationToken ct = default);
         Task<IEnumerable<UserEntity>> GetAllUsersAsync(Expression<Func<UserEntity, bool>> predicate = null, CancellationToken cancellationToken = default);
     }
 }

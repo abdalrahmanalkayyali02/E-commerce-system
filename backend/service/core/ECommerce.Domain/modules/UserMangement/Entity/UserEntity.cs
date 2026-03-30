@@ -232,5 +232,19 @@ namespace ECommerce.Domain.modules.UserMangement.Entity
             ResetPasswordOTP.MarkAsVerified();
             return Result<Success>.Success(new Success());
         }
+
+
+        public void MarkAsDelete()
+        {
+            IsDeleted = true;
+            DeletedAt = DateTime.UtcNow;
+            UpdatedAt = DateTime.UtcNow;
+        }
+
+        public void MarkAsLock()
+        {
+            AccountStatus = AccountStatus.LocKed;
+            UpdatedAt = DateTime.UtcNow;
+        }
     }
 }
