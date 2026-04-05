@@ -53,7 +53,8 @@ namespace ECommerce.Application.Feature.Adminstration.ManegeUser.GetAllUserByFil
                         ("Access.Denied", "This operation is allowed only for admin privilege"));
                 }
 
-                var pagedEntities =  await _unitOfWork.Users.GetUsersByFilterAsync(query.UserType,query.PageNumber,query.PageSize,cancellationToken);
+                var pagedEntities =  await _unitOfWork.Users.GetUsersByFilterAsync
+                    (query.UserType,null,false,query.PageNumber,query.PageSize,cancellationToken);
 
                 var userDtos = pagedEntities.Items.Select(user => new UserDto(
                    user.Id,                

@@ -18,6 +18,8 @@
   <ItemGroup>
     <Folder Include="modules\IAM\ValueObject\" />
     <Folder Include="modules\IAM\Repositories\" />
+    <Folder Include="modules\Inventory\" />
+    <Folder Include="modules\Ordaring\" />
   </ItemGroup>
 
 </Project>

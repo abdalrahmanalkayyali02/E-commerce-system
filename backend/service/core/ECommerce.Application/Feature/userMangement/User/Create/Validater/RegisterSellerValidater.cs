@@ -44,9 +44,7 @@ namespace ECommerce.Application.Feature.userMangement.User.Create.Validater
                 .Must(date => !DateOfBirth.From(date).IsError)
                 .WithMessage("Seller must be at least 18 years old and under 150.");
 
-            RuleFor(x => x.profilePhoto)
-                .Must(url => string.IsNullOrEmpty(url) || Uri.IsWellFormedUriString(url, UriKind.Absolute))
-                .WithMessage("Profile photo must be a valid URL.");
+
 
             RuleFor(x => x.shopName)
                 .NotEmpty()
@@ -54,19 +52,7 @@ namespace ECommerce.Application.Feature.userMangement.User.Create.Validater
                 .MaximumLength(20)
                 .WithMessage("The max length for the shop name is 20 characters.");
 
-            RuleFor(x => x.shopPhoto)
-                .Must(url => string.IsNullOrEmpty(url) || Uri.IsWellFormedUriString(url, UriKind.Absolute))
-                .WithMessage("Shop photo must be a valid URL.");
-
-            RuleFor(x => x.verfiedSellerDocument)
-                .NotEmpty().WithMessage("Seller verification document is required.")
-                .Must(url => Uri.IsWellFormedUriString(url, UriKind.Absolute))
-                .WithMessage("Seller document must be a valid URL.");
-
-            RuleFor(x => x.verfiedShopDocument)
-                .NotEmpty().WithMessage("Shop verification document is required.")
-                .Must(url => Uri.IsWellFormedUriString(url, UriKind.Absolute))
-                .WithMessage("Shop document must be a valid URL.");
+        
         }
     }
 }

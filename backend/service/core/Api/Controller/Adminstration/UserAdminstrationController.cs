@@ -1,18 +1,22 @@
 ﻿using Api.ViewModels.web.Adminstration.Request;
 using Common.Collection;
-using Common.Result;
 using Common.DTOs.Adminstration;
 using Common.DTOs.UserMangement.User;
 using Common.Enum;
+using Common.Result;
 using ECommerce.Application.Feature.Adminstration.ManegeUser.DeleteUserByCiteria.Command;
+using ECommerce.Application.Feature.Adminstration.ManegeUser.FilterUserByCriteria.Query;
 using ECommerce.Application.Feature.Adminstration.ManegeUser.GetAllUserByFilterQueryForUserType.Query;
 using ECommerce.Application.Feature.Adminstration.ManegeUser.LockedUserByCiteria.Command;
+using ECommerce.Application.Feature.Adminstration.ManegeUser.SearchByUserCriteria.Query;
 using ECommerce.Application.Feature.Adminstration.ManegeUser.UnLockedUserByCiteria.Query;
 using ECommerce.Application.Feature.Notification.usersNotification.GetById.Queries;
 using ECommerce.Application.Feature.userMangement.User.Profile.GetProfile.Queries;
+using ECommerce.Domain.modules.UserMangement.ValueObject;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Asn1.Ocsp;
 using System.Security.Claims;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
@@ -118,9 +122,38 @@ namespace Api.Controller.Adminstration
             return (ActionResult)HandleResult(result);
         }
 
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchUsers([FromQuery] SearchByUserCritecalRequest request)
+        {
+            var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var adminID))
+            {
+                return Unauthorized("User ID not found in token.");
+            }
 
+            var query = new SearchByUserCritecalQuery
+                (adminID,request.email,request.userName,request.phoneNumber,request.userID,request.pageNumber,request.pageSize);
 
+            var result = await _mediator.Send(query);
 
+            return HandleResult(result);
+        }
 
+        [HttpGet("filter")]
+        public async Task<IActionResult> FilterUsers([FromQuery] FilterUserByCriteriaRequest query)
+        {
+            var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var adminID))
+            {
+                return Unauthorized("User ID not found in token.");
+            }
+
+            var value = new FilterUserByCriteriaQuery
+                (adminID, query.userType, query.accountStatus, query.isDeleted, query.pageNumber, query.pageSize);
+
+            var result = await _mediator.Send(value);
+
+            return HandleResult(result);
+        }
     }
 }

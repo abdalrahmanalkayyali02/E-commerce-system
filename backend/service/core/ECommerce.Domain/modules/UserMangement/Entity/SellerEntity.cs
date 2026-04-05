@@ -73,6 +73,11 @@ namespace ECommerce.Domain.modules.UserMangement.Entity
 
         public Result<Success> updateShopName(string shopName)
         {
+
+            if (isVerifiedByAdmin is true)
+                return Error.Conflict("Seller.AlreadyVerified", "Cannot update shop name that verified by admin.");
+
+
             if (string.IsNullOrWhiteSpace(shopName))
                 return Error.Validation("Seller.InvalidShopName", "Shop name cannot be empty.");
 
@@ -89,6 +94,11 @@ namespace ECommerce.Domain.modules.UserMangement.Entity
 
         public Result<Success> updateShopPhoto(string shopPhoto)
         {
+
+            if (isVerifiedByAdmin is true)
+                return Error.Conflict("Seller.AlreadyVerified", "Cannot update shop photo that verified by admin.");
+
+
             if (string.IsNullOrWhiteSpace(shopPhoto))
                 return Error.Validation("Seller.InvalidShopPhoto", "Shop photo cannot be empty.");
 
@@ -100,6 +110,11 @@ namespace ECommerce.Domain.modules.UserMangement.Entity
 
         public Result<Success> updateShopAddress(Address address)
         {
+
+            if (isVerifiedByAdmin is true)
+                return Error.Conflict("Seller.AlreadyVerified", "Cannot update shop address that verified by admin.");
+
+
             if (address is null)
                 return Error.Validation("Seller.InvalidAddress", "Address cannot be null.");
 
@@ -183,7 +198,7 @@ namespace ECommerce.Domain.modules.UserMangement.Entity
 
         public Result<Success> updateVerfiedSellerDocument(string verfiedSellerDocument)
         {
-            if (isVerifiedByAdmin)
+            if (isVerifiedByAdmin is true)
                 return Error.Conflict("Seller.AlreadyVerified", "Cannot update document once verified by admin.");
 
             if (string.IsNullOrWhiteSpace(verfiedSellerDocument))

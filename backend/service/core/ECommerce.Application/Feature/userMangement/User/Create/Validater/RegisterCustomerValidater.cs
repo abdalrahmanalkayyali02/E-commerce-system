@@ -1,5 +1,8 @@
 ﻿using FluentValidation;
 using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
 using ECommerce.Domain.modules.UserMangement.ValueObject;
 using ECommerce.Application.Feature.userMangement.User.Create.Command;
 
@@ -41,12 +44,10 @@ namespace ECommerce.Application.Feature.userMangement.User.Create.Validater
 
             RuleFor(x => x.dateOfBirth)
                 .NotEmpty()
-                .Must(date => !DateOfBirth.From(date).IsError)
-                .WithMessage("Customer must be at least 18 years old and under 150.");
+                .WithMessage("The Customer DateOfBirth can not be empty or null");
+ 
+        }
 
-            RuleFor(x => x.profilePhoto)
-                .Must(url => string.IsNullOrEmpty(url) || Uri.IsWellFormedUriString(url, UriKind.Absolute))
-                .WithMessage("Profile photo must be a valid URL.");
+       
         }
     }
-}

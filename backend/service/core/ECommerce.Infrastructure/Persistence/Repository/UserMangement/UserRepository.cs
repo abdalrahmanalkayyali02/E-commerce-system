@@ -1,5 +1,6 @@
 ﻿using Common.Collection;
 using Common.Enum;
+using Common.Impl.Collection;
 using Common.Specfication;
 using ECommerce.Domain.modules.UserMangement.Entity;
 using ECommerce.Domain.modules.UserMangement.Repositories;
@@ -123,11 +124,7 @@ namespace ECommerce.Infrastructure.Persistence.Repository.UserMangement
             _context.Users.Update(model);
         }
 
-        public Task<UserEntity?> GetEntityWithSpec(ISpecification<UserEntity> spec, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
-
+     
         public async Task<UserEntity?> GetUserByPhoneNumber(string phoneNumber, CancellationToken ct = default)
         {
             var model = await _context.Users
@@ -137,14 +134,75 @@ namespace ECommerce.Infrastructure.Persistence.Repository.UserMangement
             return model != null ? UserMapper.FromPersistenceToDomain(model) : null;
         }
 
-        public Task<UserEntity?> GetUserByCriteria(Guid? id = null, string? userName = null, string? PhoneNumber = null, string? Email = null, CancellationToken ct = default)
+
+        public async Task<UserEntity?> GetUserByCriteria
+            (Guid? id = null, string? userName = null, string? PhoneNumber = null, string? Email = null, CancellationToken ct = default)
         {
-            throw new NotImplementedException();
+            var query = _context.Users.AsNoTracking().AsQueryable();
+
+            if (id.HasValue) query = query.Where(u => u.id == id.Value);
+            if (!string.IsNullOrEmpty(userName)) query = query.Where(u => u.UserName == userName);
+            if (!string.IsNullOrEmpty(PhoneNumber)) query = query.Where(u => u.phoneNumber == PhoneNumber);
+            if (!string.IsNullOrEmpty(Email)) query = query.Where(u => u.Email == Email);
+
+            var model = await query.FirstOrDefaultAsync(ct);
+            return model != null ? UserMapper.FromPersistenceToDomain(model) : null;
         }
 
-        public Task<IPagedList<UserEntity>> GetUsersByFilterAsync(UserType? type, int pageNumber, int pageSize, CancellationToken cancellationToken)
+        public async Task<PagedList<UserEntity>> GetUsersByCriteria(
+            Guid? id = null,
+            string? userName = null,
+            string? phoneNumber = null,
+            string? email = null,
+            int pageNumber = 1,
+            int pageSize = 10,
+            CancellationToken ct = default)
         {
-            throw new NotImplementedException();
+            var query = _context.Users.AsNoTracking().AsQueryable();
+
+            if (id.HasValue || !string.IsNullOrEmpty(userName) ||
+                !string.IsNullOrEmpty(phoneNumber) || !string.IsNullOrEmpty(email))
+            {
+                query = query.Where(u =>
+                    (id.HasValue && u.id == id.Value) ||
+                    (!string.IsNullOrEmpty(userName) && u.UserName.StartsWith(userName)) ||
+                    (!string.IsNullOrEmpty(phoneNumber) && u.phoneNumber.StartsWith(phoneNumber)) ||
+                    (!string.IsNullOrEmpty(email) && u.Email.StartsWith(email))
+                );
+            }
+
+            var totalCount = await query.CountAsync(ct);
+
+            var models = await query
+                .OrderBy(u => u.UserName)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync(ct);
+
+            var entities = models.Select(m => UserMapper.FromPersistenceToDomain(m)).ToList();
+
+            return new PagedList<UserEntity>(entities, totalCount, pageNumber, pageSize);
+        }
+
+        public async Task<IPagedList<UserEntity>> GetUsersByFilterAsync(UserType? type, AccountStatus? accountStatus, bool? isDeleted, int pageNumber, int pageSize, CancellationToken cancellationToken)
+        {
+            var query = _context.Users.AsNoTracking().AsQueryable();
+
+            if (type.HasValue) query = query.Where(u => u.Role == type.Value);
+            if (accountStatus.HasValue) query = query.Where(u => u.AccountStatus == accountStatus.Value);
+            if (isDeleted.HasValue) query = query.Where(u => u.isDelete == isDeleted.Value);
+
+            var totalCount = await query.CountAsync(cancellationToken);
+
+            var models = await query
+                .OrderByDescending(u => u.id) 
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync(cancellationToken);
+
+            var entities = models.Select(m => UserMapper.FromPersistenceToDomain(m)).ToList();
+
+            return new PagedList<UserEntity>(entities, totalCount, pageNumber, pageSize);
         }
     }
 }

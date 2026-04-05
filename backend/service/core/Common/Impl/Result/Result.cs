@@ -17,9 +17,11 @@ public sealed class Result<TValue>
     public DateTime Timestamp { get; } = DateTime.UtcNow;
     public List<Error> Errors => _errors;
 
-    public TValue Value => IsSuccess
-        ? _value!
-        : throw new InvalidOperationException("Cannot access Value when IsError is true.");
+    public TValue? Value => _value;
+
+    public TValue GetValueOrThrow() => IsSuccess
+            ? _value!
+            : throw new InvalidOperationException("Cannot access Value when IsError is true.");
 
     // Private constructors
     private Result(TValue value)

@@ -19,20 +19,23 @@ namespace ECommerce.Application.Feature.userMangement.User.Create.Handler
         private readonly IUnitOfWork _unitOfWork;
         private readonly IEmailService _emailGatway;
         private readonly IPasswordService _passwordService;
-       // private readonly INotificationGateway _notificationGatway;
+        private readonly IFileStorgeService _fileStorgeService;
+        // private readonly INotificationGateway _notificationGatway;
         private readonly IValidator<CreateSellerCommand> _validator;
 
         public CreateSellerCommandHandler(
             IUnitOfWork unitOfWork,
             IEmailService emailGatway,
             IPasswordService passwordService,
+            IFileStorgeService fileStorgeService,
           //  INotificationGateway notificationGatway,
             IValidator<CreateSellerCommand> validator)
         {
             _unitOfWork = unitOfWork;
             _emailGatway = emailGatway;
             _passwordService = passwordService;
-           // _notificationGatway = notificationGatway;
+            _fileStorgeService = fileStorgeService;
+            // _notificationGatway = notificationGatway;
             _validator = validator;
         }
 
@@ -86,6 +89,16 @@ namespace ECommerce.Application.Feature.userMangement.User.Create.Handler
                 if (existingUser is not null)
                     return Result<CreateUserResponse>.Failure(UserNameAppError.Unique);
 
+                string? uploadedImageUrl = null;
+
+                if (command.profilePhoto is not null && command.profilePhoto.Length > 0)
+                {
+                    if (command.profilePhoto.CanSeek) command.profilePhoto.Position = 0;
+
+                    uploadedImageUrl = await _fileStorgeService.UploadAsync(command.profilePhoto);
+                    Console.WriteLine($"Uploaded image URL: {uploadedImageUrl}");
+                }
+
                 // 4. Identity & OTP Generation
                 var id = Guid.CreateVersion7();
                 var generatedOtp = OTP.Generate();
@@ -103,19 +116,53 @@ namespace ECommerce.Application.Feature.userMangement.User.Create.Handler
                     emailVo.Value,
                     phoneNumberVo.Value,
                     hashedPassVo.Value,
-                    UserType.Seller
+                    UserType.Seller,
+                    uploadedImageUrl
                 );
 
                 newUser.SetRegisterOTP(generatedOtp.Value);
 
+                if (existingUser is not null)
+                    return Result<CreateUserResponse>.Failure(UserNameAppError.Unique);
+
+                string uploadedShopUrl = null;
+
+                if (command.shopPhoto is not null && command.shopPhoto.Length > 0)
+                {
+                    if (command.shopPhoto.CanSeek) command.shopPhoto.Position = 0;
+
+                    uploadedShopUrl = await _fileStorgeService.UploadAsync(command.shopPhoto);
+                    Console.WriteLine($"Uploaded image URL: {uploadedImageUrl}");
+                }
+
+                // now for verfied seller document image
+                string uploadedSellerDocumentUrl = null;
+
+                if (command.verfiedSellerDocument is not null && command.verfiedSellerDocument.Length > 0)
+                {
+                    if (command.verfiedSellerDocument.CanSeek) command.verfiedSellerDocument.Position = 0;
+                    uploadedSellerDocumentUrl = await _fileStorgeService.UploadAsync(command.verfiedSellerDocument);
+                }
+
+
+                // now for verfied shop document image
+                string uploadedShopDocumentUrl = null;
+
+                 if (command.verfiedShopDocument is not null && command.verfiedShopDocument.Length > 0)
+                {
+                    if (command.verfiedShopDocument.CanSeek) command.verfiedShopDocument.Position = 0;
+                    uploadedShopDocumentUrl = await _fileStorgeService.UploadAsync(command.verfiedShopDocument);
+                }
+             
+
                 var newSeller = SellerEntity.Create(
                     id,
                     command.shopName,
-                    command.shopPhoto,
-                    addressResult.Value, // استخدام الـ VO المصحح
-                    false, // isVerified
-                    command.verfiedShopDocument,
-                    command.verfiedSellerDocument,
+                    uploadedShopUrl!,
+                    addressResult.Value, 
+                    false,
+                    uploadedShopDocumentUrl,
+                    uploadedSellerDocumentUrl,
                     false,
                     false
                 );

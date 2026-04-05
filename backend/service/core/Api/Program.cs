@@ -19,6 +19,19 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 
 builder.Services.AddEndpointsApiExplorer();
 
+// --- CORS CONFIGURATION ---
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
+
+
 // --- 2. DATABASE CONFIGURATION ---
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(
@@ -115,6 +128,8 @@ if (app.Environment.IsDevelopment())
 // app.UseHttpsRedirection(); // Keep commented if you have SSL issues locally
 
 app.UseRouting();
+app.UseMiddleware<GlobalResultMiddleware>();
+
 
 // Order is vital: IsAuthMiddleware must be AFTER UseAuthorization
 app.UseMiddleware<IsAuthMiddleware>();

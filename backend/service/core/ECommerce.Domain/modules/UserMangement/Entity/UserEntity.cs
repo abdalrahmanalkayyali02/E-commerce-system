@@ -66,13 +66,13 @@ namespace ECommerce.Domain.modules.UserMangement.Entity
         public static UserEntity Create(
             Guid id, Name firstName, Name lastName, Name userName,
             DateOfBirth dateOfBirth, Email email, PhoneNumber phoneNumber,
-            Password password, UserType userType)
+            Password password, UserType userType, string? profilePhoto)
         {
             var now = DateTime.UtcNow;
             return new UserEntity(
                 id, firstName, lastName, userName, dateOfBirth, email,
                 false, phoneNumber, password, userType,
-                AccountStatus.Inactive, null,null, now, now, null, false);
+                AccountStatus.Inactive, profilePhoto, null, now, now, null, false);
         }
 
         // --- Update Methods (Fixing CS0305 Error) ---
@@ -128,15 +128,17 @@ namespace ECommerce.Domain.modules.UserMangement.Entity
             return Result< Success>.Success(new Success());
         }
 
-        public Result<Success> UpdateProfilePhoto(string? profilePhoto)
+        public Result<Success> UpdateProfilePhoto(string? newProfilePhotoUrl)
         {
-            if (ProfilePhoto == profilePhoto)
+            // 1. Guard against unnecessary updates
+            if (ProfilePhoto == newProfilePhotoUrl)
             {
                 return Result<Success>.Success(new Success());
             }
 
+            ProfilePhoto = newProfilePhotoUrl;
 
-            ProfilePhoto = profilePhoto;
+            // 3. Track audit metadata
             UpdatedAt = DateTime.UtcNow;
 
             return Result<Success>.Success(new Success());
