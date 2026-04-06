@@ -50,7 +50,7 @@ namespace ECommerce.Application.Feature.userMangement.User.Profile.Strategy
                 userEntity.CreatedAt
             );
 
-            return Result<UserResponse>.Success(baseUser);
+            return Result<object>.Success(baseUser);
         }
 
         public async Task<Result<object>> UpdateProfile(object data , CancellationToken ct)

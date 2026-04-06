@@ -17,12 +17,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Feature\Catalog\Attribute\GetProductAttribute\" />
+    <Folder Include="Feature\Catalog\categories\GetAllCategories\" />
     <Folder Include="Feature\Catalog\Product\Delete\" />
+    <Folder Include="Feature\Catalog\Product\GetAll\" />
+    <Folder Include="Feature\Catalog\Product\FilterForAll\" />
+    <Folder Include="Feature\Catalog\Product\GetProductDetailsById\Handler\" />
+    <Folder Include="Feature\Catalog\Product\SearchByQueryForAll\" />
     <Folder Include="Feature\Catalog\Product\Update\" />
     <Folder Include="Feature\ShopMangement\Product\" />
-    <Folder Include="Feature\ShopMangement\shop\updateShopDetails\Command\" />
     <Folder Include="Feature\ShopMangement\shop\updateShopDetails\Handler\" />
-    <Folder Include="Feature\ShopMangement\shop\updateShopDetails\Validator\" />
   </ItemGroup>
 
   <PropertyGroup>

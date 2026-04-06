@@ -6,6 +6,7 @@ using ECommerce.Application.Feature.Catalog.Product.Create.Command;
 using ECommerce.Application.Feature.Catalog.Product.Create.Validater;
 using ECommerce.Application.Feature.Notification.usersNotification.GetAllNotifications.Query;
 using ECommerce.Application.Feature.Notification.usersNotification.GetAllNotifications.Validator;
+using ECommerce.Application.Feature.ShopMangement.shop.updateShopDetails.Command;
 using ECommerce.Application.Feature.userMangement.User.Create.Command;
 using ECommerce.Application.Feature.userMangement.User.Create.Validater;
 using ECommerce.Application.Feature.userMangement.User.Login.Command;
@@ -96,6 +97,7 @@ namespace ECommerce.Infrastructure.DIC
             services.AddScoped<IValidator<sellerProfileCommand>, sellerProfileCommandValidater>();
             services.AddScoped<IValidator<GetAllNotificationQuery>,GetAllNotificationQueryValidator>();
             services.AddScoped<IValidator<GetAllUsersByFilterQuery>, GetAllUsersByFilterQueryValidator>();
+            services.AddScoped<IValidator<UpdateShopDetailCommand>, UpdateShopDetailCommandValidator>();
 
 
 

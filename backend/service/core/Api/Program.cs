@@ -48,7 +48,6 @@ builder.Services.Configure<RouteOptions>(options =>
     options.ConstraintMap.Add("otpType", typeof(OtpTypeRouteConstraint));
 });
 
-// --- 4. AUTHENTICATION & JWT ---
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -95,6 +94,8 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+
+
 // --- 5. SWAGGER CONFIGURATION ---
 builder.Services.AddSwaggerGen(options =>
 {
@@ -114,6 +115,11 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+
 // --- 6. MIDDLEWARE PIPELINE ---
 if (app.Environment.IsDevelopment())
 {
@@ -123,18 +129,22 @@ if (app.Environment.IsDevelopment())
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
         options.RoutePrefix = string.Empty;
     });
+
 }
+
+
 
 // app.UseHttpsRedirection(); // Keep commented if you have SSL issues locally
 
 app.UseRouting();
+app.UseCors("AllowFrontend"); 
 app.UseMiddleware<GlobalResultMiddleware>();
 
 
 // Order is vital: IsAuthMiddleware must be AFTER UseAuthorization
-app.UseMiddleware<IsAuthMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<IsAuthMiddleware>();
 
 // This will now catch the 401/403 and write your Result JSON body
 

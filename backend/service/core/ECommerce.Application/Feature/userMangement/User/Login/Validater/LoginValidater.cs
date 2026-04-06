@@ -13,16 +13,11 @@ namespace ECommerce.Application.Feature.userMangement.User.Login.Validater
         {
             RuleFor(x => x.email)
                 .NotEmpty().WithMessage("Email is required.")
-                .Must(BeAValidEmail).WithMessage("Invalid email format.");
+                .Must(email => Email.From(email).IsError).WithMessage("Invalid email format.");
 
             RuleFor(x => x.password)
                 .NotEmpty().WithMessage("Password is required.");
-        }
 
-        private bool BeAValidEmail(string email)
-        {
-            try { Email.From(email); return true; }
-            catch { return false; }
         }
     }
 }
