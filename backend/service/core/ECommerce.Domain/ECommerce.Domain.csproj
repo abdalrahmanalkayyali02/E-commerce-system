@@ -7,6 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="modules\Inventory\**" />
+    <Compile Remove="modules\Ordaring\**" />
+    <EmbeddedResource Remove="modules\Inventory\**" />
+    <EmbeddedResource Remove="modules\Ordaring\**" />
+    <None Remove="modules\Inventory\**" />
+    <None Remove="modules\Ordaring\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentValidation" Version="12.1.1" />
     <PackageReference Include="MediatR" Version="14.1.0" />
   </ItemGroup>
@@ -18,8 +27,6 @@
   <ItemGroup>
     <Folder Include="modules\IAM\ValueObject\" />
     <Folder Include="modules\IAM\Repositories\" />
-    <Folder Include="modules\Inventory\" />
-    <Folder Include="modules\Ordaring\" />
   </ItemGroup>
 
 </Project>
