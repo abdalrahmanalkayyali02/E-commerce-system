@@ -1,0 +1,121 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\abdal\\Desktop\\Traning-project\\backend\\service\\backend-2\\WebApplication1\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{39AAFB05-7C7D-40B7-A50E-F65D14ED6232}|WebApplication1\\WebApplication1.csproj|c:\\users\\abdal\\desktop\\traning-project\\backend\\service\\backend-2\\webapplication1\\webapplication1\\data\\model\\sellerdatamodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{39AAFB05-7C7D-40B7-A50E-F65D14ED6232}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\data\\model\\sellerdatamodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{39AAFB05-7C7D-40B7-A50E-F65D14ED6232}|WebApplication1\\WebApplication1.csproj|c:\\users\\abdal\\desktop\\traning-project\\backend\\service\\backend-2\\webapplication1\\webapplication1\\data\\model\\userdatamodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{39AAFB05-7C7D-40B7-A50E-F65D14ED6232}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\data\\model\\userdatamodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{39AAFB05-7C7D-40B7-A50E-F65D14ED6232}|WebApplication1\\WebApplication1.csproj|c:\\users\\abdal\\desktop\\traning-project\\backend\\service\\backend-2\\webapplication1\\webapplication1\\shared\\apibasecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{39AAFB05-7C7D-40B7-A50E-F65D14ED6232}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\shared\\apibasecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{39AAFB05-7C7D-40B7-A50E-F65D14ED6232}|WebApplication1\\WebApplication1.csproj|c:\\users\\abdal\\desktop\\traning-project\\backend\\service\\backend-2\\webapplication1\\webapplication1\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{39AAFB05-7C7D-40B7-A50E-F65D14ED6232}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{39AAFB05-7C7D-40B7-A50E-F65D14ED6232}|WebApplication1\\WebApplication1.csproj|c:\\users\\abdal\\desktop\\traning-project\\backend\\service\\backend-2\\webapplication1\\webapplication1\\shared\\enum\\usertype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{39AAFB05-7C7D-40B7-A50E-F65D14ED6232}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\shared\\enum\\usertype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 315,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "SellerDataModel.cs",
+              "DocumentMoniker": "C:\\Users\\abdal\\Desktop\\Traning-project\\backend\\service\\backend-2\\WebApplication1\\WebApplication1\\Data\\Model\\SellerDataModel.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Data\\Model\\SellerDataModel.cs",
+              "ToolTip": "C:\\Users\\abdal\\Desktop\\Traning-project\\backend\\service\\backend-2\\WebApplication1\\WebApplication1\\Data\\Model\\SellerDataModel.cs",
+              "RelativeToolTip": "WebApplication1\\Data\\Model\\SellerDataModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-03T09:33:30.803Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ApiBaseController.cs",
+              "DocumentMoniker": "C:\\Users\\abdal\\Desktop\\Traning-project\\backend\\service\\backend-2\\WebApplication1\\WebApplication1\\Shared\\ApiBaseController.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Shared\\ApiBaseController.cs",
+              "ToolTip": "C:\\Users\\abdal\\Desktop\\Traning-project\\backend\\service\\backend-2\\WebApplication1\\WebApplication1\\Shared\\ApiBaseController.cs",
+              "RelativeToolTip": "WebApplication1\\Shared\\ApiBaseController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-03T09:28:56.743Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "UserType.cs",
+              "DocumentMoniker": "C:\\Users\\abdal\\Desktop\\Traning-project\\backend\\service\\backend-2\\WebApplication1\\WebApplication1\\Shared\\Enum\\UserType.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Shared\\Enum\\UserType.cs",
+              "ToolTip": "C:\\Users\\abdal\\Desktop\\Traning-project\\backend\\service\\backend-2\\WebApplication1\\WebApplication1\\Shared\\Enum\\UserType.cs",
+              "RelativeToolTip": "WebApplication1\\Shared\\Enum\\UserType.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-03T09:02:57.249Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "UserDataModel.cs",
+              "DocumentMoniker": "C:\\Users\\abdal\\Desktop\\Traning-project\\backend\\service\\backend-2\\WebApplication1\\WebApplication1\\Data\\Model\\UserDataModel.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Data\\Model\\UserDataModel.cs",
+              "ToolTip": "C:\\Users\\abdal\\Desktop\\Traning-project\\backend\\service\\backend-2\\WebApplication1\\WebApplication1\\Data\\Model\\UserDataModel.cs",
+              "RelativeToolTip": "WebApplication1\\Data\\Model\\UserDataModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-03T08:59:34.115Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AppDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\abdal\\Desktop\\Traning-project\\backend\\service\\backend-2\\WebApplication1\\WebApplication1\\Data\\AppDbContext.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Data\\AppDbContext.cs",
+              "ToolTip": "C:\\Users\\abdal\\Desktop\\Traning-project\\backend\\service\\backend-2\\WebApplication1\\WebApplication1\\Data\\AppDbContext.cs",
+              "RelativeToolTip": "WebApplication1\\Data\\AppDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-03T08:58:07.764Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

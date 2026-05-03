@@ -1,0 +1,121 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\abdal\\Desktop\\Traning-project\\backend\\service\\backend-2\\WebApplication1\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{39AAFB05-7C7D-40B7-A50E-F65D14ED6232}|WebApplication1\\WebApplication1.csproj|c:\\users\\abdal\\desktop\\traning-project\\backend\\service\\backend-2\\webapplication1\\webapplication1\\service\\interface\\iauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{39AAFB05-7C7D-40B7-A50E-F65D14ED6232}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\service\\interface\\iauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{39AAFB05-7C7D-40B7-A50E-F65D14ED6232}|WebApplication1\\WebApplication1.csproj|c:\\users\\abdal\\desktop\\traning-project\\backend\\service\\backend-2\\webapplication1\\webapplication1\\service\\interface\\iregisterationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{39AAFB05-7C7D-40B7-A50E-F65D14ED6232}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\service\\interface\\iregisterationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{39AAFB05-7C7D-40B7-A50E-F65D14ED6232}|WebApplication1\\WebApplication1.csproj|c:\\users\\abdal\\desktop\\traning-project\\backend\\service\\backend-2\\webapplication1\\webapplication1\\service\\interface\\iverificationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{39AAFB05-7C7D-40B7-A50E-F65D14ED6232}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\service\\interface\\iverificationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{39AAFB05-7C7D-40B7-A50E-F65D14ED6232}|WebApplication1\\WebApplication1.csproj|c:\\users\\abdal\\desktop\\traning-project\\backend\\service\\backend-2\\webapplication1\\webapplication1\\dtos\\createsellerdtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{39AAFB05-7C7D-40B7-A50E-F65D14ED6232}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\dtos\\createsellerdtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{39AAFB05-7C7D-40B7-A50E-F65D14ED6232}|WebApplication1\\WebApplication1.csproj|c:\\users\\abdal\\desktop\\traning-project\\backend\\service\\backend-2\\webapplication1\\webapplication1\\dtos\\createcustomerdtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{39AAFB05-7C7D-40B7-A50E-F65D14ED6232}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\dtos\\createcustomerdtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 315,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "IAuthService.cs",
+              "DocumentMoniker": "C:\\Users\\abdal\\Desktop\\Traning-project\\backend\\service\\backend-2\\WebApplication1\\WebApplication1\\Service\\Interface\\IAuthService.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Service\\Interface\\IAuthService.cs",
+              "ToolTip": "C:\\Users\\abdal\\Desktop\\Traning-project\\backend\\service\\backend-2\\WebApplication1\\WebApplication1\\Service\\Interface\\IAuthService.cs",
+              "RelativeToolTip": "WebApplication1\\Service\\Interface\\IAuthService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-03T10:35:20.328Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "IVerificationService.cs",
+              "DocumentMoniker": "C:\\Users\\abdal\\Desktop\\Traning-project\\backend\\service\\backend-2\\WebApplication1\\WebApplication1\\Service\\Interface\\IVerificationService.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Service\\Interface\\IVerificationService.cs",
+              "ToolTip": "C:\\Users\\abdal\\Desktop\\Traning-project\\backend\\service\\backend-2\\WebApplication1\\WebApplication1\\Service\\Interface\\IVerificationService.cs",
+              "RelativeToolTip": "WebApplication1\\Service\\Interface\\IVerificationService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-03T09:58:12.063Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "CreateSellerDTOs.cs",
+              "DocumentMoniker": "C:\\Users\\abdal\\Desktop\\Traning-project\\backend\\service\\backend-2\\WebApplication1\\WebApplication1\\DTOs\\CreateSellerDTOs.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\DTOs\\CreateSellerDTOs.cs",
+              "ToolTip": "C:\\Users\\abdal\\Desktop\\Traning-project\\backend\\service\\backend-2\\WebApplication1\\WebApplication1\\DTOs\\CreateSellerDTOs.cs",
+              "RelativeToolTip": "WebApplication1\\DTOs\\CreateSellerDTOs.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-03T09:55:25.467Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "IRegisterationService.cs",
+              "DocumentMoniker": "C:\\Users\\abdal\\Desktop\\Traning-project\\backend\\service\\backend-2\\WebApplication1\\WebApplication1\\Service\\Interface\\IRegisterationService.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\Service\\Interface\\IRegisterationService.cs",
+              "ToolTip": "C:\\Users\\abdal\\Desktop\\Traning-project\\backend\\service\\backend-2\\WebApplication1\\WebApplication1\\Service\\Interface\\IRegisterationService.cs",
+              "RelativeToolTip": "WebApplication1\\Service\\Interface\\IRegisterationService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-03T09:36:50.632Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "CreateCustomerDtos.cs",
+              "DocumentMoniker": "C:\\Users\\abdal\\Desktop\\Traning-project\\backend\\service\\backend-2\\WebApplication1\\WebApplication1\\DTOs\\CreateCustomerDtos.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\DTOs\\CreateCustomerDtos.cs",
+              "ToolTip": "C:\\Users\\abdal\\Desktop\\Traning-project\\backend\\service\\backend-2\\WebApplication1\\WebApplication1\\DTOs\\CreateCustomerDtos.cs",
+              "RelativeToolTip": "WebApplication1\\DTOs\\CreateCustomerDtos.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-03T09:35:27.493Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
