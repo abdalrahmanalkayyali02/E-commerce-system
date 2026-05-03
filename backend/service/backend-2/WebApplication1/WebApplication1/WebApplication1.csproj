@@ -10,6 +10,7 @@
     <PackageReference Include="FluentValidation" Version="12.1.1" />
     <PackageReference Include="MediatR" Version="14.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.7" />
   </ItemGroup>
 
   <ItemGroup>
@@ -17,9 +18,9 @@
     <Folder Include="DI\" />
     <Folder Include="Filter\" />
     <Folder Include="Middleware\" />
+    <Folder Include="Service\IExternalService\Impl\" />
     <Folder Include="Service\Impl\" />
     <Folder Include="Validation\" />
-    <Folder Include="Repository\" />
   </ItemGroup>
 
 </Project>

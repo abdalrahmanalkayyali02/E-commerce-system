@@ -4,17 +4,17 @@ using WebApplication1.Shared.Result;
 
 namespace WebApplication1.DTOs
 {
-    public record CreateCustomerDTOs
+    public record CreateCustomerDtOs
     (
-        string firstName,
-        string lastName,
-        string userName,
-        DateOnly dateOfBirth,
-        string email,
-        string phoneNumber,
-        string password,
-        Stream? profilePhoto,
-        string address
+        string FirstName,
+        string LastName,
+        string UserName,
+        DateOnly DateOfBirth,
+        string Email,
+        string PhoneNumber,
+        string Password,
+        Stream? ProfilePhoto,
+        string Address
      ) : IRequest<Result<CreateUserResponse>>;
 
 

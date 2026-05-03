@@ -1,4 +1,4 @@
-namespace WebApplication1.Service.IExternalService;
+namespace WebApplication1.Service.IExternalService.Abstraction;
 
     public interface IPasswordService
     {

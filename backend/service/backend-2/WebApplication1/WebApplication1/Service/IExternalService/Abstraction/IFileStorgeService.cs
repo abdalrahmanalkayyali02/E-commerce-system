@@ -1,4 +1,4 @@
-namespace WEbApplication1.Service.IExternalService;
+namespace WebApplication1.Service.IExternalService.Abstraction;
     public interface IFileStorageService
     {
         Task<string> UploadAsync(Stream fileStream);

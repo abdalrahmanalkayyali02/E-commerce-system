@@ -1,6 +1,6 @@
 using WebApplication1.Shared.Enum;
 
-namespace WebApplication1.Service.IExternalService;
+namespace WebApplication1.Service.IExternalService.Abstraction;
 
     public interface IEmailService
     {

@@ -3,48 +3,48 @@ namespace WebApplication1.Validation;
 using FluentValidation;
 using WebApplication1.DTOs;
 
-public class CreateCustomerDTOsValidator : AbstractValidator<CreateCustomerDTOs>
+public class CreateCustomerDtOsValidator : AbstractValidator<CreateCustomerDtOs>
 {
-    public CreateCustomerDTOsValidator()
+    public CreateCustomerDtOsValidator()
     {
-        RuleFor(x => x.firstName)
+        RuleFor(x => x.FirstName)
         .NotEmpty()
         .WithMessage("First name is required.")
         .MinimumLength(2)
         .WithMessage("First name must be at least 2 characters long.");
 
-        RuleFor(x => x.lastName)
+        RuleFor(x => x.LastName)
           .NotEmpty()
           .WithMessage("Last name is required.")
           .MinimumLength(2)
           .WithMessage("Last name must be at least 2 characters long.");
 
-        RuleFor(x => x.userName)
+        RuleFor(x => x.UserName)
           .NotEmpty()
           .WithMessage("User name is required.")
           .MinimumLength(3)
           .WithMessage("User name must be at least 3 characters long.");
 
-        RuleFor(x => x.email)
+        RuleFor(x => x.Email)
         .NotEmpty()
         .WithMessage("Email is required.")
         .EmailAddress()
         .WithMessage("Invalid email format.");
 
-        RuleFor(x => x.phoneNumber)
+        RuleFor(x => x.PhoneNumber)
         .NotEmpty()
         .WithMessage("Phone number is required.")
         .Matches(@"^\+?[1-9]\d{1,14}$")
         .WithMessage("Phone number must be a valid format (E.164 format recommended).");
 
-        RuleFor(x => x.address)
+        RuleFor(x => x.Address)
         .NotEmpty()
         .WithMessage("Address is required.")
         .MinimumLength(5)
         .WithMessage("Address must be at least 5 characters long.");
 
         // password validation
-        RuleFor(x => x.password)
+        RuleFor(x => x.Password)
         .NotEmpty()
         .WithMessage("Password is required.")
         .MinimumLength(6)
@@ -58,7 +58,7 @@ public class CreateCustomerDTOsValidator : AbstractValidator<CreateCustomerDTOs>
         .Matches("[^a-zA-Z0-9]")
         .WithMessage("Password must contain at least one special character.");
 
-        RuleFor(x => x.dateOfBirth)
+        RuleFor(x => x.DateOfBirth)
         .NotEmpty()
         .WithMessage("Date of birth is required.")
         .Must(date => date < DateOnly.FromDateTime(DateTime.Now))

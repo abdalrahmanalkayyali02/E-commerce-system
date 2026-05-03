@@ -6,10 +6,10 @@ namespace WebApplication1.Data.Model
 {
     public  class SellerDataModel
     {
-        public Guid sellerID { get;  set; }
+        public Guid SellerId { get;  set; }
 
-        public string shopName { get;  set; }
-        public string shopPhoto { get;  set; }
+        public string ShopName { get;  set; }
+        public string ShopPhoto { get;  set; }
         public string address { get;  set; }
         public bool isVerifiedByAdmin { get;  set; } = false;
 

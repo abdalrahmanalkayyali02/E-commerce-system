@@ -6,7 +6,7 @@ namespace WebApplication1.Service.Interface
 {
     public interface IRegistrationService
     {
-        public Task<Result<CreateUserResponse>> CreateCustomer(CreateCustomerDTOs createCustomerDTOs);
-        public Task<Result<CreateUserResponse>> CreateSeller(CreateSellerDTOs createSellerDTOs);
+        public Task<Result<CreateUserResponse>> CreateCustomer(CreateCustomerDtOs createCustomerDTOs);
+        public Task<Result<CreateUserResponse>> CreateSeller(CreateSellerDtOs createSellerDTOs);
     }
 }

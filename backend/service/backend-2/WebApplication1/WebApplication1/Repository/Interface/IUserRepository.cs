@@ -13,13 +13,13 @@ namespace WebApplication1.Repository.Interface;
 
      void SoftDelete(UserDataModel user, CancellationToken cancellation = default);
 
-     Task<UserDataModel?> GetUserByID(Guid id, CancellationToken ct = default);
+     Task<UserDataModel?> GetUserById(Guid id, CancellationToken ct = default);
      Task<UserDataModel?> GetUserByEmail(string email, CancellationToken ct = default);
      Task<UserDataModel?> GetUserByPhoneNumber(string phoneNumber, CancellationToken ct = default);
      Task<UserDataModel?> GetUserByUserName(string userName, CancellationToken ct = default);
 
      Task<UserDataModel> GetUserByCriteria(Guid? id = null, string? userName = null,
-         string? PhoneNumber = null, string? Email = null, CancellationToken ct = default);
+         string? phoneNumber = null, string? email = null, CancellationToken ct = default);
 
      Task<PagedList<UserDataModel>> GetUsersByCriteria(
          Guid? id = null,
