@@ -9,15 +9,15 @@ namespace WebApplication1.DTOs
         string FirstName,
         string LastName,
         string UserName,
-        string DateOfBirth,
+        DateOnly DateOfBirth,
         string Email,
         string PhoneNumber,
         string Password,
-        Stream? ProfilePhoto,
+        IFormFile? ProfilePhoto,
         string Address,
         string ShopName,
-        Stream ShopPhoto,
-        Stream VerfiedSellerDocument,
-        Stream VerfiedShopDocument
-    ):IRequest<Result<CreateUserResponse>>;
+        IFormFile ShopPhoto,
+        IFormFile VerfiedSellerDocument,
+        IFormFile VerfiedShopDocument
+    );
 }

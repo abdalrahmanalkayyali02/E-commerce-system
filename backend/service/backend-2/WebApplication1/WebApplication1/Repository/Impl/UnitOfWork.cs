@@ -30,7 +30,6 @@ namespace WebApplication1.Repository.Impl;
 
       public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
       {
- 
           try
           {
               return await _context.SaveChangesAsync(cancellationToken);

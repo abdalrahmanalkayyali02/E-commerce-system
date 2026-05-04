@@ -17,7 +17,7 @@ namespace ECommerce.Infrastructure.Persistence.ModelConfigurations.UserMangement
             // 3. Property Constraints
             builder.Property(c => c.Address)
                 .IsRequired()
-                .HasMaxLength(250); // Matches your Domain logic (max 150) plus buffer
+                .HasMaxLength(250); 
 
 
 

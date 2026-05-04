@@ -13,9 +13,9 @@ namespace WebApplication1.DTOs
         string Email,
         string PhoneNumber,
         string Password,
-        Stream? ProfilePhoto,
+        IFormFile? ProfilePhoto,
         string Address
-     ) : IRequest<Result<CreateUserResponse>>;
+     ) ;
 
 
    
