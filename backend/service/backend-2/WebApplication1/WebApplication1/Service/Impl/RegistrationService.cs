@@ -59,14 +59,19 @@ public class RegistrationService : IRegistrationService
         {
             var sellerDoc = await UploadFile(dto.VerfiedSellerDocument);
             var shopDoc = await UploadFile(dto.VerfiedShopDocument);
+            var shopPhoto = await UploadFile(dto.ShopPhoto);
 
             await _unitOfWork.Seller.AddAsync(new SellerDataModel 
             { 
                 SellerId = userId,
                 ShopName = dto.ShopName,
                 address = dto.Address,
-                verfiedSellerDocument = sellerDoc ?? "",
-                verfiedShopDocument = shopDoc ?? "",
+                verfiedSellerDocument = sellerDoc,
+                verfiedShopDocument = shopDoc,
+                ShopPhoto = shopPhoto,
+                isVerifiedByAdmin = false,
+                isVerfiedSellerDocumentBeenViewed = false,
+                isVerfiedShopDocumentBeenViewed = false,
                 CreateAt = DateTime.UtcNow
             }, ct);
         });
@@ -128,7 +133,8 @@ public class RegistrationService : IRegistrationService
     private UserDataModel CreateBaseUser(Guid id, dynamic dto, string hash, string? photo, UserType role) => new()
     {
         id = id, FirstName = dto.FirstName, LastName = dto.LastName, UserName = dto.UserName,
-        Email = dto.Email, password = hash, profilePhoto = photo, Role = role,
+        Email = dto.Email, password = hash, profilePhoto = photo, Role = role,DateOfBirth = dto.DateOfBirth,
+        IsEmailConfirmed = false,
         AccountStatus = AccountStatus.Inactive, CreateAt = DateTime.UtcNow, phoneNumber = dto.PhoneNumber
     };
 

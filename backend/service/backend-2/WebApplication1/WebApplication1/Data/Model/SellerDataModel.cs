@@ -8,15 +8,15 @@ namespace WebApplication1.Data.Model
     {
         public Guid SellerId { get;  set; }
 
-        public string ShopName { get;  set; }
-        public string ShopPhoto { get;  set; }
+        public required string ShopName { get;  set; }
+        public required string ShopPhoto { get;  set; }
         public string address { get;  set; }
-        public bool isVerifiedByAdmin { get;  set; } = false;
+        public required bool isVerifiedByAdmin { get;  set; } = false;
 
-        public string verfiedSellerDocument { get;  set; }
-        public string verfiedShopDocument { get;  set; }
-        public bool isVerfiedSellerDocumentBeenViewed { get; set; }
-        public bool isVerfiedShopDocumentBeenViewed { get; set; }
+        public required string verfiedSellerDocument { get;  set; }
+        public required string verfiedShopDocument { get;  set; }
+        public required bool isVerfiedSellerDocumentBeenViewed { get; set; }
+        public required  bool isVerfiedShopDocumentBeenViewed { get; set; }
         public DateTime CreateAt { get;  set; }
         public DateTime UpdateAt { get;  set; }
     }

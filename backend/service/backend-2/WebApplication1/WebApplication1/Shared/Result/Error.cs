@@ -45,6 +45,12 @@ namespace WebApplication1.Shared.Result
 
         public static Error Failure(string code, string description)
             => new(code, "General Failure", description, ErrorKind.Failure);
+        
+        public static Error Forbidden (string code, string description)
+        => new (code, "Forbidden", description, ErrorKind.Forbidden);
+        
+        public static Error Unexpected(string code, string description)
+        => new (code, "Unexpected Error", description, ErrorKind.Unexpected);
 
         public static readonly Error None = new(string.Empty, string.Empty, string.Empty, ErrorKind.Failure);
     }

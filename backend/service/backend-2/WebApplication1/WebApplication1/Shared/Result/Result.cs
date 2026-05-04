@@ -4,6 +4,8 @@ namespace WebApplication1.Shared.Result
 {
     public record Success();
 
+
+
     public class Result : IResult
     {
         public bool IsSuccess { get; }
@@ -35,28 +37,32 @@ namespace WebApplication1.Shared.Result
 
     public sealed class Result<TValue> : Result, IResult<TValue>
     {
-        private readonly TValue? _value;
+        // Property is now nullable and won't throw an exception on access
+        public TValue? Value { get; }
 
         private Result(TValue? value, bool isSuccess, IEnumerable<Error> errors)
             : base(isSuccess, errors)
         {
-            _value = value;
+            Value = value;
         }
 
-        public TValue Value => IsSuccess
-            ? _value!
-            : throw new InvalidOperationException("Failure results cannot have a value.");
+        // Factory methods for Success and Failure
+        public static Result<TValue> Success(TValue value) => 
+            new(value, true, Array.Empty<Error>());
 
-        public TOut Match<TOut>(Func<TOut> onSuccess, Func<IReadOnlyList<Error>, TOut> onFailure)
+        public new static Result<TValue> Failure(Error error) => 
+            new(default, false, new[] { error });
+
+        public new static Result<TValue> Failure(IEnumerable<Error> errors) => 
+            new(default, false, errors);
+
+        // Functional Match method
+        public TOut Match<TOut>(Func<TValue?, TOut> onSuccess, Func<IReadOnlyList<Error>, TOut> onFailure)
         {
-            return IsSuccess ? onSuccess() : onFailure(Error);
+            return IsSuccess ? onSuccess(Value) : onFailure(Error);
         }
 
-        public static Result<TValue> Success(TValue value) => new(value, true, Array.Empty<Error>());
-        public new static Result<TValue> Failure(Error error) => new(default, false, new[] { error });
-        public new static Result<TValue> Failure(IEnumerable<Error> errors) => new(default, false, errors);
-
-
+        // Implicit conversions for cleaner code in Services
         public static implicit operator Result<TValue>(TValue value) => Success(value);
         public static implicit operator Result<TValue>(Error error) => Failure(error);
     }

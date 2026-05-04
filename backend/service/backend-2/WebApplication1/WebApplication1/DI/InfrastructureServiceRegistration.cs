@@ -4,6 +4,7 @@ using WebApplication1.Repository.Impl;
 using WebApplication1.Repository.Interface;
 using WebApplication1.Service.IExternalService.Abstraction;
 using WebApplication1.Service.IExternalService.Impl;
+using WebApplication1.Service.Interface;
 using WebApplication1.Validation;
 
 namespace WebApplication1.DI;
@@ -44,6 +45,8 @@ namespace WebApplication1.DI;
          services.AddScoped<ICustomerRepository, CustomerRepository>();
          services.AddScoped<ISellerRepository, SellerRepository>();
          services.AddScoped<IUserOTpRepository, UserOtpRepository>();
+         
+         services.AddScoped<IRegistrationService, RegistrationService>();
 
          // services.AddScoped<ProfileStrategyContext>();
          // services.AddScoped<IProfileStrategy, UserProfileStrategy>();
