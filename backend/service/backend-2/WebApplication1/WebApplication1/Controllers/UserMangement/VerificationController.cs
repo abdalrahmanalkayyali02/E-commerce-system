@@ -35,4 +35,11 @@ public class VerificationController : BaseApiController
 
         return HandleResult(result);
     }
+    
+    [HttpPatch("forget-password")]
+    public async Task <IActionResult> UpdateForgetPassword([FromBody] UpdateForgetPasswordDtosRequest command,CancellationToken ct)
+    {
+        var result = await _verificationService.UpdateForgetPassword(command,ct);
+        return HandleResult(result);
+    }
 }

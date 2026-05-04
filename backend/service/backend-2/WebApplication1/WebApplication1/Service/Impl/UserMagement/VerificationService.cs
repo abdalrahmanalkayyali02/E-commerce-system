@@ -1,4 +1,6 @@
-﻿using WebApplication1.Data.Model;
+﻿using FluentValidation;
+using WebApplication1.Data.Model;
+using WebApplication1.DTOs;
 using WebApplication1.Repository.Interface;
 using WebApplication1.Service.IExternalService.Abstraction;
 using WebApplication1.Service.Interface.UserMangement;
@@ -12,14 +14,23 @@ namespace WebApplication1.Service.Impl.UserMagement;
 public class VerificationService : IVerificationService
 {
     private readonly IEmailService _emailService;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IPasswordService _passwordService;
     private readonly ITokenService _tokenService;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IValidator<UpdateForgetPasswordDtosRequest> _validator;
 
-    public VerificationService(IEmailService emailService, IUnitOfWork unitOfWork, ITokenService tokenService)
+    public VerificationService(
+        IEmailService emailService, 
+        IUnitOfWork unitOfWork,
+        ITokenService tokenService,
+        IPasswordService passwordService,
+        IValidator<UpdateForgetPasswordDtosRequest> validator)
     {
         _emailService = emailService;
-        _unitOfWork = unitOfWork;
         _tokenService = tokenService;
+        _passwordService = passwordService;
+        _unitOfWork = unitOfWork;
+        _validator = validator;
     }
     
     public async Task<Result<string>> ResendOtpService(string email, OtpType otpType, CancellationToken cancellation)
@@ -31,10 +42,9 @@ public class VerificationService : IVerificationService
             return Result<string>.Failure(Error.NotFound("User.NotFound", "User not found."));
         }
 
-        // Generate new OTP Value Object
+        // Generate raw OTP string
         var generatedOtp = OTP.Generate();
         
-        // Use the passed otpType to ensure the database record is categorized correctly
         var userOtp = CreateOtpModel(existUser.id, generatedOtp.Value, otpType);
 
         await _unitOfWork.UserOTp.AddAsync(userOtp, cancellation);
@@ -55,11 +65,13 @@ public class VerificationService : IVerificationService
 
         var latestOtp = await _unitOfWork.UserOTp.GetLastOtpOfType(user.id, type, cancellationToken);
 
+        // Validation: Match raw strings since VOs are removed
         if (latestOtp is null || latestOtp.Code != otp)
         {
             return Result<VerifiedOtpResponse>.Failure(Error.Validation("OTP.Invalid", "Invalid OTP code."));
         }
 
+        // DateTime.Now used for Npgsql LegacyTimestamp compatibility
         if (latestOtp.ExpiresAt < DateTime.Now)
         {
             return Result<VerifiedOtpResponse>.Failure(Error.Validation("OTP.Expired", "OTP has expired."));
@@ -67,10 +79,9 @@ public class VerificationService : IVerificationService
 
         if (latestOtp.IsUsed || latestOtp.IsVerified)
         {
-            return Result<VerifiedOtpResponse>.Failure(Error.Validation("OTP.Used", "OTP has already been processed."));
+            return Result<VerifiedOtpResponse>.Failure(Error.Validation("OTP.Used", "OTP already processed."));
         }
 
-        // Update OTP state to prevent further use
         latestOtp.IsVerified = true;
         latestOtp.IsUsed = true;
         latestOtp.TimeVerfied = DateTime.Now;
@@ -78,7 +89,7 @@ public class VerificationService : IVerificationService
 
         _unitOfWork.UserOTp.Update(latestOtp, cancellationToken);
 
-        // Apply domain logic based on the OTP type
+        // Update anemic model properties directly in the service
         switch (type)
         {
             case OtpType.registration:
@@ -87,6 +98,7 @@ public class VerificationService : IVerificationService
                 break;
 
             case OtpType.forgotPassword:
+                // Set the 10-minute window for password update
                 user.ResetPasswordAllowedUntil = DateTime.Now.AddMinutes(10);
                 break;
 
@@ -100,8 +112,6 @@ public class VerificationService : IVerificationService
         try
         {
             await _unitOfWork.SaveChangesAsync(cancellationToken);
-
-            // Return a JWT so the user is authenticated immediately after verification
             var token = _tokenService.GenerateToken(user.id.ToString(), user.Role.ToString());
 
             return Result<VerifiedOtpResponse>.Success(
@@ -117,8 +127,53 @@ public class VerificationService : IVerificationService
             return Result<VerifiedOtpResponse>.Failure(Error.Unexpected("Database.Error", ex.Message));
         }
     }
-    
-    // Helper to centralize model creation with Guid V7 for sortable primary keys
+
+    public async Task<Result<UpdateForgetPasswordDtOsResponse>> UpdateForgetPassword(UpdateForgetPasswordDtosRequest request, CancellationToken ct)
+    {
+        var validationResult = await _validator.ValidateAsync(request, ct);
+        if (!validationResult.IsValid)
+        {
+            return Result<UpdateForgetPasswordDtOsResponse>.Failure(
+                Error.Validation("User.Validation", validationResult.Errors.First().ErrorMessage));
+        }
+        
+        var userEntity = await _unitOfWork.Users.GetUserByEmail(request.Email, ct);
+        if (userEntity is null)
+        {
+            return Result<UpdateForgetPasswordDtOsResponse>.Failure(Error.NotFound("User.NotFound", "User not found."));
+        }
+
+        // Logic moved from the Entity to the Service layer
+        if (userEntity.ResetPasswordAllowedUntil == null || DateTime.Now > userEntity.ResetPasswordAllowedUntil)
+        {
+            return Result<UpdateForgetPasswordDtOsResponse>.Failure(
+                Error.Validation("Reset.WindowExpired", "The password reset window has expired."));
+        }
+
+        // Check if new password matches old password using PasswordService
+        if (_passwordService.PasswordVerify(request.Password, userEntity.password))
+        {
+            return Result<UpdateForgetPasswordDtOsResponse>.Failure(
+                Error.Validation("Reset.SamePassword", "New password cannot be the same as the current password."));
+        }
+
+        // Update anemic entity properties
+        userEntity.password = _passwordService.PasswordHash(request.Password);
+        userEntity.ResetPasswordAllowedUntil = null; 
+        userEntity.UpdateAt = DateTime.Now;
+
+        _unitOfWork.Users.Update(userEntity, ct);
+        await _unitOfWork.SaveChangesAsync(ct);
+
+        var token = _tokenService.GenerateToken(userEntity.id.ToString(), userEntity.Role.ToString());
+
+        return Result<UpdateForgetPasswordDtOsResponse>.Success(new UpdateForgetPasswordDtOsResponse(
+            "Password updated successfully.",
+            token,
+            userEntity.IsEmailConfirmed,
+            userEntity.AccountStatus));
+    }
+
     private UserOtpDataModel CreateOtpModel(Guid userId, string code, OtpType type) => new()
     {
         ID = Guid.CreateVersion7(), 

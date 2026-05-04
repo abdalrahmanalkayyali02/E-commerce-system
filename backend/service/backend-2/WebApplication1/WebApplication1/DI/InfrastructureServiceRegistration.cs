@@ -65,6 +65,8 @@ namespace WebApplication1.DI;
          services.AddScoped<IValidator<UpdateCustomerProfileDtOs>, UpdateCustomerProfileDtOsValidator>();
          services.AddScoped<IValidator<UpdateSellerProfileDtOs>, UpdateSellerProfileDtOsValidator>();
          services.AddScoped<IValidator<UpdateUserProfileDtOs>, UpdateUserProfileDtOsValidatior>();
+         services.AddScoped < IValidator<UpdateForgetPasswordDtosRequest>, UpdateForgetPasswordDtOsValidator>();
+         
          
 
          
