@@ -2,5 +2,5 @@
 
 namespace WebApplication1.Shared.DTOs
 {
-    public record LoginUserResponse(string message, bool VerfiedEmail, AccountStatus AccountStatus, string token);
+    public record LoginUserResponse( bool VerfiedEmail, AccountStatus AccountStatus, string token);
 }

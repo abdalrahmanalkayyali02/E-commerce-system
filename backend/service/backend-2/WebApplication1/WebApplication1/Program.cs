@@ -15,7 +15,7 @@ builder.Services.AddControllers()
 // Add services to the container.
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDatabaseConfig(builder.Configuration);
-//builder.Services.AddJwtAuthentication(builder.Configuration);
+builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddCustomCors();
 builder.Services.AddSwaggerConfig();
 builder.Services.AddApplicationLayerServices(builder.Configuration);

@@ -50,7 +50,7 @@ namespace WebApplication1.Shared.Result
         public static Result<TValue> Success(TValue value) => 
             new(value, true, Array.Empty<Error>());
 
-        public new static Result<TValue> Failure(Error error) => 
+        public new static Result<TValue> Failure(Error? error) => 
             new(default, false, new[] { error });
 
         public new static Result<TValue> Failure(IEnumerable<Error> errors) => 

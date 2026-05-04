@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using WebApplication1.Data;
 using WebApplication1.DI;
@@ -15,46 +18,46 @@ public static class ServiceExtensions
             ));
     }
 
-    // public static void AddJwtAuthentication(this IServiceCollection services, IConfiguration config)
-    // {
-    //     var jwtSetting = config.GetSection("JWTSettings");
-    //     var secretKey = jwtSetting["SecretKey"] ?? throw new InvalidOperationException("JWT SecretKey is missing!");
-    //
-    //     services.AddAuthentication(options =>
-    //     {
-    //         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    //         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    //     })
-    //     .AddJwtBearer(options =>
-    //     {
-    //         options.TokenValidationParameters = new TokenValidationParameters
-    //         {
-    //             ValidateIssuer = true,
-    //             ValidateAudience = true,
-    //             ValidateLifetime = true,
-    //             ValidateIssuerSigningKey = true,
-    //             ClockSkew = TimeSpan.Zero,
-    //             ValidIssuer = jwtSetting["Issuer"],
-    //             ValidAudience = jwtSetting["Audience"],
-    //             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
-    //         };
-    //
-    //         options.Events = new JwtBearerEvents
-    //         {
-    //             OnChallenge = context =>
-    //             {
-    //                 context.HandleResponse();
-    //                 context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-    //                 return Task.CompletedTask;
-    //             },
-    //             OnForbidden = context =>
-    //             {
-    //                 context.Response.StatusCode = StatusCodes.Status403Forbidden;
-    //                 return Task.CompletedTask;
-    //             }
-    //         };
-    //     });
-    // }
+    public static void AddJwtAuthentication(this IServiceCollection services, IConfiguration config)
+    {
+        var jwtSetting = config.GetSection("JWTSettings");
+        var secretKey = jwtSetting["SecretKey"] ?? throw new InvalidOperationException("JWT SecretKey is missing!");
+    
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ClockSkew = TimeSpan.Zero,
+                ValidIssuer = jwtSetting["Issuer"],
+                ValidAudience = jwtSetting["Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+            };
+    
+            options.Events = new JwtBearerEvents
+            {
+                OnChallenge = context =>
+                {
+                    context.HandleResponse();
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    return Task.CompletedTask;
+                },
+                OnForbidden = context =>
+                {
+                    context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                    return Task.CompletedTask;
+                }
+            };
+        });
+    }
 
     public static void AddSwaggerConfig(this IServiceCollection services)
     {
