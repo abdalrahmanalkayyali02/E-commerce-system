@@ -52,6 +52,8 @@ namespace WebApplication1.DI;
          services.AddScoped<IRegistrationService, RegistrationService>();
          services.AddScoped<IAuthService, AuthService>();
          services.AddScoped<IVerificationService, VerificationService>();
+         services.AddScoped<IProfileService, ProfileService>();
+         
          
          services.AddScoped<ProfileStrategyContext>();
          services.AddScoped<IProfileStrategy, UserProfileStrategy>();

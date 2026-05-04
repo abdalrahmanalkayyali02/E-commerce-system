@@ -11,131 +11,76 @@ public class CustomerProfileStrategy : IProfileStrategy
 {
     public UserType UserType => UserType.Customer;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IValidator<UpdateCustomerProfileDtOs> _validator;
+    private readonly IValidator<UpdateCustomerProfileDtOs> _customerValidator;
+    private readonly IValidator<UpdateUserProfileDtOs> _baseValidator;
     private readonly IFileStorageService _fileStorageService;
 
-    public CustomerProfileStrategy(IUnitOfWork unitOfWork, IValidator<UpdateCustomerProfileDtOs> validator, IFileStorageService fileStorageService)
+    public CustomerProfileStrategy(
+        IUnitOfWork unitOfWork, 
+        IValidator<UpdateCustomerProfileDtOs> customerValidator, 
+        IValidator<UpdateUserProfileDtOs> baseValidator,
+        IFileStorageService fileStorageService)
     {
         _unitOfWork = unitOfWork;
-        _validator = validator;
+        _customerValidator = customerValidator;
+        _baseValidator = baseValidator;
         _fileStorageService = fileStorageService;
     }
-
 
     public async Task<Result<object>> GetProfileAsync(Guid id, CancellationToken ct)
     {
         var userEntity = await _unitOfWork.Users.GetUserById(id, ct);
-
-        if (userEntity is null)
-        {
-            return Result<object>.Failure(Error.NotFound("User.NotFound", "The user record does not exist."));
-        }
+        if (userEntity is null) return Result<object>.Failure(Error.NotFound("User.NotFound", "User record missing."));
 
         var customerEntity = await _unitOfWork.Customer.GetUserById(userEntity.id, ct);
+        if (customerEntity is null) return Result<object>.Failure(Error.NotFound("Customer.NotFound", "Customer data missing."));
 
-        if (customerEntity is null)
-        {
-            return Result<object>.Failure(Error.NotFound("Customer.NotFound", "Customer profile data is missing."));
-        }
-
-        var response = new CustomerDtOs(
-            userEntity.FirstName,
-            userEntity.LastName,
-            userEntity.UserName,
-            userEntity.Email,
-            userEntity.phoneNumber,
-            userEntity.DateOfBirth,
-            userEntity.profilePhoto,
-            userEntity.Role,
-            userEntity.AccountStatus,
-            userEntity.CreateAt,
-            customerEntity.Address
-        );
-
-        return Result<object>.Success(response);
+        return Result<object>.Success(new CustomerDtOs(
+            userEntity.FirstName, userEntity.LastName, userEntity.UserName, userEntity.Email,
+            userEntity.phoneNumber, userEntity.DateOfBirth, userEntity.profilePhoto,
+            userEntity.Role, userEntity.AccountStatus, userEntity.CreateAt, customerEntity.Address
+        ));
     }
 
     public async Task<Result<object>> UpdateProfile(object data, CancellationToken ct)
     {
-        if (data is not UpdateCustomerProfileDtOs command)
+        // FIX: Polymorphic check allows base DTO to pass
+        if (data is not UpdateUserProfileDtOs command)
         {
-            return Result<object>.Failure(Error.Unexpected("Invalid.CommandType",
-                "Invalid command type for the user profile strategy."));
-        }
-
-        var validationResult = await _validator.ValidateAsync(command, ct);
-        if (!validationResult.IsValid)
-        {
-            return Result<object>.Failure(
-                Error.Validation("User.Validation", validationResult.Errors.First().ErrorMessage));
+            return Result<object>.Failure(Error.Unexpected("Invalid.CommandType", "Data type mismatch."));
         }
 
         var userEntity = await _unitOfWork.Users.GetUserById(command.UserId, ct);
+        if (userEntity is null) return Result<object>.Failure(Error.NotFound("User.NotFound", "User not found."));
 
-        if (userEntity is null)
-        {
-            return Result<object>.Failure(Error.NotFound("User.NotFound", "User record not found."));
-        }
-
-
-        var customerEntity = await _unitOfWork.Customer.GetUserById(command.UserId, ct);
-
-        if (customerEntity is null)
-        {
-            return Result<object>.Failure(Error.NotFound("Customer.NotFound", "Customer record not found."));
-        }
-
+        // Update Common Base Fields
         if (command.ProfilePhoto is { Length: > 0 })
+            userEntity.profilePhoto = await UploadFile(command.ProfilePhoto);
+
+        if (!string.IsNullOrEmpty(command.FirstName)) userEntity.FirstName = command.FirstName;
+        if (!string.IsNullOrEmpty(command.LastName)) userEntity.LastName = command.LastName;
+        if (!string.IsNullOrEmpty(command.PhoneNumber)) userEntity.phoneNumber = command.PhoneNumber;
+
+        _unitOfWork.Users.Update(userEntity, ct);
+
+        // Update Customer Specific Fields if provided
+        if (data is UpdateCustomerProfileDtOs customerDto && !string.IsNullOrEmpty(customerDto.Address))
         {
-            var profilePhotoUrl = await UploadFile(command.ProfilePhoto);
-            if (profilePhotoUrl != null)
+            var customerEntity = await _unitOfWork.Customer.GetUserById(command.UserId, ct);
+            if (customerEntity != null)
             {
-                userEntity.profilePhoto = profilePhotoUrl;
+                customerEntity.Address = customerDto.Address;
+                _unitOfWork.Customer.Update(customerEntity, ct);
             }
         }
 
-        if (!string.IsNullOrEmpty(command.FirstName))
-        {
-
-            userEntity.FirstName = command.FirstName;
-        }
-
-        if (!string.IsNullOrEmpty(command.LastName))
-        {
-            userEntity.LastName = command.LastName;
-        }
-
-        if (!string.IsNullOrEmpty(command.PhoneNumber))
-        {
-            userEntity.phoneNumber = command.PhoneNumber;
-        }
-
-        // now for address
-        if (!string.IsNullOrEmpty(command.Address))
-        {
-            customerEntity.Address = command.Address;
-        }
-
-        _unitOfWork.Users.Update(userEntity, ct);
-        _unitOfWork.Customer.Update(customerEntity, ct);
-        await _unitOfWork.SaveChangesAsync(ct);
-
         return Result<object>.Success(true);
     }
-    
+
     private async Task<string?> UploadFile(IFormFile? file)
     {
-        if (file == null || file.Length == 0)
-            return null;
-
+        if (file == null || file.Length == 0) return null;
         await using var stream = file.OpenReadStream();
-
-        if (stream.CanSeek)
-        {
-            stream.Position = 0;
-        }
-
         return await _fileStorageService.UploadAsync(stream);
     }
 }
-    

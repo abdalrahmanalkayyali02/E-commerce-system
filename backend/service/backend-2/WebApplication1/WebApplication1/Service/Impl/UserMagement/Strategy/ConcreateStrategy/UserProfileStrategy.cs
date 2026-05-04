@@ -57,9 +57,7 @@ public class UserProfileStrategy : IProfileStrategy
     {
         if (data is not UpdateUserProfileDtOs command)
         {
-            return Result<object>.Failure(
-                Error.Unexpected("Invalid.CommandType", "Invalid command type for the user profile strategy.")
-            );
+            return Result<object>.Failure(Error.Unexpected("Invalid.CommandType", "Data type mismatch."));
         }
 
         var validationResult = await _validator.ValidateAsync(command, ct);

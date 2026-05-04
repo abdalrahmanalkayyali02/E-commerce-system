@@ -23,14 +23,12 @@ public class ProfileStrategyContext
             return Result<IProfileStrategy>.Failure(Error.NotFound("User.NotFound", "User not found."));
         }
 
-        var role = userExist.Role;
-
-        var strategy = _strategies.FirstOrDefault(s => s.UserType == role);
+        var strategy = _strategies.FirstOrDefault(s => s.UserType == userExist.Role);
 
         if (strategy == null)
         {
             return Result<IProfileStrategy>.Failure(
-                Error.NotFound("Strategy.NotFound", $"No profile strategy registered for {role}.")
+                Error.NotFound("Strategy.NotFound", $"No profile strategy registered for {userExist.Role}.")
             );
         }
 
@@ -52,11 +50,12 @@ public class ProfileStrategyContext
             return Result<object>.Failure(strategyResult.Error);
         }
 
-        var result = await strategyResult.Value?.UpdateProfile(command, ct);
+        var result = await strategyResult.Value!.UpdateProfile(command, ct);
 
         if (result.IsFailure)
             return result;
 
+        // Finalize all changes (User + Role Tables) in a single transaction
         await _unitOfWork.SaveChangesAsync(ct);
 
         return Result<object>.Success(true);
