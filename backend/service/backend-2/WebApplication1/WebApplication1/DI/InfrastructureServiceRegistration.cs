@@ -8,6 +8,7 @@ using WebApplication1.Service.Impl.UserMagement;
 using WebApplication1.Service.Impl.UserMagement.Strategy;
 using WebApplication1.Service.Impl.UserMagement.Strategy.ConcreateStrategy;
 using WebApplication1.Service.Interface;
+using WebApplication1.Service.Interface.UserMangement;
 using WebApplication1.Validation;
 
 namespace WebApplication1.DI;
@@ -50,6 +51,7 @@ namespace WebApplication1.DI;
          
          services.AddScoped<IRegistrationService, RegistrationService>();
          services.AddScoped<IAuthService, AuthService>();
+         services.AddScoped<IVerificationService, VerificationService>();
          
          services.AddScoped<ProfileStrategyContext>();
          services.AddScoped<IProfileStrategy, UserProfileStrategy>();
@@ -60,15 +62,17 @@ namespace WebApplication1.DI;
          // Validator Registration
          services.AddScoped<IValidator<CreateCustomerDtOs>, CreateCustomerDtOsValidator>();
          services.AddScoped<IValidator<CreateSellerDtOs>, CreateSellerDTOsValidatior>();
+         services.AddScoped<IValidator<UpdateCustomerProfileDtOs>, UpdateCustomerProfileDtOsValidator>();
+         services.AddScoped<IValidator<UpdateSellerProfileDtOs>, UpdateSellerProfileDtOsValidator>();
+         services.AddScoped<IValidator<UpdateUserProfileDtOs>, UpdateUserProfileDtOsValidatior>();
+         
 
          
          services.AddScoped<IValidator<LoginDTos>, LoginDtosValidatior>();
          
          
-         // services.AddScoped<IValidator<LoginUserCommand>, LoginValidater>();
          // services.AddScoped<IValidator<updateForgetPasswordCommand>, UpdateForgetPasswordCommandValidater>();
          // services.AddScoped<IValidator<userProfileCommand>,userProfileCommandValidater>();
-         // services.AddScoped<IValidator<customerProfileCommand>, customerProfileCommandValidater>();
          // services.AddScoped<IValidator<sellerProfileCommand>, sellerProfileCommandValidater>();
          // services.AddScoped<IValidator<GetAllUsersByFilterQuery>, GetAllUsersByFilterQueryValidator>();
          // services.AddScoped<IValidator<UpdateShopDetailCommand>, UpdateShopDetailCommandValidator>();

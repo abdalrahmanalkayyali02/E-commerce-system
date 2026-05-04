@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.DTOs;
 using WebApplication1.Service.Interface;
+using WebApplication1.Service.Interface.UserMangement;
 using WebApplication1.Shared;
 using WebApplication1.Shared.DTOs;
 using WebApplication1.Shared.Enum;

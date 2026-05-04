@@ -36,4 +36,29 @@ public class ProfileStrategyContext
 
         return Result<IProfileStrategy>.Success(strategy);
     }
+    
+    public async Task<Result<object>> UpdateProfileAsync(Guid userId, object command, CancellationToken ct)
+    {
+        var user = await _unitOfWork.Users.GetUserById(userId, ct);
+        if (user is null)
+        {
+            return Result<object>.Failure(Error.NotFound("User.NotFound", "User not found."));
+        }
+
+        var strategyResult = await GetStrategy(user.id);
+
+        if (strategyResult.IsFailure)
+        {
+            return Result<object>.Failure(strategyResult.Error);
+        }
+
+        var result = await strategyResult.Value?.UpdateProfile(command, ct);
+
+        if (result.IsFailure)
+            return result;
+
+        await _unitOfWork.SaveChangesAsync(ct);
+
+        return Result<object>.Success(true);
+    }
 }

@@ -3,11 +3,13 @@ using WebApplication1.Data.Model;
 using WebApplication1.DTOs;
 using WebApplication1.Repository.Interface;
 using WebApplication1.Service.IExternalService.Abstraction;
-using WebApplication1.Service.Interface;
+using WebApplication1.Service.Interface.UserMangement;
 using WebApplication1.Shared.DTOs;
 using WebApplication1.Shared.Enum;
 using WebApplication1.Shared.Helper;
 using WebApplication1.Shared.Result;
+
+namespace WebApplication1.Service.Impl.UserMagement;
 
 public class RegistrationService : IRegistrationService
 {

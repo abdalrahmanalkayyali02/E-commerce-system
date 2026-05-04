@@ -5,6 +5,7 @@ using WebApplication1.Repository.Interface;
 using WebApplication1.Service.IExternalService.Abstraction;
 using WebApplication1.Service.Impl.UserMagement.Strategy;
 using WebApplication1.Service.Interface;
+using WebApplication1.Service.Interface.UserMangement;
 using WebApplication1.Shared.DTOs;
 using WebApplication1.Shared.Enum;
 using WebApplication1.Shared.Result;
@@ -95,6 +96,4 @@ public class AuthService : IAuthService
 
         return result;
     }
-    
-   
 }

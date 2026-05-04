@@ -2,12 +2,12 @@
 using WebApplication1.Shared.Enum;
 using WebApplication1.Shared.Result;
 
-namespace WebApplication1.Service.Interface
+namespace WebApplication1.Service.Interface.UserMangement
 {
     public interface IVerificationService
     {
-        public Result<string> ResendOtpService(string email);
-        public Result<VerifiedOtpResponse> VerifiedOtpService(string email, string otp, OtpType type);
+        public Task<Result<string>> ResendOtpService(string email,OtpType type,CancellationToken ct);
+        public Task<Result<VerifiedOtpResponse>> VerifiedOtpService(string email, string otp, OtpType type,CancellationToken ct);
     }
 }
     

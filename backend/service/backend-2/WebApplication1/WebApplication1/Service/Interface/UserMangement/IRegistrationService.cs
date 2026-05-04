@@ -2,7 +2,7 @@
 using WebApplication1.Shared.DTOs;
 using WebApplication1.Shared.Result;
 
-namespace WebApplication1.Service.Interface
+namespace WebApplication1.Service.Interface.UserMangement
 {
     public interface IRegistrationService
     {

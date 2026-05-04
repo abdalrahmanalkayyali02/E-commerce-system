@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Internal;
 using WebApplication1.DTOs;
 using WebApplication1.Service.Interface;
+using WebApplication1.Service.Interface.UserMangement;
 using WebApplication1.Shared;
 
 namespace WebApplication1.Controllers.UserMangement;
